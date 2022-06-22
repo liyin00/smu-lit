@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,800');
+
+.wrapper {
+    max-width: 800px;
+    width: 100%;
+    margin: 6em auto;
+  }
+  
+  .title,
+  .subtitle {
+    color: #FFFFFF;
+  }
+  
+  .title {
+    margin: 0 0 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .subtitle {
+    margin: 0 0 2em;
+    font-weight: 300;
+  }
+  
+  .card-container {
+    margin: -1em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    flex: 1 0 50%;
+    max-width: calc(50% - 2em);
+    padding: 1em;
+  }
+  
+  .card-box {
+    background-color: white;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  
+  .card-image {
+    height: 0;
+    width: 100%;
+    padding-bottom: 50%;
+    
+    .card:nth-of-type(5n+1) & {
+      background-color: #E31D65;
+    }
+    .card:nth-of-type(5n+2) & {
+      background-color: #FF7C35;
+    }
+    .card:nth-of-type(5n+3) & {
+      background-color: #FFCB36;
+    }
+    .card:nth-of-type(5n+4) & {
+      background-color: #25A954;
+    }
+    .card:nth-of-type(5n+5) & {
+      background-color: #007D97;
+    }
+  }
+  
+  .card-content {
+    padding: 1.5em;
+    text-align: center;
+  }
+  
+  .card-title {
+    margin: 0 0 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .card-text {
+    margin: 0;
+  }
+  

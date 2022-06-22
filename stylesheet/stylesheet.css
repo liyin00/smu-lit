@@ -1,1 +1,24 @@
-/* TBA */
+p {
+    font-family: 'Lato', serif;
+}
+h1, h2 {
+    font-family: 'Karla', serif;
+}
+.bg-gold {
+    background-color: #B29E79;
+}
+.bg-dblue {
+    background-color: #202837;
+}
+
+.link-dotted{
+    border-bottom: 1px solid #F5F5EF ; text-decoration: none;
+}
+
+.link-dotted:hover{
+    border-bottom: 1px dashed #F5F5EF ; text-decoration: none;
+}
+
+.reveal-card{
+
+}

@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,800");
+.wrapper {
+  max-width: 800px;
+  width: 100%;
+}
+
+.card-image {
+  height: 0;
+  width: 100%;
+  padding-bottom: 50%;
+}
+.card:nth-of-type(5n+1) .card-image {
+  background-color: #E31D65;
+}
+.card:nth-of-type(5n+2) .card-image {
+  background-color: #FF7C35;
+}
+.card:nth-of-type(5n+3) .card-image {
+  background-color: #FFCB36;
+}
+.card:nth-of-type(5n+4) .card-image {
+  background-color: #25A954;
+}
+.card:nth-of-type(5n+5) .card-image {
+  background-color: #007D97;
+}
+
+.card-content {
+  padding: 1.5em;
+  text-align: center;
+}
+
+.card-title {
+  margin: 0 0 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-text {
+  margin: 0;
+}/*# sourceMappingURL=stylesheetSCSS.css.map */
