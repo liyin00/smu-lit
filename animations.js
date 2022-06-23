@@ -1,8 +1,7 @@
 
 (function scrollReveal() {
     window.sr = ScrollReveal();
-    
-    sr.reveal('.reveal-card', {
+    sr.reveal('.card', {
       duration   : 500,
       distance   : '20px',
       easing     : 'ease-out',
@@ -22,5 +21,18 @@
       easing     : 'ease-out',
       viewFactor : 1,
     }, 75);
+  })();
+
+  (function scrollReveal() {
+    window.sr = ScrollReveal();
+    sr.reveal('.reveal-class', {
+      duration   : 500,
+      distance   : '20px',
+      easing     : 'ease-out',
+      origin     : 'bottom',
+      reset      : true,
+      scale      : 1,
+      viewFactor : 0,
+    }, 150);
   })();
   
