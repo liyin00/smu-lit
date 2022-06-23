@@ -6,6 +6,59 @@ drop database if exists penteract_db;
 create database penteract_db;
 use penteract_db;
 
+--------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `name` varchar(30) NOT NULL,
+  `bdae` varchar(10) NOT NULL,
+  `last4_nric` varchar(4) NOT NULL,
+  `user_id` int NOT NULL,
+  `role` varchar(10) NOT NULL,
+  `study_year` int NOT NULL,
+  PRIMARY KEY (`user_id`)
+);
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`name`, `bdae`, `last4_nric`, `user_id`, `role`, `study_year`) VALUES
+('Li Yin', '13-12-2000', '123J', 1 ,'client', 0),
+('Marcus', '01-01-2020', '245A', 2, 'sa', 1),
+('Amanda', '05-05-2005', '378B', 3, 'sa', 2),
+('Juhi', '03-03-1993', '498C', 4, 'sl', 4),
+('Gauri', '10-10-2002', '987G', 5, 'client', 0),
+('Derrick', '08-08-2008', '924I', 6, 'lawyer', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment`
+--
+
+DROP TABLE IF EXISTS `appointment`;
+CREATE TABLE IF NOT EXISTS `appointment` (
+  `date` varchar(10) NOT NULL,
+  `timeslot` int NOT NULL,
+  `client_id` int NOT NULL,
+  `lawyer_id` int NOT NULL,
+  `appointment_id` int NOT NULL,
+  PRIMARY KEY (`appointment_id`)
+);
+
+-- --
+-- -- Dumping data for table `appointment`
+-- --
+
+INSERT INTO `appointment` (`date`, `timeslot`, `client_id`, `lawyer_id`, `appointment_id`) VALUES
+('28-06-2022', 15, 1, 6, 1),
+('01-07-2022', 16, 5, 6, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -33,64 +86,11 @@ CREATE TABLE IF NOT EXISTS `cases` (
 );
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `cases`
 --
 
 INSERT INTO `cases` (`s3_url`, `case_id`, `case_status`, `case_category`, `hearing_date`, `case_title`, `client_case_summary`, `sa_case_summary`, `lawyer_case_comments`, `sa_id`, `lawyer_id`, `client_id`, `appointment_id`, `client_feedback`, `client_approval_status`) VALUES
-('https://google.com.sg', '1', 'in progress', 'financial dispute' ,'05-07-2022', 'Dispute over inheritance after familial death', 'Father died and did not leave inheritance. Seeking a justifiable allocation of financial inheritance', 'Seeking justifable allocation of financial inheritance', 'Advice client accordingly, all in order.', '2', '6', '1', '1', 'No chance of peaceful resolvation', 'accepted');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `name` varchar(30) NOT NULL,
-  `bdae` varchar(10) NOT NULL,
-  `last4_nric` varchar(4) NOT NULL,
-  `user_id` int NOT NULL,
-  `role` varchar(10) NOT NULL,
-  `study_year` int NOT NULL,
-  PRIMARY KEY (`user_id`)
-);
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`name`, `bdae`, `last4_nric`, `user_id`, `role`, `study_year` ) VALUES
-('Li Yin', '13-12-2000', '123J', '1' ,'client', 0),
-('Marcus', '01-01-2020', '245A', '2', 'sa', 1),
-('Amanda', '05-05-2005', '378B', '3', 'sa', 2),
-('Juhi', '03-03-1993', '498C', '4', 'sl', 4),
-('Gauri', '10-10-2002', '987G', '5', 'client', 0),
-('Derrick', '08-08-2008', '924I', '6', 'lawyer', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `appointment`
---
-
-DROP TABLE IF EXISTS `appointment`;
-CREATE TABLE IF NOT EXISTS `appointment` (
-  `date` varchar(10) NOT NULL,
-  `timeslot` int NOT NULL,
-  `client_id` int NOT NULL,
-  `lawyer_id` int NOT NULL,
-  `appointment_id` int NOT NULL,
-  PRIMARY KEY (`appointment_id`)
-);
-
--- --
--- -- Dumping data for table `chapter`
--- --
-
-INSERT INTO `appointment` (`date`, `timeslot`, `client_id`, `lawyer_id`, `appointment_id`) VALUES
-('28-06-2022', '15', 1, 6, 1),
-('01-07-2022', '16', 5, 6, 2);
+('https://google.com.sg', 1, 'in progress', 'financial dispute' ,'05-07-2022', 'Dispute over inheritance after familial death', 'Father died and did not leave inheritance. Seeking a justifiable allocation of financial inheritance', 'Seeking justifable allocation of financial inheritance', 'Advice client accordingly, all in order.', 2, 6, 1, 1, 'No chance of peaceful resolvation', 'accepted');
 
 -- --------------------------------------------------------
 

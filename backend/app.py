@@ -23,11 +23,17 @@ class users(db.Model):
     role = db.Column(db.String(10), nullable=False)
     study_year = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, name, bdae, last4_nric,
-                 role, study_year):
+    def __init__(self,
+                name,
+                bdae,
+                last4_nric,
+                user_id,
+                role,
+                study_year):
         self.name = name
         self.bdae = bdae
         self.last4_nric = last4_nric
+        self.user_id = user_id
         self.role = role
         self.study_year = study_year
 
@@ -80,6 +86,7 @@ class cases(db.Model):
     case_title = db.Column(db.String(100), nullable=False)
     client_case_summary = db.Column(db.String(1500), nullable=False)
     sa_case_summary = db.Column(db.String(5000), nullable=False)
+    lawyer_case_comments = db.Column(db.String(5000), nullable=False)
     sa_id = db.Column(db.Integer, db.ForeignKey(users.user_id), nullable=False)
     lawyer_id = db.Column(db.Integer, db.ForeignKey(users.user_id), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey(users.user_id), nullable=False)
@@ -122,21 +129,21 @@ class cases(db.Model):
 
     def get_cases_info(self):
         return {
-            's3_url' : self.s3_url,
-            'case_id' : self.case_id,
-            'case_status' : self.case_status,
-            'case_category' : self.case_category,
-            'hearing_date' : self.hearing_date,
-            'case_title' : self.case_title,
-            'client_case_summary' : self.client_case_summary,
-            'sa_case_summary' : self.sa_case_summary,
-            'lawyer_case_comments' : self.lawyer_case_comments,
-            'sa_id' : self.sa_id,
-            'lawyer_id' : self.lawyer_id,
-            'client_id' : self.client_id,
-            'appointment_id' : self.appointment_id,
-            'client_feedback' : self.client_feedback,
-            'client_approval_status' : self.client_approval_status
+            's3_url': self.s3_url,
+            'case_id': self.case_id,
+            'case_status': self.case_status,
+            'case_category': self.case_category,
+            'hearing_date': self.hearing_date,
+            'case_title': self.case_title,
+            'client_case_summary': self.client_case_summary,
+            'sa_case_summary': self.sa_case_summary,
+            'lawyer_case_comments': self.lawyer_case_comments,
+            'sa_id': self.sa_id,
+            'lawyer_id': self.lawyer_id,
+            'client_id': self.client_id,
+            'appointment_id': self.appointment_id,
+            'client_feedback': self.client_feedback,
+            'client_approval_status': self.client_approval_status
         }
 
 # APIs:
@@ -146,12 +153,15 @@ class cases(db.Model):
 @app.route('/view_all_cases', methods=['GET'])
 def view_all_cases():
     try: 
+        output = []
         cases_info = cases.query.all()
+        for case in cases_info:
+            output.append(case.get_cases_info())
 
         return jsonify(
             {
                 "code": 200,
-                "data": cases_info.json()
+                "data": output
             }
         ), 200
 
@@ -159,10 +169,55 @@ def view_all_cases():
         return jsonify(
             {
                 "code": 404,
-                "message": "GG"
+                "message": "Error occured while retrieving all cases"
             }
         ), 404
+        
+@app.route('/view_all_users', methods=['GET'])
+def view_all_users():
+    try: 
+        output = []
+        users_info = users.query.all()
+        for user in users_info:
+            output.append(user.get_user())
 
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
 
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all cases"
+            }
+        ), 404
+        
+@app.route('/view_all_appts', methods=['GET'])
+def view_all_appts():
+    try: 
+        output = []
+        appts_info = appointment.query.all()
+        for appt in appts_info:
+            output.append(appt.get_appointment())
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all cases"
+            }
+        ), 404
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
