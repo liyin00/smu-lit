@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
   <head>
@@ -5,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./stylesheet/stylesheet.css">
     <link rel="stylesheet" href="./stylesheet/stylesheetSCSS.css">
+    <link rel="stylesheet" href="./stylesheet/moreAnimations.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Locate Advocate - Homepage</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
 
 
@@ -22,6 +26,7 @@
     <!--Navbar -->
 
     <div class="container-fluid bg-dblue">
+
       <header class="d-flex flex-wrap justify-content-center py-3">
         <a href="Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
           <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
@@ -42,7 +47,7 @@
     </div>
 
     <!-- Main Section -->
-
+    <div class="arrow animated bounce"></div>
     <div class="container pt-5 px-0">
       <div class="container-fluid" style="height:20vh;">
         <div class="row" data-masonry='{"percentPosition": true }'>
@@ -50,7 +55,7 @@
             <div style="height:30vh" class ="d-flex align-items-center pb-5">
               <div>  
                 <div class="card-body">
-                  <h4 class="reveal-class" style="letter-spacing: 1px;">JUSTICE IS FOR EVERYONE</h4>
+                  <h3 class="reveal-class" style="letter-spacing: 1px;">JUSTICE IS FOR EVERYONE</h4>
                 </div>
               </div> 
             </div>
@@ -62,18 +67,19 @@
 
           <div class = "col-md-4" style="height:30vh">
             <div class="card-body w-100">
-              <h4><br>Locate Advocate helps you find legal counsel for FREE.</br></h4>
-              <a href="#" class="btn btn-primary my-4 rounded-0 ">Get Started ➤</a>
+              <h4 class><br>Locate Advocate helps you find legal counsel for FREE.</br></h4>
+              <a href="#" rel="grow" class="btn btn-lg btn-primary my-4 rounded-0 grow">Get Started ➤</a>
             </div>
           </div>
 
-          <div class="container-fluid">
+          <div class="container-fluid reveal-class">
 
             <div class="row">
       
-              <div class="col-12 col-md-12">
+              <div class="col-12 col-md-12">     
       
                 <div class="container d-flex justify-content-center align-items-center" style="width:60vw!important; height:60vw!important;">
+
                   <div 
                     id="carouselExampleCaptions" 
                     class="carousel slide"
@@ -105,16 +111,19 @@
                       ></button>
                     </div>
                     <div class="carousel-inner">
+                      <div class="container-fluid bg-dblue d-flex justify-content-center pt-1" style="z-index: 1!important; position:absolute; top: 0%;">
+                        <h5 class="text-light">Our Partner Clinics</h5>
+                      </div>
                       <div class="carousel-item active">
                         <img 
                           src="./pictures/gavel.jpg"
                           class="d-block w-100"
                           alt="Sailboat 1"
                         />
-                        <div class="carousel-caption d-md-block bg-dblue">
-                          <h6>SMU Pro Bono Centre Legal Clinic</h6>
+                        <div class="carousel-caption d-md-block bg-dblue px-1">
+                          <p class="small-title">SMU Pro Bono Centre Legal Clinic</h6>
                           <p class="small-txt">The SMU Pro Bono Centre Legal Clinic is administered by the SMU Pro Bono Centre with the help of volunteer lawyers and SMU Law students.</p>
-                          <a class="btn btn-secondary rounded-0 mb-1">Click to find out more!</a>
+                          <a class="btn btn-secondary rounded-0 mb-1 btn-sm grow">Click to find out more!</a>
                         </div>
                       </div>
                       <div class="carousel-item">
@@ -123,10 +132,10 @@
                           class="d-block w-100"
                           alt="Sailboat 2"
                         />
-                        <div class="carousel-caption d-md-block bg-dblue">
-                          <h6>Law Society of Singapore Pro Bono Services</h6>
+                        <div class="carousel-caption d-md-block bg-dblue px-1">
+                          <p class="small-title">Law Society of Singapore Pro Bono Services</p>
                           <p class="small-txt">The Pro Bono Services Office of the Law Society of Singapore was established on 10 September 2007 with the mission to help bring free legal assistance to those in need in our community. </p>
-                          <a class="btn btn-secondary rounded-0 mb-1">Click to find out more!</a>
+                          <a class="btn btn-secondary rounded-0 mb-1 btn-sm grow">Click to find out more!</a>
                         </div>
                       </div>
                       <div class="carousel-item">
