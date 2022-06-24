@@ -35,4 +35,18 @@
       viewFactor : 0,
     }, 150);
   })();
+
+
+  $(document).ready(function() {
+  
+    $(window).scroll(function() {
+      var scroll = $(window).scrollTop();
+      if (scroll >= 50) {
+        $('.arrow').addClass('fade');
+      } else{
+        $('.arrow').removeClass('fade');
+      }
+    })
+  });
+  
   
