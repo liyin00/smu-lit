@@ -23,13 +23,15 @@ class users(db.Model):
     role = db.Column(db.String(10), nullable=False)
     study_year = db.Column(db.Integer, nullable=False)
 
-    def __init__(self,
-                name,
-                bdae,
-                last4_nric,
-                user_id,
-                role,
-                study_year):
+    def __init__(
+        self,
+        name,
+        bdae,
+        last4_nric,
+        user_id,
+        role,
+        study_year
+    ):
         self.name = name
         self.bdae = bdae
         self.last4_nric = last4_nric
@@ -37,15 +39,16 @@ class users(db.Model):
         self.role = role
         self.study_year = study_year
 
-    def get_user(self):
-
-        return {
-            "name": self.name,
-            "bdae": self.bdae,
-            "last4_nric": self.last4_nric,
-            "role": self.role,
-            "study_year" : self.study_year
-        }
+    def get_dict(self):
+        """
+        'get_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 
 class appointment(db.Model):
@@ -57,23 +60,30 @@ class appointment(db.Model):
     lawyer_id = db.Column(db.Integer(), db.ForeignKey(users.user_id), nullable=False)
     appointment_id = db.Column(db.Integer(), primary_key=True, nullable=False)
 
-    def __init__(self, date, timeslot,
-                 client_id, lawyer_id, appointment_id):
+    def __init__(
+        self,
+        date,
+        timeslot,
+        client_id,
+        lawyer_id,
+        appointment_id
+    ):
         self.date = date
         self.timeslot = timeslot
         self.client_id = client_id
         self.lawyer_id = lawyer_id
         self.appointment_id = appointment_id
     
-    def get_appointment(self):
-        
-        return {
-            "date": self.date,
-            "timeslot": self.timeslot,
-            "client_id": self.client_id,
-            "lawyer_id": self.lawyer_id,
-            "appointment_id": self.appointment_id
-        }
+    def get_dict(self):
+        """
+        'get_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 class cases(db.Model):
     __tablename__ = 'cases'
@@ -94,22 +104,24 @@ class cases(db.Model):
     client_feedback = db.Column(db.String(1500), nullable=False)
     client_approval_status = db.Column(db.String(30), nullable=False)
 
-    def __init__(self, 
-                s3_url,
-                case_id,
-                case_status,
-                case_category,
-                hearing_date,
-                case_title,
-                client_case_summary,
-                sa_case_summary,
-                lawyer_case_comments,
-                sa_id,
-                lawyer_id,
-                client_id,
-                appointment_id,
-                client_feedback,
-                client_approval_status):
+    def __init__(
+        self, 
+        s3_url,
+        case_id,
+        case_status,
+        case_category,
+        hearing_date,
+        case_title,
+        client_case_summary,
+        sa_case_summary,
+        lawyer_case_comments,
+        sa_id,
+        lawyer_id,
+        client_id,
+        appointment_id,
+        client_feedback,
+        client_approval_status
+    ):
         self.s3_url = s3_url,
         self.case_id = case_id,
         self.case_status = case_status,
@@ -126,25 +138,16 @@ class cases(db.Model):
         self.client_feedback = client_feedback,
         self.client_approval_status = client_approval_status
         
-
-    def get_cases_info(self):
-        return {
-            's3_url': self.s3_url,
-            'case_id': self.case_id,
-            'case_status': self.case_status,
-            'case_category': self.case_category,
-            'hearing_date': self.hearing_date,
-            'case_title': self.case_title,
-            'client_case_summary': self.client_case_summary,
-            'sa_case_summary': self.sa_case_summary,
-            'lawyer_case_comments': self.lawyer_case_comments,
-            'sa_id': self.sa_id,
-            'lawyer_id': self.lawyer_id,
-            'client_id': self.client_id,
-            'appointment_id': self.appointment_id,
-            'client_feedback': self.client_feedback,
-            'client_approval_status': self.client_approval_status
-        }
+    def get_dict(self):
+        """
+        'get_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 # APIs:
 # 1. Return all cases assigned (Case category, hearing date, Case Title)
@@ -156,7 +159,7 @@ def view_all_cases():
         output = []
         cases_info = cases.query.all()
         for case in cases_info:
-            output.append(case.get_cases_info())
+            output.append(case.get_dict())
 
         return jsonify(
             {
@@ -179,7 +182,7 @@ def view_all_users():
         output = []
         users_info = users.query.all()
         for user in users_info:
-            output.append(user.get_user())
+            output.append(user.get_dict())
 
         return jsonify(
             {
@@ -192,7 +195,7 @@ def view_all_users():
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while retrieving all cases"
+                "message": "Error occured while retrieving all suers"
             }
         ), 404
         
@@ -202,7 +205,7 @@ def view_all_appts():
         output = []
         appts_info = appointment.query.all()
         for appt in appts_info:
-            output.append(appt.get_appointment())
+            output.append(appt.get_dict())
 
         return jsonify(
             {
@@ -215,7 +218,7 @@ def view_all_appts():
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while retrieving all cases"
+                "message": "Error occured while retrieving all appointments"
             }
         ), 404
         
