@@ -95,6 +95,23 @@ INSERT INTO `cases` (`s3_url`, `case_id`, `case_status`, `case_category`, `heari
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `chat`
+--
+
+DROP TABLE IF EXISTS `chat`;
+CREATE TABLE IF NOT EXISTS `chat` (
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `message` varchar(1500) NOT NULL,
+  `msgDateTime` varchar(100) NOT NULL,
+  `case_id` int NOT NULL,
+  `chat_id` int NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) NOT NULL,
+  PRIMARY KEY (`chat_id`)
+);
+
+
 ALTER TABLE `cases`
   ADD CONSTRAINT `cases_ibfk_1` FOREIGN KEY (`sa_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `cases_ibfk_2` FOREIGN KEY (`lawyer_id`) REFERENCES `users` (`user_id`),
@@ -104,3 +121,8 @@ ALTER TABLE `cases`
 ALTER TABLE `appointment`
   ADD CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`lawyer_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `users` (`user_id`);
+
+ALTER TABLE `chat`
+  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `chat_ibfk_3` FOREIGN KEY (`case_id`) REFERENCES `cases` (`case_id`);
