@@ -369,5 +369,55 @@ def get_client_case(client_id):
             }
         ), 404
 
+@app.route('/retrieve_SA_cases/<string:sa_id>', methods=['GET'])
+def get_sa_cases(sa_id):
+    try:
+        output = []
+        sa_id = int(sa_id)
+        cases_info = cases.query.filter_by(sa_id=sa_id)
+        
+        for case in cases_info:
+            output.append(case.get_dict())
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving SA cases"
+            }
+        ), 404
+        
+@app.route('/retrieve_lawyer_cases/<string:lawyer_id>', methods=['GET'])
+def get_lawyer_cases(lawyer_id):
+    try:
+        output = []
+        lawyer_id = int(lawyer_id)
+        cases_info = cases.query.filter_by(lawyer_id=lawyer_id)
+        
+        for case in cases_info:
+            output.append(case.get_dict())
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving lawyer cases"
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5888, debug=True)
