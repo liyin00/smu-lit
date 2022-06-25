@@ -18,6 +18,7 @@ class users(db.Model):
 
     name = db.Column(db.String(30), primary_key=True)
     bdae = db.Column(db.String(10), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
     last4_nric = db.Column(db.String(4), nullable=False)
     user_id = db.Column(db.Integer, nullable=False)
     role = db.Column(db.String(10), nullable=False)
@@ -27,6 +28,7 @@ class users(db.Model):
         self,
         name,
         bdae,
+        email,
         last4_nric,
         user_id,
         role,
@@ -34,6 +36,7 @@ class users(db.Model):
     ):
         self.name = name
         self.bdae = bdae
+        self.email = email
         self.last4_nric = last4_nric
         self.user_id = user_id
         self.role = role
@@ -228,10 +231,6 @@ def create_new_client():
         # retrieve post request data
         data = request.get_json()
         
-        name = data['name']
-        bdae = data['bdae']
-        last4_nric = data['last4_nric']
-        study_year = data['study_year']
         data['user_id'] = 0
         data['role'] = "client"
 
@@ -318,6 +317,28 @@ def create_case():
                 "message": "Error occured while creating case"
             }
         ), 404
+        
+@app.route('/retrieve_user_info/<string:email>', methods=['GET'])
+def get_user_info(email):
+    try:
+        print(email)
+        users_info = users.query.filter_by(email=email).first()
+        print(users_info.get_dict())
+        return jsonify(
+            {
+                "code": 200,
+                "message": users_info.get_dict()
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating case"
+            }
+        ), 404
+        
         
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5888, debug=True)

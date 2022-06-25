@@ -16,24 +16,25 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `name` varchar(30) NOT NULL,
   `bdae` varchar(10) NOT NULL,
+  `email` varchar(50) NOT NULL,
   `last4_nric` varchar(4) NOT NULL,
   `user_id` int NOT NULL AUTO_INCREMENT,
   `role` varchar(10) NOT NULL,
   `study_year` int NOT NULL,
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`email`)
 );
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`name`, `bdae`, `last4_nric`, `user_id`, `role`, `study_year`) VALUES
-('Li Yin', '13-12-2000', '123J', 0 ,'client', 0),
-('Marcus', '01-01-2020', '245A', 0, 'sa', 1),
-('Amanda', '05-05-2005', '378B', 0, 'sa', 2),
-('Juhi', '03-03-1993', '498C', 0, 'sl', 4),
-('Gauri', '10-10-2002', '987G', 0, 'client', 0),
-('Derrick', '08-08-2008', '924I', 0, 'lawyer', 0);
+INSERT INTO `users` (`name`, `bdae`, `email`, `last4_nric`, `user_id`, `role`, `study_year`) VALUES
+('Li Yin', '13-12-2000', 'liyin@gmail.com', '123J', 0 ,'client', 0),
+('Marcus', '01-01-2020', 'marcus@gmail.com', '245A', 0, 'sa', 1),
+('Amanda', '05-05-2005', 'amanda@gmail.com', '378B', 0, 'sa', 2),
+('Juhi', '03-03-1993', 'juhi@gmail.com', '498C', 0, 'sl', 4),
+('Gauri', '10-10-2002', 'gauri@gmail.com', '987G', 0, 'client', 0),
+('Derrick', '08-08-2008', 'derrick@gmail.com', '924I', 0, 'lawyer', 0);
 
 -- --------------------------------------------------------
 
