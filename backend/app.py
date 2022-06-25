@@ -1,3 +1,5 @@
+from http import client
+from pydoc import cli
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -321,13 +323,11 @@ def create_case():
 @app.route('/retrieve_user_info/<string:email>', methods=['GET'])
 def get_user_info(email):
     try:
-        print(email)
         users_info = users.query.filter_by(email=email).first()
-        print(users_info.get_dict())
         return jsonify(
             {
                 "code": 200,
-                "message": users_info.get_dict()
+                "data": users_info.get_dict()
             }
         ), 200
 
@@ -335,10 +335,39 @@ def get_user_info(email):
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while creating case"
+                "message": "Error occured while retrieving user info"
             }
         ), 404
         
+@app.route('/retrieve_client_case/<string:client_id>', methods=['GET'])
+def get_client_case(client_id):
+    try:
+        client_id = int(client_id)
+        case_info = cases.query.filter_by(client_id=client_id).first()
         
+        if case_info:
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": case_info.get_dict()
+                }
+            ), 200
+            
+        else:
+            return jsonify(
+                {
+                    "code": 404,
+                    "Message": "Client does not have any case"
+                }
+            ), 404
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving client case"
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5888, debug=True)
