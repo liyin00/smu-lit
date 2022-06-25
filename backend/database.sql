@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `role` varchar(10) NOT NULL,
   `study_year` int NOT NULL,
-  PRIMARY KEY (`email`)
+  PRIMARY KEY (`user_id`)
 );
 
 --
