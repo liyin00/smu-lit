@@ -154,6 +154,23 @@ class cases(db.Model):
             result[column] = getattr(self, column)
         return result
 
+    def assigncase(self, sa_id):
+        self.case_status = 'In Progress'
+        self.sa_id = sa_id
+        
+    def update_sa_case_summary(self, sa_case_summary):
+        self.sa_case_summary = sa_case_summary
+        
+    def approve_case(self, client_approval_status):
+        self.client_approval_status = client_approval_status
+        
+    def update_appointment(self, appointment_id):
+        self.appointment_id = appointment_id
+        
+    def update_lawyer_case_comments(self, lawyer_case_comments):
+        self.lawyer_case_comments = lawyer_case_comments
+        
+        
 # Retrieve all cases
 @app.route('/view_all_cases', methods=['GET'])
 def view_all_cases():
@@ -198,7 +215,7 @@ def view_all_users():
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while retrieving all suers"
+                "message": "Error occured while retrieving all users"
             }
         ), 404
 
@@ -416,6 +433,152 @@ def get_lawyer_cases(lawyer_id):
             {
                 "code": 404,
                 "message": "Error occured while retrieving lawyer cases"
+            }
+        ), 404
+    
+@app.route('/assign_case_to_sa', methods=['POST'])
+def assign_case_to_sa():
+    try:
+        data = request.get_json()
+        case_id = data['case_id']
+        sa_id = data['sa_id']
+        
+        case = cases.query.filter_by(case_id=case_id).first()
+        case.assigncase(sa_id)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Case successfully assigned"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while assigning case to SA"
+            }
+        ), 404
+
+@app.route('/sa_case_summarisation', methods=['POST'])
+def sa_case_summarisation():
+    try:
+        data = request.get_json()
+        case_id = data['case_id']
+        sa_case_summary = data['sa_case_summary']
+        
+        case = cases.query.filter_by(case_id=case_id).first()
+        case.update_sa_case_summary(sa_case_summary)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "SA Case summarisation successfully updated"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating SA case summarisation"
+            }
+        ), 404
+
+# client approval
+@app.route('/client_approve_case', methods=['POST'])
+def client_approve_case():
+    try:
+        data = request.get_json()
+        
+        case_id = data['case_id']
+        client_approval_status = data['client_approval_status']
+        
+        case = cases.query.filter_by(case_id=case_id).first()
+        case.approve_case(client_approval_status)
+        
+        db.session.commit()
+    
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully updated"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating case approval"
+            }
+        ), 404
+    
+# create appointment
+@app.route('/create_appointment', methods=['POST'])
+def create_appointment():
+    try:
+        # retrieve data
+        data = request.get_json()
+        data['appointment_id'] = 0
+             
+        # add new row in appointment
+        appointment_obj = appointment(** data)
+        db.session.add(appointment_obj)
+        db.session.commit()
+
+        # retrieve appointment_id
+        appointment_id = appointment.query.filter_by(client_id=data['client_id']).first().get_dict()['appointment_id']
+        print(appointment_id)
+        
+        # update case
+        case_info = cases.query.filter_by(client_id=data['client_id']).first()
+        case_info.update_appointment(appointment_id)
+        
+        db.session.commit()
+    
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully created appointment"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating appointment"
+            }
+        ), 404
+
+# lawyer case comments
+@app.route('/lawyer_case_comments', methods=['POST'])
+def sa_case_summarisation():
+    try:
+        data = request.get_json()
+        case_id = data['case_id']
+        lawyer_case_comments = data['lawyer_case_comments']
+        
+        case = cases.query.filter_by(case_id=case_id).first()
+        case.update_lawyer_case_comments(lawyer_case_comments)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Lawyer case comments successfully updated"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating lawyer case comments"
             }
         ), 404
 
