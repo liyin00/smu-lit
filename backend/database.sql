@@ -70,18 +70,18 @@ CREATE TABLE IF NOT EXISTS `cases` (
   `s3_url` varchar(200) NOT NULL,
   `case_id` int NOT NULL AUTO_INCREMENT,
   `case_status` varchar(30) NOT NULL,
-  `case_category` varchar(30) NOT NULL,
+  `case_category` varchar(30),
   `hearing_date` varchar(10) NOT NULL,
   `case_title` varchar(100) NOT NULL,
   `client_case_summary` varchar(1500) NOT NULL,
   `sa_case_summary` varchar(5000) NOT NULL,
   `lawyer_case_comments` varchar(5000) NOT NULL,
-  `sa_id` int NOT NULL,
-  `lawyer_id` int NOT NULL,
+  `sa_id` int,
+  `lawyer_id` int,
   `client_id` int NOT NULL,
-  `appointment_id` int NOT NULL,
+  `appointment_id` int,
   `client_feedback` varchar(1500) NOT NULL,
-  `client_approval_status` varchar(30) NOT NULL,
+  `client_approval_status` varchar(30),
   PRIMARY KEY (`case_id`)
 );
 

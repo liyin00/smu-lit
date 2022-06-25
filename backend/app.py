@@ -122,20 +122,20 @@ class cases(db.Model):
         client_feedback,
         client_approval_status
     ):
-        self.s3_url = s3_url,
-        self.case_id = case_id,
-        self.case_status = case_status,
-        self.case_category = case_category,
-        self.hearing_date = hearing_date,
-        self.case_title = case_title,
-        self.client_case_summary = client_case_summary,
-        self.sa_case_summary = sa_case_summary,
-        self.lawyer_case_comments = lawyer_case_comments,
-        self.sa_id = sa_id,
-        self.lawyer_id = lawyer_id,
-        self.client_id = client_id,
-        self.appointment_id = appointment_id,
-        self.client_feedback = client_feedback,
+        self.s3_url = s3_url
+        self.case_id = case_id
+        self.case_status = case_status
+        self.case_category = case_category
+        self.hearing_date = hearing_date
+        self.case_title = case_title
+        self.client_case_summary = client_case_summary
+        self.sa_case_summary = sa_case_summary
+        self.lawyer_case_comments = lawyer_case_comments
+        self.sa_id = sa_id
+        self.lawyer_id = lawyer_id
+        self.client_id = client_id
+        self.appointment_id = appointment_id
+        self.client_feedback = client_feedback
         self.client_approval_status = client_approval_status
         
     def get_dict(self):
@@ -232,15 +232,10 @@ def create_new_client():
         bdae = data['bdae']
         last4_nric = data['last4_nric']
         study_year = data['study_year']
+        data['user_id'] = 0
+        data['role'] = "client"
 
-        user_obj = users(
-            name = name,
-            bdae = bdae,
-            last4_nric = last4_nric,
-            user_id = 0,
-            role = "client",
-            study_year = study_year
-        )
+        user_obj = users(**data)
 
         db.session.add(user_obj)
         db.session.commit()
@@ -282,6 +277,45 @@ def get_all_cases_by_status(case_status):
             {
                 "code": 404,
                 "message": "Error occured while retrieving opened cases"
+            }
+        ), 404
+
+@app.route('/create_case', methods=['POST'])
+def create_case():
+    try:
+        # retrieve post request data
+        data = request.get_json()
+        
+        data['case_id'] = 0
+        data['case_status'] = 'Pending'
+        data['case_category'] = None
+        data['sa_case_summary'] = ''
+        data['lawyer_case_comments'] = ""
+        data['sa_id'] = None
+        data['lawyer_id'] = None
+        data['appointment_id'] = None
+        data['client_feedback'] = ""
+        data['client_approval_status'] = None
+        data['client_id'] = data['client_id']
+
+        case_obj = cases(**data)
+        print(case_obj.get_dict())
+        
+        db.session.add(case_obj)
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Case successfully created"
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating case"
             }
         ), 404
         
