@@ -260,9 +260,30 @@ def create_new_client():
             }
         ), 404
 
-# APIs:
-# 1. Return all cases assigned (Case category, hearing date, Case Title)
-# 2. Return specific case (Case category, hearing date, case title, document, ...)
+# Retrieve cases by status
+@app.route('/cases_by_status/<string:case_status>', methods=['GET'])
+def get_all_cases_by_status(case_status):
+    try:
+        output = []
+        cases_info = cases.query.filter_by(case_status=case_status)
+        
+        for case in cases_info:
+            output.append(case.get_dict())
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving opened cases"
+            }
+        ), 404
         
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5888, debug=True)
