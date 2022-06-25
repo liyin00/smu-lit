@@ -149,10 +149,7 @@ class cases(db.Model):
             result[column] = getattr(self, column)
         return result
 
-# APIs:
-# 1. Return all cases assigned (Case category, hearing date, Case Title)
-# 2. Return specific case (Case category, hearing date, case title, document, ...)
-
+# Retrieve all cases
 @app.route('/view_all_cases', methods=['GET'])
 def view_all_cases():
     try: 
@@ -175,7 +172,8 @@ def view_all_cases():
                 "message": "Error occured while retrieving all cases"
             }
         ), 404
-        
+
+# Retrieve all users
 @app.route('/view_all_users', methods=['GET'])
 def view_all_users():
     try: 
@@ -198,7 +196,8 @@ def view_all_users():
                 "message": "Error occured while retrieving all suers"
             }
         ), 404
-        
+
+# Retrieve all appointments
 @app.route('/view_all_appts', methods=['GET'])
 def view_all_appts():
     try: 
@@ -221,6 +220,49 @@ def view_all_appts():
                 "message": "Error occured while retrieving all appointments"
             }
         ), 404
+
+# create new user for client
+@app.route('/new_client', methods=['POST'])
+def create_new_client():
+    try:
+        # retrieve post request data
+        data = request.get_json()
+        
+        name = data['name']
+        bdae = data['bdae']
+        last4_nric = data['last4_nric']
+        study_year = data['study_year']
+
+        user_obj = users(
+            name = name,
+            bdae = bdae,
+            last4_nric = last4_nric,
+            user_id = 0,
+            role = "client",
+            study_year = study_year
+        )
+
+        db.session.add(user_obj)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Client successfully created" 
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating new user"
+            }
+        ), 404
+
+# APIs:
+# 1. Return all cases assigned (Case category, hearing date, Case Title)
+# 2. Return specific case (Case category, hearing date, case title, document, ...)
         
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5888, debug=True)
