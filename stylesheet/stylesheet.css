@@ -1,7 +1,7 @@
-p {
+p, a, label {
     font-family: 'Lato', serif;
 }
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, u {
     font-family: 'Karla', serif;
 }
 .bg-gold {
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5 {
 .break-container{
     background-color: #202837;
     left: 0;
-    width: 100vw
+    width: 99vw
     !important;
     position:absolute
     !important;
@@ -64,7 +64,7 @@ h1, h2, h3, h4, h5 {
 
 .break-container::before{
     background-color: #202837;
-    width: 100vw
+    width: 99vw
     !important;
     position:absolute
     !important;
@@ -78,7 +78,7 @@ h1, h2, h3, h4, h5 {
 
 .small-txt{
     /* Placeholder */
-    font-size: 1vw
+    font-size: 1.1vw
     !important;
 }
 
@@ -157,5 +157,28 @@ footer {margin-top:110vh; text-align:center; font-size:12px; font-family:arial;}
   opacity:0%;
 }
 
+a.block-link {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
 
+.rounded-corners{
+  border-radius: 25px;
+}
+
+.form-group{
+  margin-bottom: 3vh;
+}
+
+.form-floating > .bi-calendar-date + .datepicker_input + label {
+  padding-left: 3.5rem;
+  z-index: 3;
+}
+
+.hr-light{
+  color: #F5F5EF;
+  height: 4px;
+}
   
