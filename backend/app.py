@@ -557,7 +557,7 @@ def create_appointment():
 
 # lawyer case comments
 @app.route('/lawyer_case_comments', methods=['POST'])
-def sa_case_summarisation():
+def lawyer_case_comments():
     try:
         data = request.get_json()
         case_id = data['case_id']
@@ -581,6 +581,36 @@ def sa_case_summarisation():
                 "message": "Error occured while updating lawyer case comments"
             }
         ), 404
+
+# Check case creation status
+@app.route('/check_case_creation_status', methods=['POST'])
+def case_creation_status():
+    try:
+        data = request.get_json()
+        client_id = data['client_id']
+        case_info = cases.query.filter_by(client_id=client_id).first()
+        
+        output = False
+        
+        if case_info:
+            output = True
+
+        return jsonify(
+            {
+                "code": 200,
+                "creation_status": output
+            }
+        ), 200
+
+    except Exception:
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while checking case creation status"
+            }
+        ), 404
+        
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5888, debug=True)
