@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div class="container bg-beige rounded-corners p-4" style="margin-top: 5vh; width: 80vw;">
+      <div class="container bg-beige rounded-corners p-4 mb-5" style="margin-top: 5vh; width: 80vw;">
         <div class="row">
           <div class="col">
             <form id="caseForm" class="needs-validation" novalidate>
@@ -129,6 +129,17 @@
                   Please describe the issue you are facing.
                 </div>
               </div>
+
+              <div class="form-group">
+                <label for="caseTitle">Case Title*</label>
+                <input type="text" class="form-control" id="caseTitle" placeholder="Please give your case a case title [100 characters]" required>
+                <div class="valid-feedback">
+                  Looks good!
+                </div>
+                <div class="invalid-feedback">
+                  Please add a case title.
+                </div>
+              </div>
               
               <div class="form-group">
                 <label for="formFileMultiple" class="form-label">Please upload all relevant supporting documents (optional)</label>
@@ -184,6 +195,14 @@
               <button type="submit" class="btn btn-primary btn-lg grow">Submit</button>
             </form>
           </div>
+        </div>
+      </div>
+
+      <!--Footer-->
+
+      <div class ="container-fluid break-container">
+        <div class="d-flex justify-content-end align-items-end mt-3 mx-0">
+          <p class = "text-light">Proudly brought to you by Team Penteract.</p>
         </div>
       </div>
 
