@@ -1,6 +1,12 @@
-p, a, label {
+p, a, br, label, b {
     font-family: 'Lato', serif;
+    font-size: 2.2vh;
 }
+
+.container-fluid{
+  padding: 0px;
+}
+
 h1, h2, h3, h4, h5, u {
     font-family: 'Karla', serif;
 }
@@ -35,7 +41,7 @@ h1, h2, h3, h4, h5, u {
 .btn-secondary{
     background-color: #B29E79
     !important;
-    border-color: #202837
+    border-color: #B29E79
     !important;
     font-family: 'Lato', serif
     !important;
@@ -82,11 +88,7 @@ h1, h2, h3, h4, h5, u {
     !important;
 }
 
-body {background:#e1e1e1; font-family: 'Pangolin', cursive; }
-h1 {text-align:center; padding-top:200px; font-size:2.5vw; color:#333; letter-spacing:2px; }
-footer {margin-top:110vh; text-align:center; font-size:12px; font-family:arial;}
-
-
+/*bounce for arrow*/
 @-moz-keyframes bounce {
   0%, 20%, 50%, 80%, 100% {
     -moz-transform: translateY(0);
@@ -157,6 +159,7 @@ footer {margin-top:110vh; text-align:center; font-size:12px; font-family:arial;}
   opacity:0%;
 }
 
+
 a.block-link {
   display: block;
   height: 100%;
@@ -176,9 +179,3 @@ a.block-link {
   padding-left: 3.5rem;
   z-index: 3;
 }
-
-.hr-light{
-  color: #F5F5EF;
-  height: 4px;
-}
-  

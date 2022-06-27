@@ -30,6 +30,7 @@
             formDataObj = constructDataObj();
             hearingDate = formDataObj.calendarDate;
             clientCaseSummary = formDataObj.caseDescription;
+            caseTitle = formDataObj.caseTitle;
             var settings = {
                 "url": "http://localhost:5888/create_case",
                 "method": "POST",
@@ -40,7 +41,7 @@
                 "data": JSON.stringify({
                   "s3_url": "s3 url 1",
                   "hearing_date": hearingDate,
-                  "case_title": "case title 1",
+                  "case_title": caseTitle,
                   "client_case_summary": clientCaseSummary,
                   "client_id": "1"
                 }),
