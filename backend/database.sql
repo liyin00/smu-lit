@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
   user_id int NOT NULL AUTO_INCREMENT,
   name varchar(30) NOT NULL,
   password varchar(30) NOT NULL,
+  otp int,
   bdae DATE NOT NULL,
   email varchar(50) NOT NULL,
   last4_nric varchar(4) NOT NULL,
@@ -34,6 +35,7 @@ INSERT INTO users (
   user_id,
   name,
   password,
+  otp,
   bdae,
   email,
   last4_nric,
@@ -47,6 +49,7 @@ values (
   0,
   "Tom",
   "Tom@123",
+  null,
   "1980-01-01",
   "magojc98@gmail.com",
   "123A",
@@ -60,6 +63,7 @@ values (
   0,
   "Henry",
   "Henry@123",
+  null,
   "1980-02-02",
   "magojc98@gmail.com",
   "123B",
@@ -73,6 +77,7 @@ values (
   0,
   "Patrick",
   "Patrick@123",
+  null,
   "198-03-03",
   "magojc98@gmail.com",
   "123C",
@@ -206,8 +211,6 @@ CREATE TABLE IF NOT EXISTS chat (
 INSERT INTO chat (case_id, chat_id, category, sender_id, message, msg_date_time) VALUES
 (1, 0, "client", "1", "Hello", CURRENT_TIMESTAMP);
 -- --------------------------------------------------------
-
-select* from chat;
 
 ALTER TABLE cases
   ADD CONSTRAINT cases_ibfk_1 FOREIGN KEY (client_id) REFERENCES users (user_id),
