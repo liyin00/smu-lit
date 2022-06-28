@@ -581,5 +581,61 @@ def login():
             }
         ), 404
     
+# Case
+# 1 ) Check if client created new case
+# 2 ) Create new case
+# 3 ) assign case to SA
+# 4 ) SA does case summary
+
+# 1 ) Check if client created new case
+@app.route('/client_existing_case', methods=['POST'])
+def client_existing_case():
+    try:
+        # retrieve data (client_id)
+        data = request.get_json()
+        client_id = data['client_id']
+
+        # check if client_id exists in cases
+        case_info = cases.query.filter_by(client_id=client_id).first()
+
+        existing_case = False
+        
+        if case_info:
+            existing_case = True
+            
+        return jsonify(
+            {
+                "code": 404,
+                "existing_case": existing_case
+            }
+        ), 404
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while checking if client has an existing case"
+            }
+        ), 404
+        
+# 2 ) Create new case
+@app.route('/create_case', methods=['POST'])
+def create_case():
+    try:
+        # retrieve data (email, password)
+        data = request.get_json()
+        
+        
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Incorrect email or password"
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
