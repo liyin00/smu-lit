@@ -8,6 +8,7 @@ from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
+import pathlib
 
 app = Flask(__name__)
 
@@ -428,9 +429,9 @@ def registration_scan():
         s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
         s.starttls()
         s.login(MY_ADDRESS, MY_PW)
-        
+
         # create message
-        template_content = read_template('Email Templates/otp_registration.txt')        
+        template_content = read_template(str(pathlib.Path().resolve()) + '/Email Templates/otp_registration.txt')
         message = template_content.substitute(verification_code=otp)
         
         # send message
@@ -544,7 +545,7 @@ def login():
         s.login(MY_ADDRESS, MY_PW)
         
         # create message
-        template_content = read_template('Email Templates/otp_login.txt')        
+        template_content = read_template(str(pathlib.Path().resolve()) + '/Email Templates/otp_login.txt')        
         message = template_content.substitute(verification_code=otp)
         
         # send message
