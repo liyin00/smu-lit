@@ -44,7 +44,7 @@
           <a href="../Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
             <img src = "../pictures/laurels.png" style='width:50px;' class = "px-2">
-            <span class="fs-4"><h2 class = "text-white">Locate Advocate</h2></span>
+            <span class="fs-4"><h1 class = "text-white">Locate Advocate</h1></span>
           </a>
         </header>
     </div>
@@ -74,7 +74,7 @@
                 
               <div class="form-group">
                 <label for="salary">Current Monthly Gross Salary (SGD)*</label>
-                <input type="number" class="form-control" id="salary" placeholder="Current Monthly Gross Salary (SGD)" required>
+                <input type="number" min="0" class="form-control" id="salary" placeholder="Current Monthly Gross Salary (SGD)" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -85,13 +85,21 @@
 
               <div class="form-group">
                 <label for="caseCategoryList" class="form-label">Case Category*</label>
-                <input class="form-control" list="caseCategories" id="caseCategoryList" placeholder="Case Category" required>
+                <input class="form-control" list="caseCategories" id="caseCategoryList" placeholder="Case Category (you may choose from dropdown or specify)" required>
                 <datalist id="caseCategories">
-                    <option value="San Francisco">
-                    <option value="New York">
-                    <option value="Seattle">
-                    <option value="Los Angeles">
-                    <option value="Chicago">
+                    <option value="Divorce">
+                    <option value="Claims for Maintenance">
+                    <option value="Custody of Children">
+                    <option value="Division of Property">
+                    <option value="Variation of Orders">
+                    <option value="Personal Protection Order">
+                    <option value="Probate (Estate Matters)"></option>
+                    <option value="Basic Advice on Criminal Matters"></option>
+                    <option value="Basic Advice on Traffic Offences"></option>
+                    <option value="Basic Advice on Tenancy Issue"></option>
+                    <option value="Employment Issue"></option>
+                    <option value="Bankruptcy"></option>
+                    <option value="Claims"></option>
                 </datalist>
                 <div class="valid-feedback">
                     Looks good!
@@ -105,7 +113,7 @@
                 <div class="input-group mb-4">
                     <label for="calendarDate">Court Hearing Date*</label>
                     <div class="input-group date" id="datepicker">
-                        <input type="text" class="form-control" id="calendarDate" placeholder="DD/MM/YY" required>
+                        <input type="text" class="form-control" data-date-format='yy-mm-dd' id="calendarDate" placeholder="YYYY-MM-DD" required>
                         <span class="input-group-append">
                             <i class="fa"></i>
                         </span>
@@ -120,8 +128,8 @@
               </div>
       
               <div class="form-group">
-                <label for="caseDescription">Brief Description of Case </label>
-                <textarea class="form-control" rows="4" id="caseDescription" placeholder="Description of issue faced [1500 characters]" required></textarea>
+                <label for="caseDescription">Brief Description of Case*</label>
+                <textarea class="form-control" rows="4" id="caseDescription" placeholder="Description of issue faced [1500 characters max]" required></textarea>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -132,7 +140,7 @@
 
               <div class="form-group">
                 <label for="caseTitle">Case Title*</label>
-                <input type="text" class="form-control" id="caseTitle" placeholder="Please give your case a case title [100 characters]" required>
+                <input type="text" class="form-control" id="caseTitle" placeholder="Please give your case a case title [100 characters max]" required>
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -147,15 +155,27 @@
                 <div class="valid-feedback">
                   Looks good!
                 </div>
-                <div class="invalid-feedback">
-                  Please add your current monthly gross salary (SGD).
-                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="calendlyDone" required>
+                    <label class="form-check-label" for="calendlyDone">
+                        I have filled in the calendly form <a href="https://calendly.com/locateadvocate/legal-counsel" target="_blank">here.</a>
+                    </label>
+                    <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                      <div class="invalid-feedback">
+                        Please book a calendly appointment.
+                      </div>
+                  </div>
               </div>
 
               <div class="container-fluid my-4 d-flex flex-column rounded-corners bg-dblue p-3" style="width:80%; height:40vh;'">
-                <div class="row align-self-center"><h5 class="text-light"><u>Legal Disclaimers</u></h5></div>
+                <div class="row align-self-center"><p class="text-light"><u>Legal Disclaimers</u></p></div>
                 <div class="row align-self-center overflow-auto">
-                    <h6 class="text-light"><u>Personal Data *</u></h6>
+                    <p class="text-light"><u>Personal Data *</u></p>
                     <p class="text-light">
                         By submitting this Form, you hereby agree to the collection, use and disclosure of your personal data by LocateAdvocate, for registering with the various pro bono clinics supported on this platform (“Partner Clinics[JA1] ”), (“Purpose”). Your personal data will be used for the Purpose, including where necessary or applicable, the disclosure of your personal data to partners or to affiliates of LocateAdvocate, as the case may be for the Purpose. In this regard, you confirm that the personal data you have provided is complete and accurate.
                     </p>
@@ -165,7 +185,7 @@
                     <p class="text-light">
                         You may withdraw your consent for the collection, use and disclosure of your personal data for the Purpose, at any point in time, by sending your request to registration@locateadvocate.sg. However, please note that this may affect our administration of the Purpose to you. Your withdrawal will be effective within 30 (thirty) days of such a request.
                     </p>
-                    <h6 class="text-light"><u>Disclaimer of Liability*</u></h6>
+                    <p class="text-light"><u>Disclaimer of Liability*</u></h6>
                     <p class="text-light">
                         The legal consultation and/or mediation service at the various pro bono clinics supported on LocateAdvocate (“Partner Clinics[JA2] ”) is provided free of charge as a community service in collaboration with Law Society Pro Bono Services (“the Society”), Singapore International Mediation Institute (“SIMI”), volunteer students, volunteer lawyers and volunteer mediators, and is based on information believed to be complete, accurate and up-to-date. Such legal consultation and/or mediation service provided is only of a general nature based on the information furnished, and is not specifically provided for the purpose of, or use in, any court case. In addition, the legal consultation and/or mediation service given during these sessions has been done as a matter of general guidance and by way of broad pointers only. It is not intended to replace, supplement or do away with the need for professional legal advice and/or legal action.
                     </p>
@@ -217,7 +237,73 @@
     </script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../animations.js"></script>
-    <script src="../validation.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script> 
+
+    <script>
+      
+ (function() {
+    function constructDataObj(){
+        var dataFieldsObj = {
+
+        };
+        var fields = document.forms["caseForm"];
+        for (i=0; i<fields.length; i++){
+            fieldValue = fields[i].value;
+            fieldName = fields[i].getAttribute("id");
+            dataFieldsObj[fieldName] = fieldValue;
+        }
+        return dataFieldsObj
+    };
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          else{
+            event.preventDefault();
+            event.stopPropagation();
+            formDataObj = constructDataObj();
+            console.log(formDataObj);
+            hearingDate = moment(formDataObj.calendarDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+            console.log(hearingDate);
+            clientCaseSummary = formDataObj.caseDescription;
+            caseTitle = formDataObj.caseTitle;
+
+            var settings = {
+                "url": "http://localhost:5888/create_case",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                  "s3_url": "s3 url 1",
+                  "hearing_date": hearingDate,
+                  "case_title": caseTitle,
+                  "client_case_summary": clientCaseSummary,
+                  "client_id": "1"
+                }),
+              };
+              
+              $.ajax(settings).done(function (response) {
+                console.log(response);
+              });
+
+              // window.location.href = "case-success.html";
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
