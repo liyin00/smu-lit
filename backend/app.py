@@ -418,9 +418,6 @@ def registration_scan():
             
         # create OTP
         otp = random.randrange(100000, 1000000)
-
-        # retrieve user_obj json
-        user_obj_json = user_info.get_dict()
         
         # send to email
         
@@ -453,9 +450,7 @@ def registration_scan():
             {
                 "code": 200,
                 "data": {
-                    "otp": otp,
-                    "user_id": user_obj_json['user_id'],
-                    "name": user_obj_json['name']
+                    "otp": otp
                 },
                 "message": "Registration scan completed. Email is available."
             }
@@ -590,7 +585,13 @@ def login():
 # 1 ) Check if client created new case
 # 2 ) Create new case
 # 3 ) assign case to SA
+
 # 4 ) SA does case summary
+# 5 ) Retrieve cases by case status
+# 6 ) Retrieve a specific case
+# 7 ) Retrieve cases by SA
+# 8 ) Retrieve cases by lawyer
+# 9 ) Retrieve case by client
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -708,6 +709,28 @@ def assigning_case_to_SA():
                 "message": "Error occured while assigning case to SA"
             }
         ), 404
+
+# Chat
+# 1 ) Retrieve chat by case_id and category
+@app.route('/', methods=['POST'])
+def template():
+    try:
+        # retrieve data (case_id, category, sender_id, message)
+        data = request.get_json()
+        
+        
+        
+        
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": ""
+            }
+        ), 404
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
