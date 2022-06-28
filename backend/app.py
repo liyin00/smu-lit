@@ -580,7 +580,7 @@ def login():
                 "message": "Incorrect email or password"
             }
         ), 404
-    
+        
 # Case
 # 1 ) Check if client created new case
 # 2 ) Create new case
@@ -639,3 +639,21 @@ def create_case():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
+
+# template
+@app.route('/template', methods=['POST'])
+def template():
+    try:
+        # retrieve data ()
+        data = request.get_json()
+        
+        
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": ""
+            }
+        ), 404
