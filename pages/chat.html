@@ -1,319 +1,194 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <!--Cambria-->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-
-    <!--Raleway font stylesheet-->
-    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
-
-    <!-- Vue JS -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-
-    <!--Axios-->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-
-    <style>
-        .logo{
-            font-family: 'Open Sans', sans-serif;
-        }
-        .nav{
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Stay on top */
-            top: 0; /* Stay at the top */
-        }
-        .btn-info {
-          font-size: 20px;
-          color: white;
-          letter-spacing: 1px;
-          line-height: 22px;
-          border: 2px solid ;
-          margin-left:1em;
-          border-radius: 30px;
-          padding: 15px;
-          margin-left:80%;
-          
-        }
-        body{
-            font-family:'Montserrat', sans-serif;
-            font-size: 23px;
-        }
-        .nav-item{
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-        @media screen and (max-width: 575px) {
-            .carousel{
-                width: 100%;
-                display: block;
-                margin-bottom: 20px;
-            }
-        }
-
-        /* CHAT INLINE STYLES HERE */
-
-        #chat {
-            height: 400px;
-            overflow: auto;
-        }
-
-        .msgSenderBackground {
-            display: inline-block;
-            position: relative;
-            left: 0;
-            background-color: lightblue;
-            font-size: 14px;
-            margin: 10px 25px;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        .time {
-            font-size: 11px;
-            color: grey;
-            margin-left: 15px;
-        }
-
-        .msgReceiverBackground{
-            
-            display: inline-block;
-            position: relative;
-            right: 0;
-            /* text-align: right; */
-            /* display: inline-block; */
-            background-color: white;
-            font-size: 14px;
-            margin: 10px 25px;
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        
-
-
-        
-    </style>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../stylesheet/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheet/chat.css">
+    <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
+    <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind CSS 3 Simple Chat UI </title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Chat</title>
   </head>
-  <body>
 
-    <div class = "animate__animated animate__fadeInDown">
+  <body style="background-image:url(../pictures/website-bg.jpg);
+  height: 100%;
+  width: 100%;
+  margin: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;">
 
-       
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:white; padding: 12px;">
-            <div class = 'container' style="padding: 0;">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <span class = 'logo' style="padding: 10px; font-size: 25px; padding-bottom: 5px;" ><img src = "https://www.flaticon.com/svg/static/icons/svg/1624/1624453.svg" height = 40px width = 40px> PROJECT HERO</span>
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                    <ul class="navbar-nav" style="margin: auto;">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="../Homepage.php">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Task
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="./book2.php">Browse</a>
-                        <a class="dropdown-item" href="./Booktask.php">Post</a>
-                        </div>
-                    </li>
-                   
-                    <li class="nav-item dropdown">
-                    <a class="nav-link" href="./leaderdisplay.php">Top Heroes </a>
-                    </li>
-                    <?php
-            
-              
-            if(isset($_SESSION["email"])){
-           ?>
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Profile
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="./History.php">History</a>
-                        <a class="dropdown-item" href="./Profile v2.php">Settings</a>
-                        
-                        </div>
-                    </li> 
-                  <li>  <button type='button'  class='btn btn-info'  ><a href='../Main/process_logout.php' style='color: white;text-decoration: none;'>Log Out</a></button></li>
-                    <?php }else{?>
-                        
-                   
-                    <!-- <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="background-color: transparent;">
-                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-                    </form> -->
-                    
-                <button type="button"  class="btn btn-info" ><a href="./views/Signup.php" style="color: white;text-decoration: none;">Join Us</a></button>
-                    <?php }?>  
-                           <!-- <button type="button" class="btn btn-primary" style="margin: 10px;">Sign Up</button> -->
-                    <span class = 'noti' style="padding: 10px; font-size: 25px; padding-bottom: 15px;" hidden><img src = "https://www.flaticon.com/svg/static/icons/svg/523/523152.svg" height = 35px width = 35px> </span>
-                </div>
-             </ul>  
-            </div>
-        
+    <!--Navbar -->
+
+    <div class="container-fluid bg-dblue">
+
+        <header class="d-flex flex-wrap justify-content-center py-3">
+          <a href="../Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <img src = "../pictures/laurels.png" style='width:50px;' class = "px-2">
+            <span class="fs-4"><h2 class = "font-weight-bold text-white">Locate Advocate</h2></span>
+          </a>
+        </header>
+    </div>
+      
+    <div class="d-flex bg-gold justify-content-end px-4">
+        <div>
+            <nav class ="navbar">
+            <a class = "link-dotted link-light" href="./pages/login.html">Register</a> 
+            <a class = "text-light text-decoration-none px-1">/</a>
+            <a class = "link-dotted link-light" href="./pages/login.html">Log-in</a>
             </nav>
-
-        <div class="container " id="chatgroup">
-            <div class="row justify-content-center">
-                <div class="col-sm-8 bg-light p-0">
-                      <div id="chat">
-                    </div>
-                    <div id="sendMsg" class="input-group">
-
-                            <input id="message" type="text" class="form-control" placeholder="Type a Message!" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button"  onclick="sendMsg()">Send</button>
-                            </div>
-                        
-                    </div> 
-                </div>
-            </div>
         </div>
+    </div>
     
-        <script>
-                   
-            // Get the input field
-            const input = document.querySelector("input");
+    <!-- Main Section -->
+    <div class=" md:container md:mx-auto center mx-auto" style="background-color: #B29E79; margin-top: 20px; padding-top: 20px;">
 
-            // Execute a function when the user releases a key on the keyboard
-            input.addEventListener("keyup", function(event) {
-            // Number 13 is the "Enter" key on the keyboard
-            if (event.keyCode === 13) {
-                sendMsg();
-            }
-            });
-            
-            var id = "1"
-            var sender = "liyin"
-            var recipient = "amanda"
-            //console.log(sender);
-
-            window.onload = retrieveMsgs(id);
-            
-            function retrieveMsgs(id){
-                               
-                const request = new XMLHttpRequest();
-                request.onreadystatechange = function() {
-                    if(this.readyState == 4 && this.status == 200) {
-                        //console.log("entered");
-                        let chatArr = JSON.parse(this.responseText).chat;
-                        console.log(chatArr);
-                        const chatbox = document.getElementById("chat");
-
-                        for (chat of chatArr){
-                            const div = document.createElement("div");
-                            const p = document.createElement("p");
-
-                            if (chat.sender == sender){
-                                p.setAttribute("class","msgSenderBackground");
-                                div.setAttribute("class", "d-flex flex-row-reverse");
-                               
-                            }else {
-                                p.setAttribute("class","msgReceiverBackground");
-                                
-                            }    
-                            
-                            p.innerText = chat.message;
-
-                            const time = document.createElement("span");
-                            time.setAttribute("class","time");
-                            datetime = chat.msgDateTime.substring(11,16);
-                            time.innerText = datetime;
-
-                            p.appendChild(time);
-                            div.appendChild(p);
-                            chatbox.appendChild(div);
-                            
-                        }
-                      
-                    }
-                };
-                //console.log(jsonObj);
-                request.open("GET", "../Main/getChat.php?id="+id, true);
-                request.send();
-                
-                //request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                
-            }
-            
-            function sendMsg(){
-                //alert("clicked");
-                const msgvalue = document.getElementById("message").value;
-                
-                const div = document.createElement("div");
-                const p = document.createElement("p");
-                p.setAttribute("class","msgSenderBackground");
-                div.setAttribute("class", "d-flex flex-row-reverse");
-                p.innerText = msgvalue;
-
-                //var currentTime= new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                
-                var today = new Date();
-                var minutes = today.getMinutes();
-
-                if (minutes < 10){
-                    minutes = "0"+minutes;
-                }
-
-                var currentTime = today.getHours() + ":" + minutes;
-                const time = document.createElement("span");
-                time.setAttribute("class","time");
-                time.innerText = currentTime;
-
-                const chatbox = document.getElementById("chat");
-                p.appendChild(time);
-                div.appendChild(p);
-                chatbox.appendChild(div);
-
-                var id = "<?php echo"$id"?>";
-                var sender = "<?php echo"$sender"?>";
-                var recipient = "<?php echo"$recipient"?>";
-
-                const request = new XMLHttpRequest();
-                request.onreadystatechange = function() {
-                    if(this.readyState == 4 && this.status == 200) {
-                        
-                        console.log(this.responseText);
-                        //JSON.parse(this.responseText);
-
-                        
-                      
-                    }
-                };
-                //console.log(jsonObj);
-                request.open("GET", '../Main/addChat.php?sender=' + 
-                            encodeURIComponent(sender) + '&recipient=' + encodeURIComponent(recipient) + '&message=' + encodeURIComponent(msgvalue)
-                           + '&gigId=' + id, true);
-                request.send();
-                //request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                //request.send("query=" + jsonObj);
-
-                document.getElementById("message").value = '';
-               
-            }
-
-        </script>
-    
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <div class="container">
+        <div class=" center">
+          <div>
+            <div class="w-full">
+              <h3 style="text-align:center;"><b><i>You have been connected with a Student Assistant, either of you can initiate the conversation when needed!</i></b></h3>
+              <div class="relative w-full p-6 ">
   
+                <ul class="space-y-2" id="chat-messages">
+
+                  <!-- <li class="flex justify-start">
+                    <div class="sent relative max-w-xl px-4 py-2 text-gray-700 rounded shadow" style="background-color: #202837;">
+                      <span class="block sent-word" style="color: white;">Hi</span>
+                    </div>
+                  </li> -->
+
+                  <!-- <li class="flex justify-end">
+                    <div class="receive relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
+                      <span class="block">Hiiii</span>
+                    </div>
+                  </li> -->
+
+                </ul>
+  
+              </div>
+  
+              <div class="flex items-center justify-between w-full p-3">
+  
+                <input type="text" placeholder="Message" style="font-size: 15px;"
+                  class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                  name="message" required id="message"/>
+                <button type="submit" onclick="sendmsg">
+                  <svg class="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20" fill="white">
+                    <path
+                      d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Footer-->
+    <div class ="container-fluid bg-dblue" style="position:absolute; bottom:0%;">
+        <div class="d-flex justify-content-end align-items-end mt-3 px-4">
+          <p class = "text-light">Proudly brought to you by Team Penteract.</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+      
+      window.onload = loadmsg()
+      function loadmsg() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          let msg_arr = JSON.parse(this.responseText).data;
+          // console.log(this.responseText);
+          // console.log(localStorage.getItem("role"));
+          let viewer_role = localStorage.getItem("user_id");
+          
+          for (messages of msg_arr){
+            console.log(messages);
+
+            const chatbox = document.getElementById("chat-messages");
+            const li = document.createElement("li");
+            const div = document.createElement("div");
+            const span = document.createElement("span");
+
+            if (viewer_role == messages.sender_id){
+              // console.log("It's a match!!")
+              li.setAttribute("class","flex justify-start");
+              div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 rounded shadow");
+              div.setAttribute("style", "background-color: #202837");
+              span.setAttribute("class", "block");
+              span.setAttribute("style", "color: white");
+            }
+            else {
+              li.setAttribute("class","flex justify-end");
+              div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow");
+              span.setAttribute("class", "block");
+            }
+
+            span.innerText = messages.message; 
+            div.appendChild(span);
+            li.appendChild(div);
+            chatbox.append(li);
+
+          }
+        }
+        xhttp.open("GET", "http://localhost:5000/chat", true);
+        xhttp.send();
+      }
+      function sendmsg(){
+        //alert("clicked");
+        const new_message = document.getElementById("message").value;
+
+        li.setAttribute("class","flex justify-start");
+        div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 rounded shadow");
+        div.setAttribute("style", "background-color: #202837");
+        span.setAttribute("class", "block");
+        span.setAttribute("style", "color: white");
+
+        span.innerText = messages.message; 
+        div.appendChild(span);
+        li.appendChild(div);
+        chatbox.append(li);
+
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {  
+
+                let sender_id = localStorage.getItem("user_id");
+                let message = new_message;
+                let category = localStorage.getItem("category");
+                let case_id = localStorage.getItem("case_id");
+            }
+        };
+
+        request.open("POST", "http://localhost:5000/chat");
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({ "code": 200, "data": { "sender_id": sender_id, "message": message, "category":category, "case_id": case_id } }));
+
+        document.getElementById("message").value = '';   
+    }
+
+    </script>
+
   </body>
 </html>
-
