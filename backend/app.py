@@ -434,7 +434,7 @@ def registration_scan():
         message = """
         Dear Sir/Mdm,
 
-        Your verification code is {}. 
+        Your verification code is {}.
         Please enter this code to verify your email and complete the registration process.
 
         Kind regards,
@@ -530,7 +530,7 @@ def login():
             return jsonify(
                 {
                     "code": 404,
-                    "message": "Invalid password"
+                    "message": "Invalid password."
                 }
             ), 404
             
@@ -554,7 +554,7 @@ def login():
         message = """
         Dear Sir/Mdm,
 
-        Your verification code is {}. 
+        Your verification code is {}.
         Please enter this code to continue the login process.
 
         Kind regards,
@@ -581,7 +581,7 @@ def login():
                     "user_id": user_obj_json['user_id'],
                     "name": user_obj_json['name']
                 },
-                "message": "Valid email and password"
+                "message": "Valid email and password."
             }
         ), 200
         
@@ -590,7 +590,7 @@ def login():
         return jsonify(
             {
                 "code": 404,
-                "message": "Incorrect email or password"
+                "message": "Incorrect email or password."
             }
         ), 404
         
@@ -624,17 +624,17 @@ def client_existing_case():
             
         return jsonify(
             {
-                "code": 404,
+                "code": 200,
                 "existing_case": existing_case
             }
-        ), 404
+        ), 200
         
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while checking if client has an existing case"
+                "message": "Error occured while checking if client has an existing case."
             }
         ), 404
         
@@ -670,7 +670,7 @@ def create_case():
         return jsonify(
             {
                 "code": 200,
-                "message": "Case successfully created"
+                "message": "Case successfully created."
             }
         ), 200
         
@@ -679,7 +679,7 @@ def create_case():
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while creating case"
+                "message": "Error occured while creating case."
             }
         ), 404
 
@@ -709,41 +709,86 @@ def assigning_case_to_SA():
         
         return jsonify(
             {
-                "code": 404,
-                "message": "Successfully assigned case to SA"
+                "code": 200,
+                "message": "Successfully assigned case to SA."
             }
-        ), 404
+        ), 200
         
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while assigning case to SA"
+                "message": "Error occured while assigning case to SA."
             }
         ), 404
 
 # Chat
-# 1 ) Retrieve chat by case_id and category
-@app.route('/', methods=['POST'])
-def template():
+# 1 ) retrieve chat message by case_id and category
+# 2 ) create chat message
+
+# 1 ) retrieve chat message by case_id and category
+@app.route('/retrieve_chat', methods=['POST'])
+def retrieve_chat():
     try:
-        # retrieve data (case_id, category, sender_id, message)
+        # retrieve data (case_id, category)
         data = request.get_json()
         
+        case_id = data['case_id']
+        category = data['category']
         
+        chats_info = chats.query.filter_by(case_id=case_id, category=category)
         
-        
+        output = []
+        for chat in chats_info:
+            output.append(chat.get_dict())
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
         
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
-                "message": ""
+                "message": "Error occured while retrieving chats information."
             }
         ), 404
 
+# 2 ) create chat message
+@app.route('/create_chat_message', methods=['POST'])
+def create_chat_message():
+    try:
+        # retrieve data (case_id, category, sender_id, message)
+        data = request.get_json()
+        
+        data['chat_id'] = 0
+        data['msg_date_time'] = datetime.today()
+        
+        chats_obj = chats(**data)
+        
+        db.session.add(chats_obj)
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully created message in chat."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating message."
+            }
+        ), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
