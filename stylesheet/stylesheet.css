@@ -9,12 +9,22 @@ input[type=text], input[type=number], input[type=password]{
   padding: 0px !important;
 }
 
+.container{
+  width: 80vw !important;
+}
+
 h1, h2, h3, h4, h5, u {
     font-family: 'Karla', serif;
 }
 .bg-gold {
     background-color: #B29E79;
 }
+
+.bg-tgold {
+  background-color: #B29E79;
+  opacity: 0.5;
+}
+
 .bg-dblue {
     background-color: #202837;
 }

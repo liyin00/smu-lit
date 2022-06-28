@@ -1,0 +1,169 @@
+<!doctype html>
+<head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../stylesheet/stylesheet.css">
+        <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
+        <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <title>Locate Advocate - PBC Dashboard</title>
+    </head>
+    
+    <body style="background-image:url(../pictures/website-bg.jpg);
+    height: 100%;
+    width: 100%;
+    margin: 0%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;">
+
+    <!--Header-->
+
+    <div class="container-fluid bg-dblue">
+
+        <header class="d-flex flex-wrap justify-content-center py-3">
+          <a href="../Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <img src = "../pictures/laurels.png" style='width:50px;' class = "px-2">
+            <span class="fs-4"><h1 class = "font-weight-bold text-white">Locate Advocate</h1></span>
+          </a>
+        </header>
+    </div>
+      
+    <div class="d-flex bg-gold justify-content-end px-4">
+        <div>
+            <nav class ="navbar">
+            <p class="text-light">Welcome <a class = "link-dotted link-light" href="#">SMU PRO BONO CENTRE</a> </p>
+            </nav>
+        </div>
+    </div>
+
+    <!--Body-->
+
+    <div class="container-fluid d-flex justify-content-center mt-5"><h1><b>New Cases</b></h1></div>
+    <form id="newCaseForm">
+        <div class="container-fluid d-flex justify-content-center">
+            <div class=" w-75 bg-gold rounded-corners mt-5">
+                <div class ="row mt-4">
+                    <p class="col text-light" >Court Hearing Date</p>
+                    <p class="col text-light" >Applicant Name</p>
+                    <p class="col text-light" >Case Type</p>
+                    <p class="col text-light" >Case ID</p>
+                    <p class="col text-light" >Student Assistant</p>
+                    <p class="col text-light" >Volunteer Lawyer</p>
+                    <p class="col text-light" >Assign</p>
+                </div>
+                <div id="newCases" class="container-fluid my-4"></div>
+            </div>
+        </div>
+    </form>
+    
+    <div class="container-fluid d-flex justify-content-center mt-5"><h1><b>Assigned Cases</b></h1></div>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class=" w-75 bg-dblue rounded-corners mt-5">
+            <div class ="row mt-4">
+                <p class="col text-light" >Court Hearing Date</p>
+                <p class="col text-light" >Applicant Name</p>
+                <p class="col text-light" >Case Type</p>
+                <p class="col text-light" >Case ID</p>
+                <p class="col text-light" >Student Assistant</p>
+                <p class="col text-light" >Volunteer Lawyer</p>
+            </div>
+            <div id="assignedCases" class="container-fluid my-4"></div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="height: 5rem;"></div>
+
+    <script>
+
+        const dummyCase = {
+            courtHearingDate:"28/06/2022",
+            applicantName:"John Tan",
+            caseType:"Divorce",
+            caseID: 12782,
+            studentAssistant: null,
+            volunteerLawyer: null
+        };
+        const retrievedNewCases =[dummyCase];
+        const retrievedAssignedCases=[dummyCase];
+
+        var count = 0;
+
+        if(retrievedNewCases.length==0){
+            document.getElementById("newCases").style.display ="none";
+        }
+        else{
+            for(i=0;i<retrievedNewCases.length; i++){
+                var newCase = retrievedNewCases[i];
+                document.getElementById("newCases").innerHTML += `
+                <div class="bg-beige" id="newCases">
+                    <div class ="row">
+                        <p class="col">`+newCase['courtHearingDate']+ `</p>
+                        <p class="col">`+newCase['applicantName']+ `</p>
+                        <p class="col">`+newCase['caseType']+`</p>
+                        <p class="col">`+newCase['caseID']+`</p>
+                        <p class="col">`+checkAssign(newCase['caseID'], newCase['studentAssistant'])+`</p>
+                        <p class="col">`+checkAssign(newCase['caseID'], newCase['volunteerLawyer'])+`</p>
+                        <div class="col"><button type="submit" class="btn btn-primary">Submit</button></div>
+                    </div>
+                </div>
+                `
+            }
+        }
+
+        if(retrievedAssignedCases.length==0){
+            document.getElementById("assignedCases").style.display ="none";
+        }
+        else{
+            for(i=0;i<retrievedAssignedCases.length; i++){
+                var assignedCase = retrievedAssignedCases[i];
+                document.getElementById("assignedCases").innerHTML += `
+                <div class="bg-beige" id="assignedCases">
+                    <div class ="row">
+                        <p class="col">`+assignedCase['courtHearingDate']+ `</p>
+                        <p class="col">`+assignedCase['applicantName']+ `</p>
+                        <p class="col">`+assignedCase['caseType']+`</p>
+                        <p class="col">`+assignedCase['caseID']+`</p>
+                        <p class="col">`+assignedCase['studentAssistant']+`</p>
+                        <p class="col">`+assignedCase['volunteerLawyer']+`</p>
+                    </div>
+                </div>
+                `
+            }
+        }
+
+        function checkAssign(caseID, valueGiven){
+            if(valueGiven == null){
+                return `<input type="text" id="`+ caseID +`" class="form-control"></input>`;
+            }
+        }
+
+        document.addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();  
+            var fields = document.forms["newCaseForm"]
+            var dataFieldsObj = {};
+            for (i=0; i<fields.length; i++){
+                fieldValue = fields[i].value;
+                fieldName = fields[i].getAttribute("id");
+                if (fieldValue!= null && fieldValue != ""){
+                    dataFieldsObj[fieldName] = fieldValue;
+                }
+                }     
+            console.log(dataFieldsObj)
+        })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    </body>
+</html>
