@@ -413,6 +413,9 @@ def registration_scan():
             
         # create OTP
         otp = random.randrange(100000, 1000000)
+
+        # retrieve user_obj json
+        user_obj_json = user_info.get_dict()
         
         # send to email
         
