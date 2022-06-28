@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
+from datetime import date
 import smtplib
 from string import Template
 from email.mime.multipart import MIMEMultipart
@@ -70,6 +71,7 @@ class users(db.Model):
         
         columns = self.__mapper__.column_attrs.keys()
         result = {}
+        
         for column in columns:
             if column in datetime_column:
                 result[column] = getattr(self, column).strftime("%Y-%m-%d")
@@ -78,14 +80,6 @@ class users(db.Model):
                 result[column] = getattr(self, column)
             
         return result
-    
-    def update_columns(self, update_dict):
-        """
-        'update_columns' which updates the corresponding 
-        key, value pair in the object instance
-        """
-        for column in update_dict:
-            self[column] = update_dict[column]
             
     def validate_password(self, password):
         return self.password == password
@@ -181,10 +175,14 @@ class cases(db.Model):
         
         columns = self.__mapper__.column_attrs.keys()
         result = {}
+        
         for column in columns:
             if column in datetime_column:
                 if getattr(self, column):
                     result[column] = getattr(self, column).strftime("%Y-%m-%d")
+                    
+                else:
+                    result[column] = None
                 
             else:
                 result[column] = getattr(self, column)
@@ -196,8 +194,28 @@ class cases(db.Model):
         'update_columns' which updates the corresponding 
         key, value pair in the object instance
         """
-        for column in update_dict:
-            self[column] = update_dict[column]
+        self.case_id = update_dict['case_id']
+        self.client_name = update_dict['client_name']
+        self.client_id = update_dict['client_id']
+        self.gross_salary = update_dict['gross_salary']
+        self.case_title = update_dict['case_title']
+        self.case_category = update_dict['case_category']
+        self.court_hearing_date = update_dict['court_hearing_date']
+        self.client_case_description = update_dict['client_case_description']
+        self.s3_url = update_dict['s3_url']
+        self.sa_id = update_dict['sa_id']
+        self.lawyer_id = update_dict['lawyer_id']
+        self.current_case_status = update_dict['current_case_status']
+        self.student_assigned_date = update_dict['student_assigned_date']
+        self.case_summary_date = update_dict['case_summary_date']
+        self.finalised_case_summary_date = update_dict['finalised_case_summary_date']
+        self.confirmed_appointment_date = update_dict['confirmed_appointment_date']
+        self.consultation_date = update_dict['consultation_date']
+        self.consultation_questions = update_dict['consultation_questions']
+        self.consultation_advices = update_dict['consultation_advices']
+        self.client_summary_approval = update_dict['client_summary_approval']
+        self.pre_consult_req = update_dict['pre_consult_req']
+        self.pre_consult_google_docs_link = update_dict['pre_consult_google_docs_link']
             
 class case_summary(db.Model):
     __tablename__ = 'case_summary'
@@ -238,17 +256,11 @@ class case_summary(db.Model):
         """
         columns = self.__mapper__.column_attrs.keys()
         result = {}
+        
         for column in columns:
             result[column] = getattr(self, column)
+            
         return result
-    
-    def update_columns(self, update_dict):
-        """
-        'update_columns' which updates the corresponding 
-        key, value pair in the object instance
-        """
-        for column in update_dict:
-            self[column] = update_dict[column]
             
 class chats(db.Model):
     __tablename__ = 'chats'
@@ -286,6 +298,7 @@ class chats(db.Model):
         
         columns = self.__mapper__.column_attrs.keys()
         result = {}
+        
         for column in columns:
             if column in datetime_column:
                 result['date'] = getattr(self, column).strftime("%Y-%m-%d")
@@ -295,14 +308,6 @@ class chats(db.Model):
                 result[column] = getattr(self, column)
             
         return result
-    
-    def update_columns(self, update_dict):
-        """
-        'update_columns' which updates the corresponding 
-        key, value pair in the object instance
-        """
-        for column in update_dict:
-            self[column] = update_dict[column]
 
 # Retrieve all users
 @app.route('/get_all_users', methods=['GET'])
@@ -623,17 +628,84 @@ def client_existing_case():
 @app.route('/create_case', methods=['POST'])
 def create_case():
     try:
-        # retrieve data (email, password)
+        # retrieve data (client_name, client_id, gross_salary, case_title, case_category, court_hearing_date, client_case_description, s3_url)
         data = request.get_json()
         
+        data['court_hearing_date'] = datetime.strptime(data['court_hearing_date'], '%Y-%m-%d')
+        data['current_case_status'] = "New Case"
+        data['case_id'] = 0
+        data['sa_id'] = None 
+        data['lawyer_id'] = None 
+        data['student_assigned_date'] = None 
+        data['case_summary_date'] = None 
+        data['finalised_case_summary_date'] = None 
+        data['confirmed_appointment_date'] = None 
+        data['consultation_date'] = None 
+        data['consultation_questions'] = None 
+        data['consultation_advices'] = None 
+        data['client_summary_approval'] = None 
+        data['pre_consult_req'] = None 
+        data['pre_consult_google_docs_link'] = None
         
+        case_obj = cases(**data)
+        
+        # add to database
+        db.session.add(case_obj)
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Case successfully created"
+            }
+        ), 200
         
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
-                "message": "Incorrect email or password"
+                "message": "Error occured while creating case"
+            }
+        ), 404
+
+# 3 ) assign case to SA
+@app.route('/assigning_case_to_SA', methods=['POST'])
+def assigning_case_to_SA():
+    try:
+        # retrieve data (case_id, sa_id)
+        data = request.get_json()
+        
+        # retrieve case_info
+        case_id = data['case_id']
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        
+        # get instance dict
+        case_info_dict = case_info.get_dict()
+        
+        # update instance dict values
+        case_info_dict['court_hearing_date'] = datetime.strptime(case_info_dict['court_hearing_date'], '%Y-%m-%d')
+        case_info_dict['student_assigned_date'] = date.today()
+        case_info_dict['current_case_status'] = 'Assigned cases'
+        case_info_dict['sa_id'] = data['sa_id']
+
+        case_info.update_columns(case_info_dict)
+        
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Successfully assigned case to SA"
+            }
+        ), 404
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while assigning case to SA"
             }
         ), 404
 
@@ -646,8 +718,6 @@ def template():
     try:
         # retrieve data ()
         data = request.get_json()
-        
-        
         
     except Exception as e:
         print(e)
