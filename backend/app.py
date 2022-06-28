@@ -554,7 +554,7 @@ def login():
         message = """
         Dear Sir/Mdm,
 
-        Your verification code is ${verification_code}. 
+        Your verification code is {}. 
         Please enter this code to continue the login process.
 
         Kind regards,
