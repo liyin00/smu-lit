@@ -1,5 +1,4 @@
 
-
  (function() {
     function constructDataObj(){
         var dataFieldsObj = {
@@ -28,9 +27,11 @@
             event.preventDefault();
             event.stopPropagation();
             formDataObj = constructDataObj();
+            console.log(formDataObj);
             hearingDate = formDataObj.calendarDate;
             clientCaseSummary = formDataObj.caseDescription;
             caseTitle = formDataObj.caseTitle;
+
             var settings = {
                 "url": "http://localhost:5888/create_case",
                 "method": "POST",
@@ -51,7 +52,7 @@
                 console.log(response);
               });
 
-              window.location.href = "case-success.html";
+              // window.location.href = "case-success.html";
           }
           form.classList.add('was-validated');
         }, false);
