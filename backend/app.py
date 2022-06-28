@@ -431,8 +431,14 @@ def registration_scan():
         s.login(MY_ADDRESS, MY_PW)
 
         # create message
-        template_content = read_template(str(pathlib.Path().resolve()) + '/Email Templates/otp_registration.txt')
-        message = template_content.substitute(verification_code=otp)
+        message = """
+        Dear Sir/Mdm,
+
+        Your verification code is {}. 
+        Please enter this code to verify your email and complete the registration process.
+
+        Kind regards,
+        Penteract""".format(otp)
         
         # send message
         msg = MIMEMultipart()
@@ -545,8 +551,14 @@ def login():
         s.login(MY_ADDRESS, MY_PW)
         
         # create message
-        template_content = read_template(str(pathlib.Path().resolve()) + '/Email Templates/otp_login.txt')        
-        message = template_content.substitute(verification_code=otp)
+        message = """
+        Dear Sir/Mdm,
+
+        Your verification code is ${verification_code}. 
+        Please enter this code to continue the login process.
+
+        Kind regards,
+        Penteract""".format(otp)
         
         # send message
         msg = MIMEMultipart()
