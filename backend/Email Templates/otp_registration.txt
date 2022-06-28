@@ -1,4 +1,4 @@
-Hi Sir/Mdm,
+Dear Sir/Mdm,
 
 Your verification code is ${verification_code}. 
 Please enter this code to verify your email and complete the registration process.

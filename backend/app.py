@@ -444,7 +444,11 @@ def registration_scan():
         return jsonify(
             {
                 "code": 200,
-                "otp": otp,
+                "data": {
+                    "otp": otp,
+                    "user_id": user_obj_json['user_id'],
+                    "name": user_obj_json['name']
+                },
                 "message": "Registration scan completed. Email is available."
             }
         ), 200
@@ -520,6 +524,9 @@ def login():
                 }
             ), 404
             
+        # retrieve user_obj json
+        user_obj_json = user_obj.get_dict()
+            
         # create OTP
         otp = random.randrange(100000, 1000000)
         
@@ -553,7 +560,11 @@ def login():
         return jsonify(
             {
                 "code": 200,
-                "otp": otp,
+                "data": {
+                    "otp": otp,
+                    "user_id": user_obj_json['user_id'],
+                    "name": user_obj_json['name']
+                },
                 "message": "Valid email and password"
             }
         ), 200
