@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS chats (
 --
 
 INSERT INTO chats (case_id, chat_id, category, sender_id, message, msg_date_time) VALUES
-(1, 0, "client", "1", "Hello", CURRENT_TIMESTAMP);
+(1, 0, "sa-client", "1", "Hello", CURRENT_TIMESTAMP);
 -- --------------------------------------------------------
 
 ALTER TABLE cases
