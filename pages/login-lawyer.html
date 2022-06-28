@@ -111,7 +111,7 @@
 				<h2>LOGIN AS LAWYER</h2>
 				<input type="text" placeholder="Email">
 				<input type="password" placeholder="Password">
-				<input type="button" value="Login">
+				<input type="button" value="Login" onclick="loginLawyer">
 				<a href="" class="link-dark">Forgot password?</a>
 			</div>
 			<div class="register-show mb-3">
@@ -122,7 +122,7 @@
                 <input type="text" placeholder="Position">
 				<input type="password" placeholder="Password">
 				<input type="password" placeholder="Confirm Password">
-				<input type="button" value="Register">
+				<input type="button" value="Register" onclick="registerLawyer()">
 			</div>
 		</div>
 	</div>
@@ -132,6 +132,35 @@
 
 
 <script>
+
+function loginLawyer(){
+    var email = document.getElementById("emailLawyerL");
+    var password = document.getElementById("passwordLawyerL");
+    if(true){
+        //API
+        window.sessionStorage;
+        sessionStorage.setItem("name", "John Tan");
+        sessionStorage.setItem("userID", 22222);
+        sessionStorage.setItem("caseID", 21298);
+        sessionStorage.setItem("userType", "studentAssistant");
+    }
+}
+
+function registerLawyer(){
+    var email = document.getElementById("emailLawyer").value;
+    var name = document.getElementById("nameLawyer").value;
+    var company = document.getElementById("company").value;
+    var position = document.getElementById("position").value;
+    var password = document.getElementById("passwordLawyer").value;
+    window.sessionStorage;
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("company", company);
+    sessionStorage.setItem("position", position);
+    sessionStorage.setItem("password", password);
+    //API
+}
+
 $(document).ready(function(){
     $('.login-info-box').fadeOut();
     $('.login-show').addClass('show-log-panel');
@@ -163,6 +192,9 @@ $('.login-reg-panel input[type="radio"]').on('change', function() {
 
 </script>
 
+<script src="https://unpkg.com/scrollreveal"></script>
+<script src="animations.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 </body>
 
 </html>
