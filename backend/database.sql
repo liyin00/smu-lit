@@ -15,10 +15,9 @@ CREATE TABLE IF NOT EXISTS users (
   user_id int NOT NULL AUTO_INCREMENT,
   name varchar(30) NOT NULL,
   password varchar(30) NOT NULL,
-  otp int,
   bdae DATE NOT NULL,
   email varchar(50) NOT NULL,
-  last4_nric varchar(4) NOT NULL,
+  last4_nric varchar(4),
   role varchar(10) NOT NULL,
   educational_instituition varchar(50),
   study_year int,
@@ -35,7 +34,6 @@ INSERT INTO users (
   user_id,
   name,
   password,
-  otp,
   bdae,
   email,
   last4_nric,
@@ -49,7 +47,6 @@ values (
   0,
   "Tom",
   "Tom@123",
-  null,
   "1980-01-01",
   "magojc98@gmail.com",
   "123A",
@@ -63,10 +60,9 @@ values (
   0,
   "Henry",
   "Henry@123",
-  null,
   "1980-02-02",
   "magojc98@gmail.com",
-  "123B",
+   null,
   "SA",
    "Singapore Management University",
    3,
@@ -77,10 +73,9 @@ values (
   0,
   "Patrick",
   "Patrick@123",
-  null,
-  "198-03-03",
+  "1980-03-03",
   "magojc98@gmail.com",
-  "123C",
+   null,
   "lawyer",
    null,
    null,
@@ -101,7 +96,7 @@ CREATE TABLE IF NOT EXISTS cases (
   gross_salary int NOT NULL,
   case_title varchar(100) NOT NULL,
   case_category varchar(30) NOT NULL,
-  court_hearing_date varchar(10) NOT NULL,
+  court_hearing_date DATE NOT NULL,
   client_case_description varchar(1500),
   s3_url varchar(200),
   sa_id int,
@@ -119,6 +114,10 @@ CREATE TABLE IF NOT EXISTS cases (
   pre_consult_google_docs_link varchar(300),
   PRIMARY KEY (case_id)
 );
+
+--
+-- Dumping data for table "cases"
+--
 
 INSERT INTO cases (
 	case_id,
@@ -168,10 +167,6 @@ INSERT INTO cases (
 	NULL
 );
 
---
--- Dumping data for table "cases"
---
-
 -- --------------------------------------------------------
 
 --
@@ -197,18 +192,22 @@ CREATE TABLE IF NOT EXISTS case_summary (
 -- Table structure for table "chat"
 --
 
-DROP TABLE IF EXISTS chat;
-CREATE TABLE IF NOT EXISTS chat (
+DROP TABLE IF EXISTS chats;
+CREATE TABLE IF NOT EXISTS chats (
   case_id int NOT NULL,
   chat_id int NOT NULL AUTO_INCREMENT,
   category varchar(100) NOT NULL,
   sender_id int NOT NULL,
   message varchar(1500) NOT NULL,
-  msg_date_time timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  msg_date_time timestamp NOT NULL,
   PRIMARY KEY (chat_id)
 );
 
-INSERT INTO chat (case_id, chat_id, category, sender_id, message, msg_date_time) VALUES
+--
+-- Dumping data for table "chat"
+--
+
+INSERT INTO chats (case_id, chat_id, category, sender_id, message, msg_date_time) VALUES
 (1, 0, "client", "1", "Hello", CURRENT_TIMESTAMP);
 -- --------------------------------------------------------
 
@@ -220,6 +219,6 @@ ALTER TABLE cases
 ALTER TABLE case_summary
   ADD CONSTRAINT case_summary_ibfk_1 FOREIGN KEY (case_id) REFERENCES cases (case_id);
 
-ALTER TABLE chat
+ALTER TABLE chats
   ADD CONSTRAINT chat_ibfk_1 FOREIGN KEY (sender_id) REFERENCES users (user_id),
   ADD CONSTRAINT chat_ibfk_2 FOREIGN KEY (case_id) REFERENCES cases (case_id);

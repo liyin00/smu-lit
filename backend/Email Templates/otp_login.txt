@@ -1,0 +1,7 @@
+Dear Sir/Mdm,
+
+Your verification code is ${verification_code}. 
+Please enter this code to continue the login process.
+
+Kind regards,
+Penteract
