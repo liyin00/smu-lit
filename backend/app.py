@@ -874,13 +874,14 @@ def assigning_case_to_SA():
 @app.route('/create_case_summary', methods=['POST'])
 def create_case_summary():
     try:
-        # retrieve data (case_id, summary_of_facts, issues_questions, applicable_law, court_hearing_matter, specific_questions, client_summary_feedback)
+        # retrieve data (case_id, summary_of_facts, issues_questions, applicable_law, court_hearing_matter, specific_questions)
         data = request.get_json()
         case_id = data['case_id']
         case_obj = cases.query.filter_by(case_id=case_id).first()
         
         # create case summary instance
         data['case_summary_id'] = 0
+        data['client_summary_feedback'] = None
         case_summary_obj = case_summary(**data)
         
         db.session.add(case_summary_obj)
