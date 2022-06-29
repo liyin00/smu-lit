@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../stylesheet/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
+    <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Locate Advocate - Applicant Dashboard</title>
+  </head>
+  <body style="background-image:url(../pictures/website-bg.jpg);
+  height: 100%;
+  width: 100%;
+  margin: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;">
+
+    <!--Navbar -->
+
+    <div class="container-fluid bg-dblue">
+
+        <header class="d-flex flex-wrap justify-content-center py-3">
+          <a href="../Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <img src = "../pictures/laurels.png" style='width:50px;' class = "px-2">
+            <span class="fs-4"><h1 class = "font-weight-bold text-white">Locate Advocate</h1></span>
+          </a>
+        </header>
+    </div>
+      
+    <div class="d-flex bg-gold justify-content-end px-4">
+        <div>
+            <nav class ="navbar">
+            <a class = "link-dotted link-light" href="./pages/login.html">Register</a> 
+            <a class = "text-light text-decoration-none px-1">/</a>
+            <a class = "link-dotted link-light" href="./pages/login.html">Log-in</a>
+            </nav>
+        </div>
+    </div>
+
+    <!--Body-->
+
+    <div class="container bg-dblue pt-3 pb-2 mt-5 d-flex align-items-center justify-content-center">
+      <div class="d-flex flex-column">
+          <div class="d-flex justify-content-center text-light"><h4>Name of Case</h4></div>
+      </div>
+    </div>
+
+    <div class="container bg-gold pt-3 pb-2 d-flex align-items-center justify-content-center">
+      <div class="d-flex flex-column">
+          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span>To be updated.</span></h4></div>
+      </div>
+    </div>
+
+    <div class="container bg-beige p-4 px-5 mb-4">
+
+      <div class="row">
+
+        <div class="col-6">
+            <a href="chat.html" class="block-link link-dark">
+                <div class="d-flex justify-content-center m-5">  
+                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Student Assistant</u></b></span></div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6">
+            <a href="chat.html" class="block-link link-dark">
+                <div class="d-flex justify-content-center m-5">  
+                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Lawyer</u></b></span></div>
+                </div>
+              </a>
+        </div>
+
+      </div>
+
+      <div class="container-fluid">
+        <!-- Section: Timeline -->
+        <div class="row">
+
+            <div class="col-6 col-md-6">
+
+                <div class="mb-3"><h4>Summary of Case Updates</h4></div>
+
+                <section>
+                    <style>
+                      .timeline-with-icons {
+                        border-left: 1px solid hsl(0, 0%, 90%);
+                        position: relative;
+                        list-style: none;
+                      }
+          
+                      .timeline-with-icons .timeline-item {
+                        position: relative;
+                      }
+          
+                      .timeline-with-icons .timeline-item:after {
+                        position: absolute;
+                        display: block;
+                        top: 0;
+                      }
+          
+                      .timeline-with-icons .timeline-icon {
+                        position: absolute;
+                        left: -48px;
+                        background-color: #B29E79;
+                        color: #B29E79;
+                        border-radius: 50%;
+                        height: 31px;
+                        width: 31px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                      }
+          
+                      .timeline-with-icons .timeline-current{
+                          background-color: #202837;
+                          color: #202837;
+                          position: absolute;
+                          left: -48px;
+                          border-radius: 50%;
+                          height: 31px;
+                          width: 31px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                      }
+                    </style>
+          
+                    <ul class="timeline-with-icons">
+                      <li class="timeline-item mb-5">
+                        <span class="timeline-current">
+                          <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
+                        </span>
+          
+                        <h5 class="fw-bold">Awaiting Assignment</h5>
+                        <p class="text-muted mb-2 fw-bold">To be updated</p>
+                        <p class="text-muted">
+                          Awaiting assignment of student assistant and lawyer.
+                        </p>
+                      </li>
+          
+                      <li class="timeline-item mb-5">
+          
+                        <span class="timeline-icon">
+                          <i class="fas fa-hand-holding-usd text-primary fa-sm fa-fw"></i>
+                        </span>
+                        <h5 class="fw-bold">Case Details Review</h5>
+                        <p class="text-muted mb-2 fw-bold">To be updated</p>
+                        <p class="text-muted">
+                          The facts of the case are being reviewed.                 
+                        </p>
+                      </li>
+          
+                      <li class="timeline-item mb-5">
+          
+                        <span class="timeline-icon">
+                          <i class="fas fa-users text-primary fa-sm fa-fw"></i>
+                        </span>
+                        <h5 class="fw-bold">Case Summary Review</h5>
+                        <p class="text-muted mb-2 fw-bold">To be updated</p>
+                        <p class="text-muted">
+                          The case summary is being confirmed.
+                        </p>
+                      </li>
+          
+                      <li class="timeline-item mb-5">
+          
+                        <span class="timeline-icon">
+                          <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
+                        </span>
+                        <h5 class="fw-bold">Appointment Confirmed</h5>
+                        <p class="text-muted mb-2 fw-bold">To be updated</p>
+                        <p class="text-muted">
+                          Appointment has been confirmed.
+                        </p>
+                      </li>
+                    </ul>
+                  </section>
+                  <!-- Section: Timeline -->
+            </div>
+    
+            <div class="col-6 col-md-6">
+                <h4>Application Details</h4>
+
+                <p class="text-gold">Case Category: </p>
+
+                <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
+
+                <ul>
+                    <li><a href="#">Document 1</a></li>
+                    <li><a href="#">Document 2</a></li>
+                    <li><a href="#">Document 3</a></li>
+                </ul>
+
+                <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
+
+                <p class="text-gold">I am currently a freelance photographer and I work with a few agencies to get clients, paying them a small comission fees. My recent client engagement under PhotoMAGIC (the agency) with Mr and Mrs Smith (Client) for a wedding photoshoot has been disappointing as they are unwilling to pay for the agreed upon costs stating their unsatisfaction with the pictures. </p>
+
+
+            </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--Footer-->
+
+  
+
+  </body>
+  </html>
