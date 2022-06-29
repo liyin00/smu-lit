@@ -935,6 +935,43 @@ def get_specific_case():
             }
         ), 404
 
+# 7 ) Retrieve cases by SA
+@app.route('/get_cases_by_sa', methods=['POST'])
+def get_cases_by_sa():
+    try:
+        # retrieve data (sa_id,)
+        data = request.get_json()
+        
+        sa_id = data['sa_id']
+        cases_info = cases.query.filter_by(sa_id=sa_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by SA"
+            }
+        ), 404
+
 # Chat
 # 1 ) retrieve chat message by case_id and category
 # 2 ) create chat message
