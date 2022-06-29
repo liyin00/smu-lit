@@ -555,7 +555,6 @@ def create_new_user_client():
             }
         ), 200
     
-        
     except Exception as e:
         print(e)
         return jsonify(
@@ -747,16 +746,14 @@ def user_profile():
             }
         ), 404
 
-
-
 # Case
 # 1 ) Check if client created new case
 # 2 ) Create new case
 # 3 ) assign case to SA
 # 4 ) SA does case summary
+# 6 ) Retrieve a specific case
 
 # 5 ) Retrieve cases by case status
-# 6 ) Retrieve a specific case
 # 7 ) Retrieve cases by SA
 # 8 ) Retrieve cases by lawyer
 # 9 ) Retrieve case by client
@@ -903,13 +900,38 @@ def create_case_summary():
             }
         ), 200
         
-        
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
                 "message": "Error occured while creating case summary."
+            }
+        ), 404
+
+# 6 ) Retrieve a specific case
+@app.route('/get_specific_case', methods=['POST'])
+def get_specific_case():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": case_info.get_dict()
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving specific case."
             }
         ), 404
 
