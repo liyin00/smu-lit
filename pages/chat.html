@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../stylesheet/stylesheet.css">
-    <link rel="stylesheet" href="../stylesheet/chat.css">
     <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
     <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
@@ -85,8 +84,8 @@
   
                 <input type="text" placeholder="Message" style="font-size: 15px;"
                   class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
-                  name="message" required id="message"/>
-                <button type="submit" onclick="sendmsg">
+                  name="message" required id="message-input"/>
+                <button type="submit" onclick="sendmsg()">
                   <svg class="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20" fill="white">
                     <path
@@ -113,14 +112,17 @@
 
     <script>
       
-      window.onload = loadmsg()
+      const user_id = localStorage.getItem("user_id");
+      const category = localStorage.getItem("category");
+      const case_id = localStorage.getItem("case_id");
+
+      window.onload = loadmsg();
       function loadmsg() {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           let msg_arr = JSON.parse(this.responseText).data;
           // console.log(this.responseText);
           // console.log(localStorage.getItem("role"));
-          let viewer_role = localStorage.getItem("user_id");
           
           for (messages of msg_arr){
             console.log(messages);
@@ -130,7 +132,7 @@
             const div = document.createElement("div");
             const span = document.createElement("span");
 
-            if (viewer_role == messages.sender_id){
+            if (user_id == messages.sender_id){
               // console.log("It's a match!!")
               li.setAttribute("class","flex justify-start");
               div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 rounded shadow");
@@ -151,12 +153,19 @@
 
           }
         }
-        xhttp.open("GET", "http://localhost:5000/chat", true);
-        xhttp.send();
+        xhttp.open("POST", "http://localhost:8100/retrieve_chat", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({"case_id": case_id,"category": category}));
       }
       function sendmsg(){
-        //alert("clicked");
-        const new_message = document.getElementById("message").value;
+
+        const new_message = document.getElementById("message-input").value;
+        // console.log(new_message);
+
+        const chatbox = document.getElementById("chat-messages");
+        const li = document.createElement("li");
+        const div = document.createElement("div");
+        const span = document.createElement("span");
 
         li.setAttribute("class","flex justify-start");
         div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 rounded shadow");
@@ -164,7 +173,7 @@
         span.setAttribute("class", "block");
         span.setAttribute("style", "color: white");
 
-        span.innerText = messages.message; 
+        span.innerText = new_message; 
         div.appendChild(span);
         li.appendChild(div);
         chatbox.append(li);
@@ -172,19 +181,17 @@
         const request = new XMLHttpRequest();
         request.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200) {  
-
-                let sender_id = localStorage.getItem("user_id");
                 let message = new_message;
-                let category = localStorage.getItem("category");
-                let case_id = localStorage.getItem("case_id");
             }
         };
 
-        request.open("POST", "http://localhost:5000/chat");
-        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlhttp.send(JSON.stringify({ "code": 200, "data": { "sender_id": sender_id, "message": message, "category":category, "case_id": case_id } }));
+        let send_req = JSON.stringify({"case_id": case_id, "category": category, "sender_id": user_id, "message": new_message});
+        console.log(send_req);
+        request.open("POST", "http://localhost:8100/create_chat_message");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(send_req);
 
-        document.getElementById("message").value = '';   
+        document.getElementById("message-input").value = '';   
     }
 
     </script>

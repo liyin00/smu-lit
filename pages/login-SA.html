@@ -50,10 +50,16 @@
 
 <!--Main-->
 
+<div class="container-fluid bg-dark d-flex justify-content-center" style="margin-top: 5vh; width: 79vw;">
+    <h3 class="text-light">
+        Logging in as:
+    </h3>
+</div>
+
 <div class="container-fluid px-0 pb-2 pt-0 d-flex justify-content-between" style="margin-top: 5vh; width: 80vw;">
 
     <a href="login.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 justify-content-center d-flex align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 justify-content-center d-flex align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/client.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -65,7 +71,7 @@
 
 
     <a href="login-SA.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/student.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -77,7 +83,7 @@
 
 
     <a href="login-lawyer.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/lawyer.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -89,8 +95,6 @@
 
 </div>
 
-<div class="container-fluid bg-beige" style="position: absolute; top:35%">
-
 <div class="container" id="userLoginRegister">
 
     <div class="login-reg-panel" style="margin-top: 18rem;">
@@ -100,7 +104,7 @@
 			<input type="radio" name="active-log-panel" id="log-reg-show"  checked="checked">
 		</div>
 							
-		<div class="register-info-box">
+		<div class="register-info-box px-4">
 			<h2>Don't have an account?</h2>
 			<label id="label-login" for="log-login-show">Register</label>
 			<input type="radio" name="active-log-panel" id="log-login-show">
@@ -109,20 +113,20 @@
 		<div class="white-panel">
 			<div class="login-show">
 				<h2>LOGIN AS ASSISTANT</h2>
-				<input type="text" placeholder="Email">
-				<input type="password" placeholder="Password">
-				<input type="button" value="Login">
+				<input type="text" id="emailSAL" placeholder="Email">
+				<input type="password" id="passwordSAL" placeholder="Password">
+				<input type="button" value="Login" onclick="loginSA()">
 				<a href="" class="link-dark">Forgot password?</a>
 			</div>
 			<div class="register-show mb-3">
 				<h2>REGISTER AS ASSISTANT</h2>
-				<input type="text" placeholder="Email">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Educational Institution">
-                <input type="text" placeholder="Year of Study">
-				<input type="password" placeholder="Password">
+				<input type="text" id="emailSA" placeholder="Email">
+                <input type="text" id="nameSA" placeholder="Name">
+                <input type="text" id="school" placeholder="Educational Institution">
+                <input type="text" id="yearOfStudy" placeholder="Year of Study">
+				<input type="password" id="passwordSA" placeholder="Password">
 				<input type="password" placeholder="Confirm Password">
-				<input type="button" value="Register">
+				<input type="button" value="Register" onclick="registerSA()">
 			</div>
 		</div>
 	</div>
@@ -132,6 +136,36 @@
 
 
 <script>
+
+function loginSA(){
+    //API
+    var email = document.getElementById("emailSAL");
+    var password = document.getElementById("passwordSAL");
+    if(true){
+        window.sessionStorage;
+        sessionStorage.setItem("name", "John Tan");
+        sessionStorage.setItem("userID", 22222);
+        sessionStorage.setItem("caseID", 21298);
+        sessionStorage.setItem("userType", "studentAssistant");
+    }
+}
+
+function registerSA(){
+    var email = document.getElementById("emailSA").value;
+    var name = document.getElementById("nameSA").value;
+    var school = document.getElementById("school").value;
+    var yearOfStudy = document.getElementById("yearOfStudy").value;
+    var password = document.getElementById("passwordSA").value;
+    window.sessionStorage;
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("school", school);
+    sessionStorage.setItem("yearOfStudy", yearOfStudy);
+    sessionStorage.setItem("password", password);
+    //API
+}
+
+
 $(document).ready(function(){
     $('.login-info-box').fadeOut();
     $('.login-show').addClass('show-log-panel');
@@ -163,6 +197,9 @@ $('.login-reg-panel input[type="radio"]').on('change', function() {
 
 </script>
 
+<script src="https://unpkg.com/scrollreveal"></script>
+<script src="animations.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 </body>
 
 </html>

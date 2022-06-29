@@ -16,6 +16,11 @@ input[type=text], input[type=number], input[type=password]{
 h1, h2, h3, h4, h5, u {
     font-family: 'Karla', serif;
 }
+
+.text-gold{
+  color: #B29E79 !important;
+}
+
 .bg-gold {
     background-color: #B29E79;
 }

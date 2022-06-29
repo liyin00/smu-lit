@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../stylesheet/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
+    <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Locate Advocate - Applicant Dashboard</title>
+  </head>
+
+  <body style="background-image:url(../pictures/website-bg.jpg);
+  height: 100%;
+  width: 100%;
+  margin: 0%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;">
+
+  <!--Header-->
+    <div class="container-fluid bg-dblue">
+
+        <header class="d-flex flex-wrap justify-content-center py-3">
+        <a href="../Homepage.html" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <img src = "../pictures/laurels.png" style='width:50px;' class = "px-2">
+            <span class="fs-4"><h1 class = "font-weight-bold text-white">Locate Advocate</h1></span>
+        </a>
+        </header>
+    </div>
+    
+    <div class="d-flex bg-gold justify-content-end px-4">
+        <div>
+            <nav class ="navbar">
+            <a class = "link-dotted link-light" href="login.html">Register</a> 
+            <a class = "text-light text-decoration-none px-1">/</a>
+            <a class = "link-dotted link-light" href="login.html">Log-in</a>
+            </nav>
+        </div>
+    </div>
+
+    <!--Body-->
+
+    <div class="container-fluid" style="margin-top: 5%;">
+
+        <div class="container d-flex justify-content-center flex-column">
+            <div class="w-100 bg-dblue d-flex justify-content-center mt-5 p-1">
+                <h4 class="text-light">Sending you a One Time Password</h4></p>
+            </div>
+
+            <div class="w-100 bg-beige d-flex flex-column p-3">
+                <div class="justify-content-center d-flex"><p>You should have received an email from <b>the_penteract@gmail.com</b></p></div>
+                <div class="justify-content-center d-flex"><p>Enter the 6 Digit Verification Code within the next 10 minutes to complete your log-in process.</p></div>
+                <div class="justify-content-center d-flex">
+                    <form id="otpLogin">
+                        <div class="w-100">
+                          <input type="number" class="form-control" id="otpNumber" placeholder="6 digit OTP"></input>
+                        </div>
+                        <div class="justify-content-center d-flex mt-3"><button type="button" onclick="verify()" class="btn btn-secondary">Login</button></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+        window.onload = console.log(sessionStorage)
+
+        let userType =  sessionStorage.getItem("userType");
+
+        // if(userType == "client"){
+        //     window.location.replace("applicant-start.html");
+        // }
+        // else if(userType == "studentAssistant"){
+        //     window.location.replace("SA-dashboard.html");
+        // }
+        // else if(userType == "lawyer"){
+        //     window.location.replace("lawyer-dashboard.html");
+        // }
+
+    </script>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="../animations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  </body>
+  </html>
