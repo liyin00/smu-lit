@@ -752,11 +752,12 @@ def user_profile():
 # 3 ) assign case to SA
 # 4 ) SA does case summary
 # 6 ) Retrieve a specific case
+# 7 ) Retrieve cases by SA by case_status
+# 8 ) Retrieve cases by lawyer by case_status
+# 9 ) Retrieve case by client by case_status
+# 10 ) Retrieve all cases by case_status
 
 # 5 ) Retrieve cases by case status
-# 7 ) Retrieve cases by SA
-# 8 ) Retrieve cases by lawyer
-# 9 ) Retrieve case by client
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -935,11 +936,11 @@ def get_specific_case():
             }
         ), 404
 
-# 7 ) Retrieve cases by SA
+# 7 ) Retrieve cases by SA by case_status
 @app.route('/get_cases_by_sa', methods=['POST'])
 def get_cases_by_sa():
     try:
-        # retrieve data (sa_id,)
+        # retrieve data (sa_id)
         data = request.get_json()
         
         sa_id = data['sa_id']
@@ -968,7 +969,114 @@ def get_cases_by_sa():
         return jsonify(
             {
                 "code": 404,
-                "message": "Error occured while retrieving cases by SA"
+                "message": "Error occured while retrieving cases by SA."
+            }
+        ), 404
+
+# 8 ) Retrieve cases by lawyer by case_status
+@app.route('/get_cases_by_lawyer', methods=['POST'])
+def get_cases_by_lawyer():
+    try:
+        # retrieve data (lawyer_id)
+        data = request.get_json()
+        
+        lawyer_id = data['lawyer_id']
+        cases_info = cases.query.filter_by(lawyer_id=lawyer_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by lawyer."
+            }
+        ), 404
+
+# 9 ) Retrieve case by client by case_status
+@app.route('/get_cases_by_client', methods=['POST'])
+def get_cases_by_client():
+    try:
+        # retrieve data (client_id)
+        data = request.get_json()
+        
+        client_id = data['client_id']
+        cases_info = cases.query.filter_by(client_id=client_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by client."
+            }
+        ), 404
+
+# 10 ) Retrieve all cases by case_status
+@app.route('/get_all_cases_admin', methods=['GET'])
+def get_all_cases_admin():
+    try:
+        cases_info = cases.query.all()
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all cases by case status."
             }
         ), 404
 
