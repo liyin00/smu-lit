@@ -50,10 +50,16 @@
 
 <!--Main-->
 
+<div class="container-fluid bg-dark d-flex justify-content-center" style="margin-top: 5vh; width: 79vw;">
+    <h3 class="text-light">
+        Logging in as:
+    </h3>
+</div>
+
 <div class="container-fluid px-0 pb-2 pt-0 d-flex justify-content-between" style="margin-top: 5vh; width: 80vw;">
 
     <a href="login.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 justify-content-center d-flex align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 justify-content-center d-flex align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/client.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -65,7 +71,7 @@
 
 
     <a href="login-SA.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/student.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -77,7 +83,7 @@
 
 
     <a href="login-lawyer.html" class="block-link link-dark">
-        <div class="bg-beige grow p-0 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 20vh;">
+        <div class="bg-beige grow pt-3 d-flex justify-content-center align-items-center flex-column mx-2" style="height: 15vh;">
             <div class="d-flex justify-content-center">
                 <img src="../pictures/lawyer.png" style="max-width: 2rem; height:auto; margin-bottom: 10px;">
             </div>
@@ -89,7 +95,8 @@
 
 </div>
 
-<div class="container-fluid bg-beige" style="position: absolute; top:35%">
+
+<div class="container-fluid" style="position: relative; top:35%;">
 
 <div class="container" id="userLoginRegister">
 
@@ -100,7 +107,7 @@
 			<input type="radio" name="active-log-panel" id="log-reg-show"  checked="checked">
 		</div>
 							
-		<div class="register-info-box">
+		<div class="register-info-box px-4">
 			<h2>Don't have an account?</h2>
 			<label id="label-login" for="log-login-show">Register</label>
 			<input type="radio" name="active-log-panel" id="log-login-show">
@@ -138,10 +145,10 @@ function loginClient(){
     var password = document.getElementById("passwordClientL").value;
     if(true){
         window.sessionStorage;
-        sessionStorage.setItem("name", "John Tan").value;
-        sessionStorage.setItem("userID", 22222).value;
-        sessionStorage.setItem("caseID", 21298).value;
-        sessionStorage.setItem("userType", "client").value;
+        sessionStorage.setItem("name", "John Tan");
+        sessionStorage.setItem("userID", 22222);
+        sessionStorage.setItem("caseID", 21298);
+        sessionStorage.setItem("userType", "client");
         //API
     }
 }
@@ -151,7 +158,6 @@ function registerClient(){
     var name = document.getElementById("nameClient").value;
     var bday = document.getElementById("bdayClient").value;
     var nric = document.getElementById("nricClient").value;
-    console.log(email);
     var password = document.getElementById("passwordClient").value;
     window.sessionStorage;
     sessionStorage.setItem("email", email);
@@ -159,26 +165,11 @@ function registerClient(){
     sessionStorage.setItem("bday", bday);
     sessionStorage.setItem("nric", nric);
     sessionStorage.setItem("password", password);
+    sessionStorage.setItem("userType", "client")
 
-    var settings = {
-    "url": "http://127.0.0.1:8100/create_new_user_client",
-    "method": "POST",
-    "timeout": 0,
-    "headers": {
-        "Content-Type": "application/json"
-    },
-    "data": JSON.stringify({
-        "email": email,
-        "name": name,
-        "bdae": bday,
-        "last4_nric": nric,
-        "password": password
-    }),
-    };
+    // check if client exists
 
-    $.ajax(settings).done(function (response) {
-    console.log(response);
-    });
+    window.location.replace("otp.html")
 }
 
 $(document).ready(function(){
