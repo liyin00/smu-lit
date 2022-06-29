@@ -751,13 +751,12 @@ def user_profile():
 # 2 ) Create new case
 # 3 ) assign case to SA
 # 4 ) SA does case summary
+# 5 ) SA retrieve case summary
 # 6 ) Retrieve a specific case
 # 7 ) Retrieve cases by SA by case_status
 # 8 ) Retrieve cases by lawyer by case_status
 # 9 ) Retrieve case by client by case_status
 # 10 ) Retrieve all cases by case_status
-
-# 5 ) Retrieve cases by case status
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -907,6 +906,37 @@ def create_case_summary():
             {
                 "code": 404,
                 "message": "Error occured while creating case summary."
+            }
+        ), 404
+
+# 5 ) SA retrieve case summary
+@app.route('/get_case_summary', methods=['POST'])
+def get_case_summary():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        
+        cases_info = cases.query.filter_by(case_id=case_id)
+        
+        output = []
+        
+        for case in cases_info:
+            output.append(case.get_dict())
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving case summary."
             }
         ), 404
 
