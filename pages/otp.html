@@ -79,16 +79,71 @@
         window.onload = console.log(sessionStorage)
 
         let userType =  sessionStorage.getItem("userType");
+        let otp = sessionStorage.getItem("otp");
+        let loginRegister = sessionStorage.getItem("loginRegister");
 
-        // if(userType == "client"){
-        //     window.location.replace("applicant-start.html");
-        // }
-        // else if(userType == "studentAssistant"){
-        //     window.location.replace("SA-dashboard.html");
-        // }
-        // else if(userType == "lawyer"){
-        //     window.location.replace("lawyer-dashboard.html");
-        // }
+        function verify(){
+
+            console.log(document.getElementById("otpNumber").value)
+
+            if(otp == document.getElementById("otpNumber").value){
+
+                let email = sessionStorage.getItem("email");
+                let password = sessionStorage.getItem("password");
+
+                if(userType == "client"){
+
+                    if(loginRegister == "register"){
+                        let email = sessionStorage.getItem("email");
+                        let name = sessionStorage.getItem("name");
+                        let bday = sessionStorage.getItem("bday");
+                        let nric = sessionStorage.getItem("nric");
+
+                        var settings = {
+                            "url": "http://127.0.0.1:8100/create_new_user_client",
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify({
+                                "email": email,
+                                "name": name,
+                                "bdae": bday,
+                                "last4_nric": nric,
+                                "password": password
+                            }),
+                            };
+                            $.ajax(settings).done(function (response) {
+                            console.log(response);
+                            });
+                    }
+
+                    var settings = {
+                        "url": "http://127.0.0.1:8100/login",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify({
+                            "email": email,
+                            "password": password
+                        }),
+                        };
+
+                        $.ajax(settings).done(function (response) {
+                        console.log(response);
+                        });
+
+                    window.location.replace("applicant-start.html");
+                }
+                    
+                   
+            }
+            
+        }
+
 
     </script>
 

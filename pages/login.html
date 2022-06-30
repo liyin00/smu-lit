@@ -143,14 +143,40 @@
 function loginClient(){
     var email = document.getElementById("emailClientL").value;
     var password = document.getElementById("passwordClientL").value;
-    if(true){
-        window.sessionStorage;
-        sessionStorage.setItem("name", "John Tan");
-        sessionStorage.setItem("userID", 22222);
-        sessionStorage.setItem("caseID", 21298);
-        sessionStorage.setItem("userType", "client");
-        //API
-    }
+
+    console.log(email);
+
+    var settings = {
+        "url": "http://127.0.0.1:8100/login",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+            "email": email,
+            "password": password
+        }),
+        };
+
+        $.ajax(settings).done(function (response) {
+        console.log(response);
+        if(response.code==200){
+            name = response.data.name;
+            userID = response.data.user_id;
+            otp = response.data.otp;
+            window.sessionStorage;
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("userID", userID);
+            sessionStorage.setItem("otp", otp);
+            sessionStorage.setItem("userType", "client");
+            sessionStorage.setItem("loginRegister", "login");
+            window.location.replace("otp.html");
+        }
+        else{
+            alert("Login failed.")
+        }
+        });
 }
 
 function registerClient(){
@@ -166,10 +192,32 @@ function registerClient(){
     sessionStorage.setItem("nric", nric);
     sessionStorage.setItem("password", password);
     sessionStorage.setItem("userType", "client")
+    sessionStorage.setItem("loginRegister", "register")
 
-    // check if client exists
+    var settings = {
+    "url": "http://127.0.0.1:8100/registration_scan",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+        "email": email
+    }),
+    };
 
-    window.location.replace("otp.html")
+    $.ajax(settings).done(function (response) {
+    console.log(response);
+    if(response.code==200){
+        otp = response.data.otp;
+        sessionStorage.setItem("otp", otp)
+        window.location.replace("otp.html");
+    }
+    else{
+        alert("Registration failed. Do you have an existing account?")
+    }
+    });
+
 }
 
 $(document).ready(function(){
