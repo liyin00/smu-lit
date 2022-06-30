@@ -176,7 +176,7 @@
               <h5 class="bg-dblue text-light" style="text-align:center;">Edits Requested by Applicant</h5> 
               <form class="m-2">
                 <div class="input-group">
-                  <textarea class="form-control" aria-label="With textarea" id=""client-req></textarea>
+                  <textarea class="form-control" aria-label="With textarea" id="client-req"></textarea>
                 </div>
                 <div class="container-fluid d-flex justify-content-center">
                   <button class="text-light m-3 bg-gold" style="margin-bottom: 15px; border: none;">Submit Request</button>
@@ -189,37 +189,36 @@
     </div>
 
     <script>
-      const user_id = localStorage.getItem("user_id");
-      const case_id = localStorage.getItem("case_id");
-
+      const user_id = localStorage.getItem("userID");
+      const case_id = localStorage.getItem("caseID");
+      console.log(case_id);
       window.onload = loadDrafts();
       function loadDrafts() {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           let draft_info_arr = JSON.parse(this.responseText).data;
-          // console.log(this.responseText);
-          
+          console.log(draft_info_arr);
           for (draft_info of draft_info_arr){
             //logic flow for requesting edits 
-            if (draft_info.finalised_case_summary_date != "" || draft_info.case_summary_date != "") {
+            if (draft_info.finalised_case_summary_date != null || draft_info.case_summary_date != null) {
               // case whereby the entire case has previously been approved 
-              if (draft_info.case_summary_date != "" && draft_info.finalised_case_summary_date != ""){
+              if (draft_info.case_summary_date != null && draft_info.finalised_case_summary_date != null){
                 document.getElementById('timeline').style.display="";
                 document.getElementById('latest_draft').style.display="";
                 document.getElementById('final_draft').style.display="";
                 let case_summary_date = draft_info.case_summary_date;
-                case_summary_date = moment(case_summary_date).format('LL'); 
+                // case_summary_date = moment(case_summary_date).format('LL'); 
                 let finalized_case_summary_date = draft_info.finalized_case_summary_date;
-                finalized_case_summary_date = moment(finalized_case_summary_date).format('LL'); 
+                // finalized_case_summary_date = moment(finalized_case_summary_date).format('LL'); 
                 document.getElementById('case_summary_date').innerHTML = case_summary_date;
                 document.getElementById('finalized_case_summary_date').innerHTML = finalized_case_summary_date;
               }
               // case whereby approval is pending 
-              else if (draft_info.finalised_case_summary_date == ""){
+              else if (draft_info.finalised_case_summary_date == null){
                 document.getElementById('timeline').style.display="";
                 document.getElementById('latest_draft').style.display="";
                 let case_summary_date = draft_info.case_summary_date;
-                case_summary_date = moment(case_summary_date).format('LL'); 
+                // case_summary_date = moment(case_summary_date).format('LL'); 
                 document.getElementById('case_summary_date').innerHTML = case_summary_date;
                 document.getElementById('approval').style.display = "";
               }
@@ -227,7 +226,7 @@
 
             //populating fields on the left 
             let case_date = draft_info.case_summary_date;
-            case_date = moment(case_date).format('LL'); 
+            // case_date = moment(case_date).format('LL'); 
             document.getElementById('case_date').innerHTML = case_date;
             document.getElementById('summary_of_facts').innerHTML = draft_info.summary_of_facts;
             document.getElementById('issues_questions').innerHTML = draft_info.issues_questions;
@@ -237,9 +236,9 @@
           }
 
         }
-        xhttp.open("GET", "http://localhost:5000/get_draft_details", true);
+        xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send();
+        xhttp.send(JSON.stringify({"case_id": case_id}));
       }
 
       function addEdits(){

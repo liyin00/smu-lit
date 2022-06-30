@@ -112,9 +112,9 @@
 
     <script>
       
-      const user_id = localStorage.getItem("user_id");
+      const user_id = localStorage.getItem("userID");
       const category = localStorage.getItem("category");
-      const case_id = localStorage.getItem("case_id");
+      const case_id = localStorage.getItem("caseID");
 
       window.onload = loadmsg();
       function loadmsg() {
@@ -122,7 +122,6 @@
         xhttp.onload = function() {
           let msg_arr = JSON.parse(this.responseText).data;
           // console.log(this.responseText);
-          // console.log(localStorage.getItem("role"));
           
           for (messages of msg_arr){
             console.log(messages);
