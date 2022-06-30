@@ -809,6 +809,7 @@ def user_profile():
 # 9 ) Retrieve case by client by case_status
 # 10 ) Retrieve all cases by case_status
 # 11 ) update client feedback
+# 12 ) get_case_stages
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -1214,6 +1215,39 @@ def client_feedback():
             {
                 "code": 404,
                 "message": "Error occurred while updating client feedback."
+            }
+        ), 404
+
+# 12 ) get_case_stages
+@app.route('/get_case_stages', methods=['POST'])
+def get_case_stages():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        
+        case_id = data['case_id']
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        case_info_json = case_info.get_dict()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "student_assigned_date": case_info_json['student_assigned_date'],
+                    "case_summary_date": case_info_json['case_summary_date'],
+                    "finalised_case_summary_date": case_info_json['finalised_case_summary_date'],
+                    "confirmed_appointment_date": case_info_json["confirmed_appointment_date"],
+                    "consultation_date": case_info_json["consultation_date"]
+                }
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving case stages."
             }
         ), 404
 
