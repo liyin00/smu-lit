@@ -145,6 +145,7 @@ function loginClient(){
     var password = document.getElementById("passwordClientL").value;
 
     console.log(email);
+    console.log(password);
 
     var settings = {
         "url": "http://127.0.0.1:8100/login",
@@ -166,6 +167,7 @@ function loginClient(){
             userID = response.data.user_id;
             otp = response.data.otp;
             window.sessionStorage;
+            console.log(sessionStorage);
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("userID", userID);
             sessionStorage.setItem("otp", otp);

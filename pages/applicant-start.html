@@ -60,7 +60,7 @@
 
     <div class="container px-0 pb-2 pt-0 d-flex justify-content-between animate__animated animate__fadeIn " style="margin-top: 5vh; width: 80vw;">
 
-        <a href="./clinic-select.html" class="block-link link-dark">
+        <a href="./clinic-select.html" id="clinicSelect" class="block-link link-dark">
             <div class="bg-beige rounded-corners grow p-0 justify-content-center d-flex align-items-center flex-column" style="height: 40vh;">
                 <div class="d-flex justify-content-center">
                     <img src="../pictures/contract.png" style="max-width: 8rem; height:auto; margin-bottom: 30px; margin-left: 30px;">
@@ -72,7 +72,7 @@
         </a>
         <div style="width: 20vh;"></div>
 
-        <a href="applicant-case-overview.html" class="block-link link-dark">
+        <a href="applicant-case-overview.html" id="caseUpdates" class="block-link link-dark">
             <div class="bg-beige rounded-corners grow p-0 d-flex justify-content-center align-items-center flex-column" style="height: 40vh;">
                 <div class="d-flex justify-content-center">
                     <img src="../pictures/chat.png" style="max-width: 8rem; height:auto; margin-bottom: 10px;">
@@ -92,7 +92,43 @@
     </div>
 
     <script>
-        window.onload = console.log(sessionStorage);
+        function caseExists(){
+            alert("Case already exists!");
+        }
+        function caseNotExists(){
+            alert("No case exists!");
+        }
+        function checkExistingCase(){
+            var userID = sessionStorage.getItem("userID");
+            console.log(sessionStorage)
+            var settings = {
+                "url": "http://127.0.0.1:8100/client_existing_case",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "client_id": userID
+                }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                console.log(response);
+                if(response.code==200){
+                    if(response.existing_case == true){
+                        document.getElementById("clinicSelect").setAttribute("href", "#")
+                        document.getElementById("clinicSelect").addEventListener("click", caseExists);
+
+                    }
+                    else{
+                        document.getElementById("caseUpdates").setAttribute("href", "#")
+                        document.getElementById("caseUpdates").addEventListener("click", caseNotExists);
+                    }
+                }
+                });
+        }
+        window.onload = checkExistingCase();
     </script>
 
     <script src="https://unpkg.com/scrollreveal"></script>

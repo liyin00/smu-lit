@@ -478,8 +478,8 @@ def registration_scan():
         # send to email
         
         # 1) login
-        MY_ADDRESS = 'THE_Penteract@outlook.com' # input your address
-        MY_PW = 'PenteractPassword' # input your password
+        MY_ADDRESS = 'marcus.goh.2019@scis.smu.edu.sg' # input your address
+        MY_PW = 'Pkl12345:)' # input your password
         
         s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
         s.starttls()
@@ -597,8 +597,8 @@ def login():
         # send to email
         
         # 1) login
-        MY_ADDRESS = 'THE_Penteract@outlook.com' # input your address
-        MY_PW = 'PenteractPassword' # input your password
+        MY_ADDRESS = 'marcus.goh.2019@scis.smu.edu.sg' # input your address
+        MY_PW = 'Pkl12345:)' # input your password
         
         s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
         s.starttls()

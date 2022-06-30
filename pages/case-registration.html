@@ -237,12 +237,14 @@
     </script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../animations.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <script>
+<script>
       
+console.log(sessionStorage);
+
  (function() {
     function constructDataObj(){
         var dataFieldsObj = {
@@ -272,39 +274,49 @@
             event.stopPropagation();
             formDataObj = constructDataObj();
             console.log(formDataObj);
-            hearingDate = moment(formDataObj.calendarDate, "DD/MM/YYYY").format("YYYY-MM-DD");
-            console.log(hearingDate);
-            clientCaseSummary = formDataObj.caseDescription;
-            caseTitle = formDataObj.caseTitle;
+            var salary = formDataObj.salary;
+            var caseCategory = formDataObj.caseCategoryList;
+            var clientCaseSummary = formDataObj.caseDescription;
+            var caseTitle = formDataObj.caseTitle;
+            var hearingDate = moment(formDataObj.calendarDate, "MM/DD/YYYY").format("YYYY-MM-DD");
+            var name = sessionStorage.getItem("name");
+            var userID = sessionStorage.getItem("userID");
+            console.log(name, userID, salary, caseTitle,caseCategory, hearingDate, clientCaseSummary);
+
+
 
             var settings = {
-                "url": "http://localhost:5888/create_case",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                  "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({
-                  "s3_url": "s3 url 1",
-                  "hearing_date": hearingDate,
-                  "case_title": caseTitle,
-                  "client_case_summary": clientCaseSummary,
-                  "client_id": "1"
-                }),
-              };
-              
-              $.ajax(settings).done(function (response) {
-                console.log(response);
-              });
+              "url": "http://127.0.0.1:8100/create_case",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "data": JSON.stringify({
+                "client_name": name,
+                "client_id": userID,
+                "gross_salary": salary,
+                "case_title": caseTitle,
+                "case_category": caseCategory,
+                "court_hearing_date": hearingDate,
+                "client_case_description": clientCaseSummary,
+                "s3_url": "www.google.com"
+              }),
+            };
 
-              // window.location.href = "case-success.html";
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+              if(response.code == 200){
+                window.location.replace("case-success.html");
+              }
+            });
           }
           form.classList.add('was-validated');
         }, false);
       });
     }, false);
   })();
-    </script>
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

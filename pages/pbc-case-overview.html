@@ -51,7 +51,7 @@
 
     <div class="container bg-dblue pt-3 pb-2 mt-5 d-flex align-items-center justify-content-center">
       <div class="d-flex flex-column">
-          <div class="d-flex justify-content-center text-light"><h4>Name of Case</h4></div>
+          <div class="d-flex justify-content-center text-light"><h4>Case Name: <span id="caseName"></span></h4></div>
       </div>
     </div>
 
@@ -88,7 +88,7 @@
 
             <div class="col-6 col-md-6">
 
-                <div class="mb-3"><h4>Summary of Case Updates</h4></div>
+                <div class="mb-3"><h4 class="mb-4">Summary of Case Updates</h4></div>
 
                 <section>
                     <style>
@@ -189,12 +189,22 @@
             </div>
     
             <div class="col-6 col-md-6">
-                <h4>Application Details</h4>
+                <h4 class="mb-4">Application Details</h4>
 
-                <h5><b>Client name: <span id="clientName"></span></b></h5>
-                <h5><b>Client birthday: <span id="clientBday"></span></b></h5>
+                <h5 class="text-gold mb-4"><b>Case Category:</b> <span id="caseCategory"></span></h5>
 
-                <p class="text-gold">Case Category: <span id="caseCategory"></span></p>
+
+                <div class="container-fluid mb-4">
+                  <h5><b>Client name:</b> <span id="clientName"></span></h5>
+                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
+                </div>
+
+                <div class="container-fluid mb-4">
+                  <h5><b>Lawyer Name:</b> <span id="clientName"></span></h5>
+                  <h5><b>Student Assistant Name:</b> <span id="clientBday"></span></h5>
+                </div>
+
+                
 
                 <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
@@ -206,7 +216,7 @@
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
-                <p class="text-gold" id="caseDescription">I am currently a freelance photographer and I work with a few agencies to get clients, paying them a small comission fees. My recent client engagement under PhotoMAGIC (the agency) with Mr and Mrs Smith (Client) for a wedding photoshoot has been disappointing as they are unwilling to pay for the agreed upon costs stating their unsatisfaction with the pictures. </p>
+                <p class="text-gold" id="caseDescription"></p>
 
 
             </div>
@@ -217,7 +227,34 @@
 
     </div>
 
-    <!--Footer-->
+    <script>
+      window.onload = console.log(sessionStorage);
+      window.onload = function retrieveCase(){
+          var settings = {
+              "url": "http://127.0.0.1:8100/get_specific_case",
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                  "Content-Type": "application/json"
+              },
+              "data": JSON.stringify({
+                  "case_id": sessionStorage.getItem("caseID")
+              }),
+              };
+
+              $.ajax(settings).done(function (response) {
+              console.log(response);
+              if (response.code==200){
+                document.getElementById("clientName").innerHTML = response.data.client_name;
+                document.getElementById("caseCategory").innerHTML = response.data.case_category;
+                document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
+                document.getElementById("caseName").innerHTML = response.data.case_title;
+              }
+              });
+      };
+
+    
+    </script>
 
   
 
