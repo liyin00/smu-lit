@@ -338,7 +338,7 @@ class case_summary(db.Model):
             self.specific_questions = update_dict['specific_questions']
             
         if 'client_summary_feedback' in update_dict:
-            self.client_summary_feedbac = update_dict['client_summary_feedback']
+            self.client_summary_feedback = update_dict['client_summary_feedback']
             
 class chats(db.Model):
     __tablename__ = 'chats'
@@ -1174,7 +1174,7 @@ def get_all_cases_admin():
 
 # 11 ) update client feedback (last seen)
 @app.route('/client_feedback', methods=['POST'])
-def template():
+def client_feedback():
     try:
         # retrieve data (case_id, client_summary_approval, client_summary_feedback)
         data = request.get_json()
@@ -1184,11 +1184,11 @@ def template():
         client_summary_feedback = data['client_summary_feedback']
         
         # update case_summary
-        case_summary_info = case_summary.query.filter_by(case_id=case_id).last()
+        case_summary_info = case_summary.query.filter_by(case_id=case_id)[-1]
         case_summary_info.update_columns({
             "client_summary_feedback": client_summary_feedback
         })
-        
+        print(case_summary_info.get_dict())
         db.session.commit()
         
         # update case
