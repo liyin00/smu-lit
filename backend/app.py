@@ -1347,6 +1347,70 @@ def get_user_profile():
             }
         ), 404
 
+# 2 ) Retrieve all SAs
+@app.route('/get_all_sa', methods=['GET'])
+def get_all_sa():
+    try:
+        users_info = users.query.filter_by(role='SA')
+        
+        output = []
+        
+        for user in users_info:
+            user_json = user.get_dict()
+            
+            output.append({
+                "sa_id": user_json['user_id'],
+                "sa_name": user_json['name']
+            })
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all SAs"
+            }
+        ), 404
+
+# 2 ) Retrieve all lawyers
+@app.route('/get_all_lawyers', methods=['GET'])
+def get_all_lawyers():
+    try:
+        users_info = users.query.filter_by(role='lawyer')
+        
+        output = []
+        
+        for user in users_info:
+            user_json = user.get_dict()
+            
+            output.append({
+                "lawyer_id": user_json['user_id'],
+                "lawyer_name": user_json['name']
+            })
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all Lawyers"
+            }
+        ), 404
+        
 # consultation
 # 1) update_consultation
 @app.route('/update_consultation', methods=['POST'])
