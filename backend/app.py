@@ -201,48 +201,70 @@ class cases(db.Model):
         """
         if 'case_id' in update_dict:
             self.case_id = update_dict['case_id']
+
         if 'client_name' in update_dict:
             self.client_name = update_dict['client_name']
+
         if 'client_id' in update_dict:
             self.client_id = update_dict['client_id']
+
         if 'gross_salary' in update_dict:
             self.gross_salary = update_dict['gross_salary']
+
         if 'case_title' in update_dict:
             self.case_title = update_dict['case_title']
+
         if 'case_category' in update_dict:
             self.case_category = update_dict['case_category']
+
         if 'court_hearing_date' in update_dict:
             self.court_hearing_date = update_dict['court_hearing_date']
+
         if 'client_case_description' in update_dict:
             self.client_case_description = update_dict['client_case_description']
+
         if 's3_url' in update_dict:
             self.s3_url = update_dict['s3_url']
+
         if 'sa_id' in update_dict:
             self.sa_id = update_dict['sa_id']
+
         if 'lawyer_id' in update_dict:
             self.lawyer_id = update_dict['lawyer_id']
+
         if 'current_case_status' in update_dict:
             self.current_case_status = update_dict['current_case_status']
+
         if 'student_assigned_date' in update_dict:
             self.student_assigned_date = update_dict['student_assigned_date']
+
         if 'case_summary_date' in update_dict:
             self.case_summary_date = update_dict['case_summary_date']
+
         if 'finalised_case_summary_date' in update_dict:
             self.finalised_case_summary_date = update_dict['finalised_case_summary_date']
+
         if 'confirmed_appointment_date' in update_dict:
             self.confirmed_appointment_date = update_dict['confirmed_appointment_date']
+
         if 'consultation_date' in update_dict:
             self.consultation_date = update_dict['consultation_date']
+
         if 'consultation_questions' in update_dict:
             self.consultation_questions = update_dict['consultation_questions']
+
         if 'consultation_advices' in update_dict:
             self.consultation_advices = update_dict['consultation_advices']
+
         if 'client_summary_approval' in update_dict:
             self.client_summary_approval = update_dict['client_summary_approval']
+
         if 'pre_consult_req' in update_dict:
             self.pre_consult_req = update_dict['pre_consult_req']
+
         if 'pre_consult_google_docs_link' in update_dict:
             self.pre_consult_google_docs_link = update_dict['pre_consult_google_docs_link']
+
             
 class case_summary(db.Model):
     __tablename__ = 'case_summary'
@@ -288,6 +310,35 @@ class case_summary(db.Model):
             result[column] = getattr(self, column)
             
         return result
+
+    def update_columns(self, update_dict):
+        """
+        'update_columns' which updates the corresponding 
+        key, value pair in the object instance
+        """
+        if 'case_id' in update_dict:
+            self.case_id = update_dict['case_id']
+            
+        if 'case_summary_id' in update_dict:
+            self.case_summary_id = update_dict['case_summary_id']
+            
+        if 'summary_of_facts' in update_dict:
+            self.summary_of_facts = update_dict['summary_of_facts']
+            
+        if 'issues_questions' in update_dict:
+            self.issues_questions = update_dict['issues_questions']
+            
+        if 'applicable_law' in update_dict:
+            self.applicable_law = update_dict['applicable_law']
+            
+        if 'court_hearing_matter' in update_dict:
+            self.court_hearing_matter = update_dict['court_hearing_matter']
+            
+        if 'specific_questions' in update_dict:
+            self.specific_questions = update_dict['specific_questions']
+            
+        if 'client_summary_feedback' in update_dict:
+            self.client_summary_feedbac = update_dict['client_summary_feedback']
             
 class chats(db.Model):
     __tablename__ = 'chats'
@@ -936,7 +987,8 @@ def get_case_summary():
                 "code": 200,
                 "data": {
                     "case_summary": output[-1],
-                    "date": cases_info_json['case_summary_date']
+                    "case_summary_date": cases_info_json['case_summary_date'],
+                    "finalised_case_summary_date": cases_info_json['finalised_case_summary_date']
                 }
             }
         ), 200
@@ -1124,8 +1176,27 @@ def get_all_cases_admin():
 @app.route('/client_feedback', methods=['POST'])
 def template():
     try:
-        # retrieve data ()
+        # retrieve data (case_id, client_summary_approval, client_summary_feedback)
         data = request.get_json()
+        
+        case_id = data['case_id']
+        client_summary_approval = data['client_summary_approval']
+        client_summary_feedback = data['client_summary_feedback']
+        
+        # update case_summary
+        case_summary_info = case_summary.query.filter_by(case_id=case_id).last()
+        case_summary_info.update_columns({
+            "client_summary_feedback": client_summary_feedback
+        })
+        
+        
+        # update case
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        case_info.update_columns({
+            "current_case_status": "Active",
+            "finalised_case_summary_date": date.today(),
+            "client_summary_approval": client_summary_approval
+        })
         
     except Exception as e:
         print(e)
