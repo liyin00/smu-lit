@@ -757,6 +757,7 @@ def user_profile():
 # 8 ) Retrieve cases by lawyer by case_status
 # 9 ) Retrieve case by client by case_status
 # 10 ) Retrieve all cases by case_status
+# 11 ) update client feedback
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -918,17 +919,25 @@ def get_case_summary():
         data = request.get_json()
         case_id = data['case_id']
         
-        cases_info = cases.query.filter_by(case_id=case_id)
+        # retrieve info from cases
+        cases_info = cases.query.filter_by(case_id=case_id).first()
+        cases_info_json = cases_info.get_dict()
+        
+        # retrieve info from case summary
+        case_summary_info = case_summary.query.filter_by(case_id=case_id)
         
         output = []
         
-        for case in cases_info:
-            output.append(case.get_dict())
+        for case_summary_element in case_summary_info:
+            output.append(case_summary_element.get_dict())
         
         return jsonify(
             {
                 "code": 200,
-                "data": output
+                "data": {
+                    "case_summary": output,
+                    "date": cases_info_json['case_summary_date']
+                }
             }
         ), 200
         
@@ -1108,6 +1117,22 @@ def get_all_cases_admin():
             {
                 "code": 404,
                 "message": "Error occured while retrieving all cases by case status."
+            }
+        ), 404
+
+# 11 ) update client feedback (last seen)
+@app.route('/client_feedback', methods=['POST'])
+def template():
+    try:
+        # retrieve data ()
+        data = request.get_json()
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": ""
             }
         ), 404
 
