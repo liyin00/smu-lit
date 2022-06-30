@@ -810,6 +810,7 @@ def user_profile():
 # 10 ) Retrieve all cases by case_status
 # 11 ) update client feedback
 # 12 ) get_case_stages
+# 13 ) assign case to lawyer
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -1253,6 +1254,40 @@ def get_case_stages():
             }
         ), 404
 
+# 13 ) assign case to lawyer
+@app.route('/assign_case_lawyer', methods=['POST'])
+def assign_case_lawyer():
+    try:
+        # retrieve data (case_id, lawyer_id)
+        data = request.get_json()
+        
+        case_id = data['case_id']
+        lawyer_id = data['lawyer_id']
+        
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        
+        case_info.update_columns({
+            "lawyer_id": lawyer_id
+        })
+        
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully assigned case to lawyer."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while assigning case to lawyer."
+            }
+        ), 404
+        
 # Chat
 # 1 ) retrieve chat message by case_id and category
 # 2 ) create chat message
@@ -1445,6 +1480,130 @@ def update_consultation():
             {
                 "code": 404,
                 "message": "Error occured while updating consultation."
+            }
+        ), 404
+
+# 2) retrieve past cases of SA (sort by category, year)
+@app.route('/retrieve_past_cases_SA', methods=['GET'])
+def retrieve_past_cases_SA():
+    try:
+        # retrieve all SAs
+        users_info = users.query.filter_by(role='SA')
+        
+        all_users_dict = {}
+        
+        for user in users_info:
+            user_json = user.get_dict()
+            user_id = user_json['user_id']
+        
+            all_users_dict[user_id] = user_json
+        
+        got_case = {}
+        output = {}
+        
+        # 1) retrieve all cases
+        cases_info = cases.query.filter_by(current_case_status="Closed")
+        
+        for case in cases_info:
+            case_json = case.get_dict()
+            case_category = case_json['case_category']
+            sa_id = case_json['sa_id']
+            
+            # add SA into got case
+            got_case[sa_id] = sa_id
+            
+            if case_category not in output:
+                output[case_category] = {}
+                
+            if all_users_dict[sa_id]['study_year'] not in output[case_category]:
+                output[case_category][all_users_dict[sa_id]['study_year']] = []
+            
+            output[case_category][all_users_dict[sa_id]['study_year']].append(all_users_dict[sa_id])
+        
+        output['new'] = {}
+        
+        for key in all_users_dict:
+            if key not in got_case:
+                if all_users_dict[key]['study_year'] not in output['new']:
+                    output['new'][all_users_dict[key]['study_year']] = []
+                    
+                output['new'][all_users_dict[key]['study_year']].append(all_users_dict[key])
+                
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving all SAs past cases."
+            }
+        ), 404
+        
+# 2) retrieve past cases of lawyer (sort by category, position)
+@app.route('/retrieve_past_cases_lawyer', methods=['GET'])
+def retrieve_past_cases_lawyer():
+    try:
+        # retrieve all lawyers
+        users_info = users.query.filter_by(role='lawyer')
+        
+        all_users_dict = {}
+        
+        for user in users_info:
+            user_json = user.get_dict()
+            user_id = user_json['user_id']
+        
+            all_users_dict[user_id] = user_json
+        
+        got_case = {}
+        output = {}
+        
+        # 1) retrieve all cases
+        cases_info = cases.query.filter_by(current_case_status="Closed")
+        
+        for case in cases_info:
+            case_json = case.get_dict()
+            case_category = case_json['case_category']
+            lawyer_id = case_json['lawyer_id']
+            
+            # add lawyer into got case
+            got_case[lawyer_id] = lawyer_id
+            
+            if case_category not in output:
+                output[case_category] = {}
+                
+            if all_users_dict[lawyer_id]['position'] not in output[case_category]:
+                output[case_category][all_users_dict[lawyer_id]['position']] = []
+            
+            output[case_category][all_users_dict[lawyer_id]['position']].append(all_users_dict[lawyer_id])
+        
+        output['new'] = {}
+        
+        for key in all_users_dict:
+            if key not in got_case:
+                if all_users_dict[key]['position'] not in output['new']:
+                    output['new'][all_users_dict[key]['position']] = []
+                    
+                output['new'][all_users_dict[key]['position']].append(all_users_dict[key])
+                
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving all SAs past cases."
             }
         ), 404
 
