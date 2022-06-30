@@ -57,7 +57,7 @@
 
     <div class="container bg-gold pt-3 pb-2 d-flex align-items-center justify-content-center">
       <div class="d-flex flex-column">
-          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span>To be updated.</span></h4></div>
+          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span id="caseStatus"></span></h4></div>
       </div>
     </div>
 
@@ -103,11 +103,23 @@
               align-items: center;
               justify-content: center;
             }
+            .timeline-with-icons .timeline-current{
+                background-color: #202837;
+                color: #202837;
+                position: absolute;
+                left: -48px;
+                border-radius: 50%;
+                height: 31px;
+                width: 31px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
           </style>
 
           <ul class="timeline-with-icons">
             <li class="timeline-item mb-5">
-              <span class="timeline-icon">
+              <span id="awaitingAssignment" class="timeline-icon">
                 <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
               </span>
 
@@ -120,7 +132,7 @@
 
             <li class="timeline-item mb-5">
 
-              <span class="timeline-icon">
+              <span id="awaitingSummaryApproval" class="timeline-icon">
                 <i class="fas fa-hand-holding-usd text-primary fa-sm fa-fw"></i>
               </span>
               <h5 class="fw-bold">Case Details Review</h5>
@@ -132,7 +144,7 @@
 
             <li class="timeline-item mb-5">
 
-              <span class="timeline-icon">
+              <span id="awaitingAppointment" class="timeline-icon">
                 <i class="fas fa-users text-primary fa-sm fa-fw"></i>
               </span>
               <h5 class="fw-bold">Case Summary Completed</h5>
@@ -169,12 +181,12 @@
 
     <script>
       window.onload = console.log(sessionStorage);
-      window.onload = retrieveCase();
+      window.onload = retrieveCaseStatus();
       function dashboardReturn(){
         window.location.replace("applicant-start.html")
       }
 
-      function retrieveCase(){
+      function retrieveCaseStatus(){
         var settings = {
           "url": "http://127.0.0.1:8100/get_cases_by_client",
           "method": "POST",
@@ -191,6 +203,26 @@
           console.log(response);
           if (response.code == 200){
             document.getElementById("caseName").innerHTML = response.data.case_title;
+            if (response.data.student_assigned_date == null){
+              document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAssignment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Assignment";
+            }
+            else if(response.data.finalised_case_summary_date == null){
+              document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
+              document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Case Detail Review";
+            }
+            else if(response.data.confirmed_appointment_date == null){
+              document.getElementById("awaitingAppointment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Appointment Confirmation";
+            }
+            else{
+              document.getElementById("confirmedAppointment").classList.remove("timeline-icon");
+              document.getElementById("confirmedAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Appointment Confirmed";
+            }
           }
         });
       }

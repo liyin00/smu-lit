@@ -73,11 +73,11 @@
                     <p class="col text-light" >Applicant Name</p>
                     <p class="col text-light" >Case Type</p>
                     <p class="col text-light" >Case ID</p>
-                    <p class="col text-light" >Student Assistant</p>
-                    <p class="col text-light" >Volunteer Lawyer</p>
-                    <p class="col text-light" >Assign</p>
+                    <p class="col text-light" >Assign Student Assistant</p>
+                    <p class="col text-light" >Assign Volunteer Lawyer</p>
                 </div>
                 <div id="newCases" class="container-fluid my-4"></div>
+                <div class="container-fluid d-flex justify-content-center"><button type="submit" class="btn btn-primary mb-3">Submit</button></div>
             </div>
         </div>
     </form>
@@ -150,8 +150,8 @@
                             <p class="col">`+newCase['client_name']+ `</p>
                             <p class="col">`+newCase['case_category']+`</p>
                             <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>
-                            <p class="col">`+checkAssign(newCase['case_id'], newCase['sa_id']) +`</p>
-                            <p class="col">`+checkAssign(newCase['case_id'], newCase['lawyer_id'])+`</p>
+                            <p class="col">`+checkAssignSA(newCase['case_id'], newCase['sa_id']) +`</p>
+                            <p class="col">`+checkAssignLawyer(newCase['case_id'], newCase['lawyer_id'])+`</p>
                             
                         </div>
                     </div>
@@ -197,7 +197,7 @@
 
 
         function retrieveAllAssignedCases(retrievedAssignedCases){
-            if(retrievedAssignedCases){
+            if(retrievedAssignedCases == null){
             document.getElementById("assignedCases").style.display ="none";
             }
             else{
@@ -219,12 +219,17 @@
             }
         }
 
-        function checkAssign(caseID, valueGiven){
+        function checkAssignSA(caseID, valueGiven){
             if(valueGiven == null){
                 return `<input type="text" id="`+ caseID +`" class="form-control"></input>`;
             }
         }
 
+        function checkAssignLawyer(caseID, valueGiven){
+            if(valueGiven == null){
+                return `<input type="text" id="`+ caseID +`" class="form-control"></input>`;
+            }
+        }
         function assignSA(){
 
         };
