@@ -1346,7 +1346,44 @@ def get_user_profile():
                 "message": "Error occurred while retrieving user profile."
             }
         ), 404
+
+# consultation
+# 1) update_consultation
+@app.route('/update_consultation', methods=['POST'])
+def update_consultation():
+    try:
+        # retrieve data (case_id, consultation_questions, consultation_advices)
+        data = request.get_json()
         
+        case_id = data['case_id']
+        
+        case_info = cases.query.filter_by(case_id=case_id).first()
+
+        case_info.update_columns({
+            "consultation_questions": data['consultation_questions'],
+            "consultation_advices": data['consultation_advices'],
+            "current_case_status": "Closed",
+            "consultation_date": date.today()
+        })
+        
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully updated consultation."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating consultation."
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
 
