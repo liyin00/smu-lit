@@ -948,6 +948,44 @@ def create_case_summary():
         
         db.session.commit()
         
+        # retrieve client email
+        # 1) retrieve client id
+        client_id = cases.query.filter_by(case_id=case_id).first().get_dict()['client_id']
+        
+        # 2) retrieve client email
+        email = users.query.filter_by(user_id=client_id).first().get_dict()['email']
+
+        # 1) login
+        MY_ADDRESS = 'marcus.goh.2019@scis.smu.edu.sg' # input your address
+        MY_PW = 'Pkl12345:)' # input your password
+        
+        s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
+        s.starttls()
+        s.login(MY_ADDRESS, MY_PW)
+
+        # create message
+        message = """
+        Dear Sir/Mdm,
+
+        Your case summary has been submitted. Kindly login to Locate Advocate to verify the case summary.
+        Thank you.
+
+        Kind regards,
+        Penteract"""
+        
+        # send message
+        msg = MIMEMultipart()
+        
+        msg['From'] = MY_ADDRESS
+        msg['To'] = email
+        msg['Subject'] = 'Case Summary'
+
+        msg.attach(MIMEText(message, 'plain'))
+        
+        s.send_message(msg)
+        del msg
+        s.quit
+        
         return jsonify(
             {
                 "code": 200,
