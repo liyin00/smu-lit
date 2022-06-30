@@ -935,7 +935,7 @@ def get_case_summary():
             {
                 "code": 200,
                 "data": {
-                    "case_summary": output,
+                    "case_summary": output[-1],
                     "date": cases_info_json['case_summary_date']
                 }
             }
