@@ -806,7 +806,7 @@ def user_profile():
 # 6 ) Retrieve a specific case
 # 7 ) Retrieve cases by SA by case_status
 # 8 ) Retrieve cases by lawyer by case_status
-# 9 ) Retrieve case by client by case_status
+# 9 ) Retrieve case by client
 # 10 ) Retrieve all cases by case_status
 # 11 ) update client feedback
 # 12 ) get_case_stages
@@ -1103,7 +1103,7 @@ def get_cases_by_lawyer():
             }
         ), 404
 
-# 9 ) Retrieve case by client by case_status
+# 9 ) Retrieve case by client
 @app.route('/get_cases_by_client', methods=['POST'])
 def get_cases_by_client():
     try:
@@ -1111,23 +1111,12 @@ def get_cases_by_client():
         data = request.get_json()
         
         client_id = data['client_id']
-        cases_info = cases.query.filter_by(client_id=client_id)
-        
-        output = {}
-        
-        for case in cases_info:
-            case_data = case.get_dict()
-            current_case_status = case_data['current_case_status']
-            
-            if current_case_status not in output:
-                output[current_case_status] = []
-                
-            output[current_case_status].append(case_data)
+        cases_info = cases.query.filter_by(client_id=client_id).first()
             
         return jsonify(
             {
                 "code": 200,
-                "data": output
+                "data": cases_info.get_dict()
             }
         ), 200
             
