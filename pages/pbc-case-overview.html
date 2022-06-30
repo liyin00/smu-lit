@@ -57,7 +57,7 @@
 
     <div class="container bg-gold pt-3 pb-2 d-flex align-items-center justify-content-center">
       <div class="d-flex flex-column">
-          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span>To be updated.</span></h4></div>
+          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span id="caseStatus"></span></h4></div>
       </div>
     </div>
 
@@ -137,7 +137,7 @@
           
                     <ul class="timeline-with-icons">
                       <li class="timeline-item mb-5">
-                        <span class="timeline-current">
+                        <span id="awaitingAssignment" class="timeline-current">
                           <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
                         </span>
           
@@ -150,7 +150,7 @@
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
+                        <span id="awaitingSummaryApproval" class="timeline-icon">
                           <i class="fas fa-hand-holding-usd text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Case Details Review</h5>
@@ -162,7 +162,7 @@
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
+                        <span id="awaitingAppointment" class="timeline-icon">
                           <i class="fas fa-users text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Case Summary Review</h5>
@@ -175,7 +175,7 @@
                       <li class="timeline-item mb-5">
           
                         <span class="timeline-icon">
-                          <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
+                          <i id="confirmedAppointment" class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Appointment Confirmed</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
@@ -200,8 +200,8 @@
                 </div>
 
                 <div class="container-fluid mb-4">
-                  <h5><b>Lawyer Name:</b> <span id="clientName"></span></h5>
-                  <h5><b>Student Assistant Name:</b> <span id="clientBday"></span></h5>
+                  <h5><b>Lawyer Name:</b> <span id="lawyerName"></span></h5>
+                  <h5><b>Student Assistant Name:</b> <span id="saName"></span></h5>
                 </div>
 
                 
@@ -229,29 +229,76 @@
 
     <script>
       window.onload = console.log(sessionStorage);
-      window.onload = function retrieveCase(){
-          var settings = {
-              "url": "http://127.0.0.1:8100/get_specific_case",
-              "method": "POST",
-              "timeout": 0,
-              "headers": {
-                  "Content-Type": "application/json"
-              },
-              "data": JSON.stringify({
-                  "case_id": sessionStorage.getItem("caseID")
-              }),
-              };
 
-              $.ajax(settings).done(function (response) {
-              console.log(response);
-              if (response.code==200){
-                document.getElementById("clientName").innerHTML = response.data.client_name;
-                document.getElementById("caseCategory").innerHTML = response.data.case_category;
-                document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
-                document.getElementById("caseName").innerHTML = response.data.case_title;
-              }
-              });
-      };
+      window.onload = function retrieveCaseStatus(){
+        
+        //caseData
+        var settings = {
+          "url": "http://127.0.0.1:8100/get_specific_case",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+              "Content-Type": "application/json"
+          },
+          "data": JSON.stringify({
+              "case_id": sessionStorage.getItem("caseID")
+          }),
+          };
+
+          $.ajax(settings).done(function (response) {
+          console.log(response);
+          if (response.code==200){
+            document.getElementById("clientName").innerHTML = response.data.client_name;
+            document.getElementById("caseCategory").innerHTML = response.data.case_category;
+            document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
+            document.getElementById("caseName").innerHTML = response.data.case_title;
+            document.getElementById("clientName").innerHTML = response.data.client_name;
+            window.sessionStorage
+            sessionStorage.setItem("userID", response.data.client_id);
+          }
+        });
+
+        //caseStatus
+        var settings = {
+          "url": "http://127.0.0.1:8100/get_cases_by_client",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "data": JSON.stringify({
+            "client_id": sessionStorage.getItem("userID")
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+          if (response.code == 200){
+            document.getElementById("caseName").innerHTML = response.data.case_title;
+            if (response.data.student_assigned_date == null){
+              document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAssignment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Assignment";
+            }
+            else if(response.data.finalised_case_summary_date == null){
+              document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
+              document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Case Detail Review";
+            }
+            else if(response.data.confirmed_appointment_date == null){
+              document.getElementById("awaitingAppointment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Appointment Confirmation";
+            }
+            else{
+              document.getElementById("confirmedAppointment").classList.remove("timeline-icon");
+              document.getElementById("confirmedAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Appointment Confirmed";
+            }
+          }
+        });
+
+      }
 
     
     </script>
