@@ -136,33 +136,81 @@
 
 
 <script>
-
 function loginSA(){
-    //API
-    var email = document.getElementById("emailSAL");
-    var password = document.getElementById("passwordSAL");
-    if(true){
-        window.sessionStorage;
-        sessionStorage.setItem("name", "John Tan");
-        sessionStorage.setItem("userID", 22222);
-        sessionStorage.setItem("caseID", 21298);
-        sessionStorage.setItem("userType", "studentAssistant");
-    }
+    var email = document.getElementById("emailSAL").value;
+    var password = document.getElementById("passwordSAL").value;
+
+    var settings = {
+        "url": "http://127.0.0.1:8100/login",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+            "email": email,
+            "password": password
+        }),
+        };
+
+        $.ajax(settings).done(function (response) {
+        console.log(response);
+        if(response.code==200){
+            name = response.data.name;
+            userID = response.data.user_id;
+            otp = response.data.otp;
+            window.sessionStorage;
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("userID", userID);
+            sessionStorage.setItem("otp", otp);
+            sessionStorage.setItem("userType", "studentAssistant");
+            sessionStorage.setItem("loginRegister", "login");
+            window.location.replace("otp.html");
+        }
+        else{
+            alert("Login failed.")
+        }
+        });
 }
 
 function registerSA(){
     var email = document.getElementById("emailSA").value;
     var name = document.getElementById("nameSA").value;
     var school = document.getElementById("school").value;
-    var yearOfStudy = document.getElementById("yearOfStudy").value;
+    var year = document.getElementById("yearOfStudy").value;
     var password = document.getElementById("passwordSA").value;
     window.sessionStorage;
     sessionStorage.setItem("email", email);
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("school", school);
-    sessionStorage.setItem("yearOfStudy", yearOfStudy);
+    sessionStorage.setItem("year", year);
     sessionStorage.setItem("password", password);
-    //API
+    sessionStorage.setItem("userType", "studentAssistant")
+    sessionStorage.setItem("loginRegister", "register")
+
+    var settings = {
+    "url": "http://127.0.0.1:8100/registration_scan",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+        "email": email
+    }),
+    };
+
+    $.ajax(settings).done(function (response) {
+    console.log(response);
+    if(response.code==200){
+        otp = response.data.otp;
+        sessionStorage.setItem("otp", otp)
+        window.location.replace("otp.html");
+    }
+    else{
+        alert("Registration failed. Do you have an existing account?")
+    }
+    });
 }
 
 
@@ -194,11 +242,10 @@ $('.login-reg-panel input[type="radio"]').on('change', function() {
 });
 
 
-
 </script>
 
 <script src="https://unpkg.com/scrollreveal"></script>
-<script src="animations.js"></script>
+<script src="../animations.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 </body>
 

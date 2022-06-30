@@ -167,19 +167,19 @@
             </section>
             <div class="container-fluid d-flex justify-content-center" style="margin-bottom: 30px;">
               <div id="approval" style="display: none;">
-                <button class="border border-dark bg-dblue text-light mx-3">Approve Latest Draft</button>
+                <button class="border border-dark bg-dblue text-light mx-3" onclick="approveDraft()">Approve Latest Draft</button>
                 <button class="text-light bg-gold mx-3" style="border: none;" onclick="addEdits()">Request Edits</button>
               </div>
             </div>
 
             <div style="display: none;" id="request-edits">
-              <h5 class="bg-dblue text-light" style="text-align:center;">Edits Requested by Applicant</h5> 
+              <h5 class="bg-dblue text-light" style="text-align:center;">Request for Edits</h5> 
               <form class="m-2">
                 <div class="input-group">
                   <textarea class="form-control" aria-label="With textarea" id="client-req"></textarea>
                 </div>
                 <div class="container-fluid d-flex justify-content-center">
-                  <button class="text-light m-3 bg-gold" style="margin-bottom: 15px; border: none;">Submit Request</button>
+                  <button class="text-light m-3 bg-gold" style="margin-bottom: 15px; border: none;" onclick="requestEdits()">Submit Request</button>
                 </div>
               </form>
             </div>
@@ -191,60 +191,84 @@
     <script>
       const user_id = localStorage.getItem("userID");
       const case_id = localStorage.getItem("caseID");
-      console.log(case_id);
+      post_json = JSON.stringify({"case_id": case_id});
+      // console.log(post_json);
       window.onload = loadDrafts();
-      function loadDrafts() {
+      function loadDrafts() { 
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
-          let draft_info_arr = JSON.parse(this.responseText).data;
-          console.log(draft_info_arr);
-          for (draft_info of draft_info_arr){
-            //logic flow for requesting edits 
-            if (draft_info.finalised_case_summary_date != null || draft_info.case_summary_date != null) {
-              // case whereby the entire case has previously been approved 
-              if (draft_info.case_summary_date != null && draft_info.finalised_case_summary_date != null){
-                document.getElementById('timeline').style.display="";
-                document.getElementById('latest_draft').style.display="";
-                document.getElementById('final_draft').style.display="";
-                let case_summary_date = draft_info.case_summary_date;
-                // case_summary_date = moment(case_summary_date).format('LL'); 
-                let finalized_case_summary_date = draft_info.finalized_case_summary_date;
-                // finalized_case_summary_date = moment(finalized_case_summary_date).format('LL'); 
-                document.getElementById('case_summary_date').innerHTML = case_summary_date;
-                document.getElementById('finalized_case_summary_date').innerHTML = finalized_case_summary_date;
-              }
-              // case whereby approval is pending 
-              else if (draft_info.finalised_case_summary_date == null){
-                document.getElementById('timeline').style.display="";
-                document.getElementById('latest_draft').style.display="";
-                let case_summary_date = draft_info.case_summary_date;
-                // case_summary_date = moment(case_summary_date).format('LL'); 
-                document.getElementById('case_summary_date').innerHTML = case_summary_date;
-                document.getElementById('approval').style.display = "";
-              }
-            }
+          let draft_info = JSON.parse(this.responseText).data;
+          // console.log(draft_info.case_summary.issues_questions);
 
-            //populating fields on the left 
-            let case_date = draft_info.case_summary_date;
-            // case_date = moment(case_date).format('LL'); 
-            document.getElementById('case_date').innerHTML = case_date;
-            document.getElementById('summary_of_facts').innerHTML = draft_info.summary_of_facts;
-            document.getElementById('issues_questions').innerHTML = draft_info.issues_questions;
-            document.getElementById('applicable_law').innerHTML = draft_info.applicable_law;
-            document.getElementById('court_hearing_matter').innerHTML = draft_info.court_hearing_matter;
-            document.getElementById('specific_questions').innerHTML = draft_info.specific_questions;
+          let applicable_law = draft_info.case_summary.applicable_law;
+          let case_summary_id = draft_info.case_summary.case_summary_id;
+          let client_summary_feedback = draft_info.case_summary.client_summary_feedback;
+          let court_hearing_matter = draft_info.case_summary.court_hearing_matter;
+          let issues_questions = draft_info.case_summary.issues_questions;
+          let specific_questions = draft_info.case_summary.specific_questions;
+          let summary_of_facts = draft_info.case_summary.summary_of_facts;
+          let case_summary_date = draft_info.case_summary_date;
+          let finalised_case_summary_date = draft_info.finalised_case_summary_date;
+
+          //logic flow for requesting edits 
+          if (finalised_case_summary_date != null || case_summary_date != null) {
+            // case whereby the entire case has previously been approved 
+            if (case_summary_date != null && finalised_case_summary_date != null){
+              document.getElementById('timeline').style.display="";
+              document.getElementById('latest_draft').style.display="";
+              document.getElementById('final_draft').style.display="";
+              document.getElementById('case_summary_date').innerHTML = case_summary_date;
+              document.getElementById('finalized_case_summary_date').innerHTML = finalised_case_summary_date;
+            }
+            // case whereby approval is pending 
+            else if (finalised_case_summary_date == null){
+              document.getElementById('timeline').style.display="";
+              document.getElementById('latest_draft').style.display="";
+              document.getElementById('case_summary_date').innerHTML = case_summary_date;
+              document.getElementById('approval').style.display = "";
+            }
           }
+
+          //populating fields on the left 
+          document.getElementById('case_date').innerHTML = case_summary_date;
+          document.getElementById('summary_of_facts').innerHTML = summary_of_facts;
+          document.getElementById('issues_questions').innerHTML = issues_questions;
+          document.getElementById('applicable_law').innerHTML = applicable_law;
+          document.getElementById('court_hearing_matter').innerHTML = court_hearing_matter;
+          document.getElementById('specific_questions').innerHTML = specific_questions;
+          
 
         }
         xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send(JSON.stringify({"case_id": case_id}));
+        xhttp.send(post_json);
       }
 
       function addEdits(){
         document.getElementById('approval').style.display = "none";
         document.getElementById('request-edits').style.display = "";
       }
+
+      function approveDraft(){
+        const xhttp = new XMLHttpRequest();
+        let client_summary_feedback = "";
+        let client_summary_approval = "1";
+        const feedback = JSON.stringify({"case_id": case_id, "client_summary_approval": client_summary_approval, "client_summary_feedback": client_summary_feedback})
+        xhttp.open("POST", "http://localhost:8100/client_feedback", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(feedback);
+      }
+      function requestEdits(){ 
+        const client_request = document.getElementById('client-req').value;
+        const xhttp = new XMLHttpRequest();
+        let client_summary_feedback = client_request;
+        let client_summary_approval = "0";
+        const feedback = JSON.stringify({"case_id": case_id, "client_summary_approval": client_summary_approval, "client_summary_feedback": client_request})
+        xhttp.open("POST", "http://localhost:8100/client_feedback", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(feedback);
+      }
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script> 
   </body>

@@ -94,7 +94,6 @@
                 if(userType == "client"){
 
                     if(loginRegister == "register"){
-                        let email = sessionStorage.getItem("email");
                         let name = sessionStorage.getItem("name");
                         let bday = sessionStorage.getItem("bday");
                         let nric = sessionStorage.getItem("nric");
@@ -134,11 +133,67 @@
 
                         $.ajax(settings).done(function (response) {
                         console.log(response);
+                        if(response.code==200){
+                            sessionStorage.setItem("userID", response.data.user_id);
+                            console.log(response.data.user_id);
+                            console.log(sessionStorage);
+                            window.location.replace("applicant-start.html");
+                        }
+                        });
+                    
+                }
+                else if(userType == "studentAssistant"){
+
+                    if(loginRegister == "register"){
+                        let name = sessionStorage.getItem("name");
+                        let year = sessionStorage.getItem("year");
+                        let school = sessionStorage.getItem("school");
+
+                        var settings = {
+                            "url": "http://127.0.0.1:8100/create_new_user_sa",
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify({
+                                "email": email,
+                                "name": name,
+                                "educational_instituition": school,
+                                "study_year": year,
+                                "password": password
+                            }),
+                            };
+
+                            $.ajax(settings).done(function (response) {
+                            console.log(response);
+                            });
+                    }
+                    var settings = {
+                        "url": "http://127.0.0.1:8100/login",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify({
+                            "email": email,
+                            "password": password
+                        }),
+                        };
+
+                        $.ajax(settings).done(function (response) {
+                        console.log(response);
+                        if(response.code ==200){
+                            sessionStorage.setItem("userID", response.data.user_id);
+                            window.location.replace("SA-dashboard.html");
+                        }
                         });
 
-                    window.location.replace("applicant-start.html");
                 }
-                    
+                else if(userType == "lawyer"){
+                    //placeholder
+                }                    
                    
             }
             

@@ -114,14 +114,6 @@
                       <p class="text-muted mb-2 fw-bold" id="case_summary_date"></p>
                     </li>
         
-                    <li class="timeline-item mb-5" id="final_draft">
-                      <span class="timeline-icon">
-                        <i class="fas fa-users text-primary fa-sm fa-fw"></i>
-                      </span>
-                      <h5 class="fw-bold">Final Draft Received</h5>
-                      <p class="text-muted mb-2 fw-bold" id="finalized_case_summary_date"></p>
-                    </li>
-        
                   </ul>
                   <!-- <button class="border border-dark position-absolute start-50 " style="text-align: center;">Approve draft</button> -->
                 </section>
@@ -206,6 +198,7 @@
 
     <script>
 
+        const user_id = localStorage.getItem("userID");
         const case_id = localStorage.getItem("caseID");
         function getDate(){
             var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -243,6 +236,59 @@
             document.getElementById('court_hearing_matter_input').value = "";
             document.getElementById('specific_questions_input').value = "";
             
+        }
+
+        post_json = JSON.stringify({"case_id": case_id});
+        // console.log(post_json);
+        window.onload = loadDrafts();
+        function loadDrafts() { 
+          const xhttp = new XMLHttpRequest();
+          xhttp.onload = function() {
+            let draft_info = JSON.parse(this.responseText).data;
+            // console.log(draft_info.case_summary.issues_questions);
+
+            let applicable_law = draft_info.case_summary.applicable_law;
+            let case_summary_id = draft_info.case_summary.case_summary_id;
+            let client_summary_feedback = draft_info.case_summary.client_summary_feedback;
+            let court_hearing_matter = draft_info.case_summary.court_hearing_matter;
+            let issues_questions = draft_info.case_summary.issues_questions;
+            let specific_questions = draft_info.case_summary.specific_questions;
+            let summary_of_facts = draft_info.case_summary.summary_of_facts;
+            let case_summary_date = draft_info.case_summary_date;
+            let finalised_case_summary_date = draft_info.finalised_case_summary_date;
+
+            //logic flow for requesting edits 
+            if (finalised_case_summary_date != null || case_summary_date != null) {
+              // case whereby the entire case has previously been approved 
+              if (case_summary_date != null && finalised_case_summary_date != null){
+                document.getElementById('timeline').style.display="";
+                document.getElementById('latest_draft').style.display="";
+                document.getElementById('final_draft').style.display="";
+                document.getElementById('case_summary_date').innerHTML = case_summary_date;
+                document.getElementById('finalized_case_summary_date').innerHTML = finalised_case_summary_date;
+              }
+              // case whereby approval is pending 
+              else if (finalised_case_summary_date == null){
+                document.getElementById('timeline').style.display="";
+                document.getElementById('latest_draft').style.display="";
+                document.getElementById('case_summary_date').innerHTML = case_summary_date;
+                document.getElementById('approval').style.display = "";
+              }
+            }
+
+            //populating fields on the left 
+            document.getElementById('case_date').innerHTML = case_summary_date;
+            document.getElementById('summary_of_facts').innerHTML = summary_of_facts;
+            document.getElementById('issues_questions').innerHTML = issues_questions;
+            document.getElementById('applicable_law').innerHTML = applicable_law;
+            document.getElementById('court_hearing_matter').innerHTML = court_hearing_matter;
+            document.getElementById('specific_questions').innerHTML = specific_questions;
+            
+
+          }
+          xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
+          xhttp.setRequestHeader("Content-Type", "application/json");
+          xhttp.send(post_json);
         }
 
 
