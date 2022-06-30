@@ -116,67 +116,106 @@
 
     <script>
 
-        const dummyCase = {
-            courtHearingDate:"28/06/2022",
-            applicantName:"John Tan",
-            caseType:"Divorce",
-            caseID: 12782,
-            studentAssistant: null,
-            volunteerLawyer: null
+        var settings = {
+        "url": "http://127.0.0.1:8100/get_all_cases_admin",
+        "method": "GET",
+        "timeout": 0,
         };
-        const dummyCase2 = {
-            courtHearingDate:"28/06/2022",
-            applicantName:"John Tan",
-            caseType:"Divorce",
-            caseID: 12784,
-            studentAssistant: null,
-            volunteerLawyer: null
-        };
-        const retrievedNewCases =[dummyCase, dummyCase2];
-        const retrievedAssignedCases=[dummyCase];
+
+        $.ajax(settings).done(function (response) {
+        console.log(response);
+        if (response.code=200){
+            var retrievedNewCases = response.data["New Case"];
+            retrieveAllNewCases(retrievedNewCases);
+
+            var retrievedAssignedCases = response.data["Assigned cases"];
+            retrieveAllAssignedCases(retrievedAssignedCases);
+        }
+        });
 
         var count = 0;
 
-        if(retrievedNewCases.length==0){
+        function retrieveAllNewCases(retrievedNewCases){
+
+            if(retrievedNewCases.length==0){
             document.getElementById("newCases").style.display ="none";
-        }
-        else{
-            for(i=0;i<retrievedNewCases.length; i++){
-                var newCase = retrievedNewCases[i];
-                document.getElementById("newCases").innerHTML += `
-                <div class="bg-beige" id="newCases">
-                    <div class ="row px-3">
-                        <p class="col">`+newCase['courtHearingDate']+ `</p>
-                        <p class="col">`+newCase['applicantName']+ `</p>
-                        <p class="col">`+newCase['caseType']+`</p>
-                        <p class="col">`+newCase['caseID']+`</p>
-                        <p class="col">`+checkAssign(newCase['caseID'], newCase['studentAssistant'])+`</p>
-                        <p class="col">`+checkAssign(newCase['caseID'], newCase['volunteerLawyer'])+`</p>
-                        <div class="col"><button type="submit" class="btn btn-primary">Submit</button></div>
-                    </div>
-                </div>
-                `
             }
+            else{
+                for(i=0;i<retrievedNewCases.length; i++){
+                    var newCase = retrievedNewCases[i];
+                    document.getElementById("newCases").innerHTML += `
+                    <div class="bg-beige" id="newCases">
+                        <div class ="row px-3">
+                            <p class="col">`+newCase['court_hearing_date']+ `</p>
+                            <p class="col">`+newCase['client_name']+ `</p>
+                            <p class="col">`+newCase['case_category']+`</p>
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>
+                            <p class="col">`+checkAssign(newCase['case_id'], newCase['sa_id']) +`</p>
+                            <p class="col">`+checkAssign(newCase['case_id'], newCase['lawyer_id'])+`</p>
+                            <div class="col"><button type="submit" class="btn btn-primary">Submit</button></div>
+                        </div>
+                    </div>
+                    `
+                }
+            }
+
         }
 
-        if(retrievedAssignedCases.length==0){
-            document.getElementById("assignedCases").style.display ="none";
+        function caseSession(caseID){
+            sessionStorage.setItem("caseID", caseID);
         }
-        else{
-            for(i=0;i<retrievedAssignedCases.length; i++){
-                var assignedCase = retrievedAssignedCases[i];
-                document.getElementById("assignedCases").innerHTML += `
-                <div class="bg-beige" id="assignedCases">
-                    <div class ="row px-3">
-                        <p class="col">`+assignedCase['courtHearingDate']+ `</p>
-                        <p class="col">`+assignedCase['applicantName']+ `</p>
-                        <p class="col">`+assignedCase['caseType']+`</p>
-                        <p class="col">`+assignedCase['caseID']+`</p>
-                        <p class="col">`+assignedCase['studentAssistant']+`</p>
-                        <p class="col">`+assignedCase['volunteerLawyer']+`</p>
+
+        function studentSession(saID){
+            sessionStorage.setItem("studentAssistantID", saID);
+        }
+
+        function lawyerSession(lawyerID){
+            sessionStorage.setItem("lawyerID", lawyerID);
+        }
+
+        function getUserDetails(userID){
+
+            var settings = {
+                "url": "http://127.0.0.1:8100/user_profile",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "user_id": userID
+                }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                console.log(response);
+                if (response.code == 200){
+                    return response.data.name;
+                }
+                });
+        }
+
+
+        function retrieveAllAssignedCases(retrievedAssignedCases){
+            if(retrievedAssignedCases.length==0){
+            document.getElementById("assignedCases").style.display ="none";
+            }
+            else{
+                for(i=0;i<retrievedAssignedCases.length; i++){
+                    var assignedCase = retrievedAssignedCases[i];
+                    document.getElementById("assignedCases").innerHTML += `
+                    <div class="bg-beige">
+                        <div class ="row px-3">
+                            <p class="col">`+assignedCase['court_hearing_date']+ `</p>
+                            <p class="col">`+assignedCase['client_name']+ `</p>
+                            <p class="col">`+assignedCase['case_category']+`</p>
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+assignedCase['case_id']+`)">`+assignedCase['case_id']+`</a></p>
+                            <p class="col"> <a href="view-SA.html" onclick="caseSession(`+assignedCase['sa_id']+`)">`+ assignedCase['sa_id']+`</a></p>
+                            <p class="col"> <a href="view-lawyer.html" onclick="caseSession(`+assignedCase['lawyer_id']+`)">`+ assignedCase['lawyer_id'] +`</a></p>
+                        </div>
                     </div>
-                </div>
-                `
+                    `
+                }
             }
         }
 
@@ -186,6 +225,10 @@
             }
         }
 
+        function assignSA(){
+
+        };
+
         document.addEventListener('submit', function(event) {
             event.preventDefault();
             event.stopPropagation();  
@@ -194,17 +237,22 @@
             for (i=0; i<fields.length; i++){
                 if(fields[i].value != ""){
                     fieldName = fields[i].getAttribute("id");
-                    dataFieldsObj[fieldName] = [];}
+                    dataFieldsObj[fieldName] = {};}
             }
 
             for (i=0; i<fields.length; i++){
                 if(fields[i].value != ""){
                     fieldName = fields[i].getAttribute("id");
-                    dataFieldsObj[fieldName].push(fields[i].value);
+                    if(i%2 == 0){
+                        dataFieldsObj[fieldName].saID = fields[i].value;
+                    }
+                    else{
+                        dataFieldsObj[fieldName].lawyerID = fields[i].value;
+                    }
                 }
             }
+
             console.log(dataFieldsObj)
-            location.reload()
         })
     </script>
 

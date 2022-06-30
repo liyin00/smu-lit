@@ -50,29 +50,35 @@
     
     <!-- Main Section -->
 
-    <div class="container bg-beige pb-0 pt-3 d-flex align-items-center justify-content-center animate__animated animate__fadeIn rounded-corners" style="margin-top: 5vh; width: 80vw;">
-        <div class="d-flex flex-column">
-            <div class="d-flex justify-content-center"><h4><i><b>Important Notice</b></i></h4></div>
-            <div class="d-flex justify-content-center"><p><i>Each individual is entitled to one pro bono case per legal counsel centre, per lifetime.</i></p></div>
-        </div>
+    <div class="container pb-0 pt-3 d-flex align-items-center justify-content-center animate__animated animate__fadeIn rounded-corners" style="margin-top: 5vh; width: 80vw;">
+        <a href="pbc-dashboard.html" class="block-link link-dark">
+            <div class="bg-beige rounded-corners grow p-0 justify-content-center d-flex align-items-center flex-column" style="height: 40vh;">
+                <div class="d-flex justify-content-center">
+                    <img src="../pictures/dashboard.png" style="max-width: 8rem; height:auto; margin-bottom: 30px; margin-left: 30px;">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <p>Dashboard to view cases and assign cases</p>
+                </div>
+            </div>
+        </a>
     </div>
 
 
     <div class="container px-0 pb-2 pt-0 d-flex justify-content-between animate__animated animate__fadeIn " style="margin-top: 5vh; width: 80vw;">
 
-        <a href="./clinic-select.html" id="clinicSelect" class="block-link link-dark">
+        <a href="./clinic-select.html" class="block-link link-dark">
             <div class="bg-beige rounded-corners grow p-0 justify-content-center d-flex align-items-center flex-column" style="height: 40vh;">
                 <div class="d-flex justify-content-center">
-                    <img src="../pictures/contract.png" style="max-width: 8rem; height:auto; margin-bottom: 30px; margin-left: 30px;">
+                    <img src="../pictures/student.png" style="max-width: 8rem; height:auto; margin-bottom: 30px; margin-left: 30px;">
                 </div>
                 <div class="d-flex justify-content-center">
-                    <p>New Case Application</p>
+                    <p>View Student Assistant Profiles</p>
                 </div>
             </div>
         </a>
         <div style="width: 20vh;"></div>
 
-        <a href="applicant-case-overview.html" id="caseUpdates" class="block-link link-dark">
+        <a href="applicant-case-overview.html" class="block-link link-dark">
             <div class="bg-beige rounded-corners grow p-0 d-flex justify-content-center align-items-center flex-column" style="height: 40vh;">
                 <div class="d-flex justify-content-center">
                     <img src="../pictures/chat.png" style="max-width: 8rem; height:auto; margin-bottom: 10px;">
@@ -84,55 +90,9 @@
         </a>
 
     </div>
-    <!--Footer-->
-    <div class ="container-fluid bg-dblue" style="position:absolute; bottom:0%;">
-        <div class="d-flex justify-content-end align-items-end mt-3 px-4">
-          <p class = "text-light">Proudly brought to you by Team Penteract.</p>
-        </div>
-    </div>
-
-    <script>
-        function caseExists(){
-            alert("Case already exists!");
-        }
-        function caseNotExists(){
-            alert("No case exists!");
-        }
-        function checkExistingCase(){
-            var userID = sessionStorage.getItem("userID");
-            console.log(sessionStorage)
-            var settings = {
-                "url": "http://127.0.0.1:8100/client_existing_case",
-                "method": "POST",
-                "timeout": 0,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "data": JSON.stringify({
-                    "client_id": userID
-                }),
-                };
-
-                $.ajax(settings).done(function (response) {
-                console.log(response);
-                if(response.code==200){
-                    if(response.existing_case == true){
-                        document.getElementById("clinicSelect").setAttribute("href", "#")
-                        document.getElementById("clinicSelect").addEventListener("click", caseExists);
-
-                    }
-                    else{
-                        document.getElementById("caseUpdates").setAttribute("href", "#")
-                        document.getElementById("caseUpdates").addEventListener("click", caseNotExists);
-                    }
-                }
-                });
-        }
-        window.onload = checkExistingCase();
-    </script>
 
     <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="../animations.js"></script>
+    <script src="animations.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 

@@ -159,12 +159,20 @@
 
       </div>
       
-      
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="button" onclick="dashboardReturn()">Back to Dashboard</button>
+      </div>
+
     </div>
 
     <!--Footer-->
 
-  
+    <script>
+      window.onload = console.log(sessionStorage);
+      function dashboardReturn(){
+        window.location.replace("applicant-start.html")
+      }
+    </script>
 
   </body>
   </html>
