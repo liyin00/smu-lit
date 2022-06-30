@@ -27,7 +27,7 @@ class users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(30), nullable=False)
-    bdae = db.Column(db.Date, nullable=False)
+    bdae = db.Column(db.Date)
     email = db.Column(db.String(50), nullable=False)
     last4_nric = db.Column(db.String(4))
     role = db.Column(db.String(10), nullable=False)
@@ -75,7 +75,11 @@ class users(db.Model):
         
         for column in columns:
             if column in datetime_column:
-                result[column] = getattr(self, column).strftime("%Y-%m-%d")
+                if getattr(self, column):
+                    result[column] = getattr(self, column).strftime("%Y-%m-%d")
+                    
+                else:
+                    result[column] = None
                 
             else:
                 result[column] = getattr(self, column)
@@ -195,28 +199,50 @@ class cases(db.Model):
         'update_columns' which updates the corresponding 
         key, value pair in the object instance
         """
-        self.case_id = update_dict['case_id']
-        self.client_name = update_dict['client_name']
-        self.client_id = update_dict['client_id']
-        self.gross_salary = update_dict['gross_salary']
-        self.case_title = update_dict['case_title']
-        self.case_category = update_dict['case_category']
-        self.court_hearing_date = update_dict['court_hearing_date']
-        self.client_case_description = update_dict['client_case_description']
-        self.s3_url = update_dict['s3_url']
-        self.sa_id = update_dict['sa_id']
-        self.lawyer_id = update_dict['lawyer_id']
-        self.current_case_status = update_dict['current_case_status']
-        self.student_assigned_date = update_dict['student_assigned_date']
-        self.case_summary_date = update_dict['case_summary_date']
-        self.finalised_case_summary_date = update_dict['finalised_case_summary_date']
-        self.confirmed_appointment_date = update_dict['confirmed_appointment_date']
-        self.consultation_date = update_dict['consultation_date']
-        self.consultation_questions = update_dict['consultation_questions']
-        self.consultation_advices = update_dict['consultation_advices']
-        self.client_summary_approval = update_dict['client_summary_approval']
-        self.pre_consult_req = update_dict['pre_consult_req']
-        self.pre_consult_google_docs_link = update_dict['pre_consult_google_docs_link']
+        if 'case_id' in update_dict:
+            self.case_id = update_dict['case_id']
+        if 'client_name' in update_dict:
+            self.client_name = update_dict['client_name']
+        if 'client_id' in update_dict:
+            self.client_id = update_dict['client_id']
+        if 'gross_salary' in update_dict:
+            self.gross_salary = update_dict['gross_salary']
+        if 'case_title' in update_dict:
+            self.case_title = update_dict['case_title']
+        if 'case_category' in update_dict:
+            self.case_category = update_dict['case_category']
+        if 'court_hearing_date' in update_dict:
+            self.court_hearing_date = update_dict['court_hearing_date']
+        if 'client_case_description' in update_dict:
+            self.client_case_description = update_dict['client_case_description']
+        if 's3_url' in update_dict:
+            self.s3_url = update_dict['s3_url']
+        if 'sa_id' in update_dict:
+            self.sa_id = update_dict['sa_id']
+        if 'lawyer_id' in update_dict:
+            self.lawyer_id = update_dict['lawyer_id']
+        if 'current_case_status' in update_dict:
+            self.current_case_status = update_dict['current_case_status']
+        if 'student_assigned_date' in update_dict:
+            self.student_assigned_date = update_dict['student_assigned_date']
+        if 'case_summary_date' in update_dict:
+            self.case_summary_date = update_dict['case_summary_date']
+        if 'finalised_case_summary_date' in update_dict:
+            self.finalised_case_summary_date = update_dict['finalised_case_summary_date']
+        if 'confirmed_appointment_date' in update_dict:
+            self.confirmed_appointment_date = update_dict['confirmed_appointment_date']
+        if 'consultation_date' in update_dict:
+            self.consultation_date = update_dict['consultation_date']
+        if 'consultation_questions' in update_dict:
+            self.consultation_questions = update_dict['consultation_questions']
+        if 'consultation_advices' in update_dict:
+            self.consultation_advices = update_dict['consultation_advices']
+        if 'client_summary_approval' in update_dict:
+            self.client_summary_approval = update_dict['client_summary_approval']
+        if 'pre_consult_req' in update_dict:
+            self.pre_consult_req = update_dict['pre_consult_req']
+        if 'pre_consult_google_docs_link' in update_dict:
+            self.pre_consult_google_docs_link = update_dict['pre_consult_google_docs_link']
             
 class case_summary(db.Model):
     __tablename__ = 'case_summary'
@@ -387,10 +413,39 @@ def get_all_chats():
             }
         ), 404
 
+# Retrieve all case summary
+@app.route('/get_all_case_summary', methods=['GET'])
+def get_all_case_summary():
+    try: 
+        output = []
+        case_summary_info = case_summary.query.all()
+
+        for case_summary_element in case_summary_info:
+            output.append(case_summary_element.get_dict())
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all case summaries."
+            }
+        ), 404
+        
 # Login APIs
 # 1 ) a) Check if email is used b) create OTP
-# 2 ) Create new user
+# 2 ) Create new user (client)
 # 3 ) a) check if name/password correct b) create OTP
+# 4 ) Create new user (sa)
+# 5 ) Create new user (lawyer)
+# 6 ) Retrieve user profile
 
 # 1 ) a) Check if email is used b) create OTP
 def read_template(filename):
@@ -472,7 +527,7 @@ def registration_scan():
             }
         ), 404
     
-# 2 ) Create new user
+# 2 ) Create new user (client)
 @app.route('/create_new_user_client', methods=['POST'])
 def create_new_user_client():
     try:
@@ -500,7 +555,6 @@ def create_new_user_client():
             }
         ), 200
     
-        
     except Exception as e:
         print(e)
         return jsonify(
@@ -593,18 +647,116 @@ def login():
                 "message": "Incorrect email or password."
             }
         ), 404
+
+# 4 ) Create new user (sa)
+@app.route('/create_new_user_sa', methods=['POST'])
+def create_new_user_sa():
+    try:
+        # retrieve data (email, name, educational_instituition, study_year, password)
+        data = request.get_json()
         
+        # fill in missing data
+        data['last4_nric'] = None
+        data['bdae'] = None
+        data['user_id'] = 0
+        data['role'] = "sa"
+        data['company'] = None
+        data['position'] = None
+        
+        user_obj = users(**data)
+        
+        db.session.add(user_obj)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully created new user for sa."
+            }
+        ), 200
+    
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating new user for sa."
+            }
+        ), 404
+        
+# 5 ) Create new user (lawyer)
+@app.route('/create_new_user_lawyer', methods=['POST'])
+def create_new_user_lawyer():
+    try:
+        # retrieve data (email, name, company, position, password)
+        data = request.get_json()
+        
+        # fill in missing data
+        data['last4_nric'] = None
+        data['bdae'] = None
+        data['user_id'] = 0
+        data['role'] = "lawyer"
+        data['educational_instituition'] = None
+        data['study_year'] = None
+        
+        user_obj = users(**data)
+        
+        db.session.add(user_obj)
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully created new user for lawyer."
+            }
+        ), 200
+    
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating new user for lawyer."
+            }
+        ), 404
+
+# 6 ) Retrieve user profile
+@app.route('/user_profile', methods=['POST'])
+def user_profile():
+    try:
+        # retrieve data ()
+        data = request.get_json()
+        user_id = data['user_id']
+        
+        user_info = users.query.filter_by(user_id=user_id).first()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": user_info.get_dict()
+            }
+        ), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving user profile."
+            }
+        ), 404
+
 # Case
 # 1 ) Check if client created new case
 # 2 ) Create new case
 # 3 ) assign case to SA
-
 # 4 ) SA does case summary
-# 5 ) Retrieve cases by case status
+# 5 ) SA retrieve case summary
 # 6 ) Retrieve a specific case
-# 7 ) Retrieve cases by SA
-# 8 ) Retrieve cases by lawyer
-# 9 ) Retrieve case by client
+# 7 ) Retrieve cases by SA by case_status
+# 8 ) Retrieve cases by lawyer by case_status
+# 9 ) Retrieve case by client by case_status
+# 10 ) Retrieve all cases by case_status
 
 # 1 ) Check if client created new case
 @app.route('/client_existing_case', methods=['POST'])
@@ -693,17 +845,12 @@ def assigning_case_to_SA():
         # retrieve case_info
         case_id = data['case_id']
         case_info = cases.query.filter_by(case_id=case_id).first()
-        
-        # get instance dict
-        case_info_dict = case_info.get_dict()
-        
-        # update instance dict values
-        case_info_dict['court_hearing_date'] = datetime.strptime(case_info_dict['court_hearing_date'], '%Y-%m-%d')
-        case_info_dict['student_assigned_date'] = date.today()
-        case_info_dict['current_case_status'] = 'Assigned cases'
-        case_info_dict['sa_id'] = data['sa_id']
 
-        case_info.update_columns(case_info_dict)
+        case_info.update_columns({
+            'student_assigned_date': date.today(),
+            'current_case_status': 'Assigned cases',
+            'sa_id': data['sa_id']
+        })
         
         db.session.commit()
         
@@ -720,6 +867,247 @@ def assigning_case_to_SA():
             {
                 "code": 404,
                 "message": "Error occured while assigning case to SA."
+            }
+        ), 404
+
+# 4 ) SA does case summary
+@app.route('/create_case_summary', methods=['POST'])
+def create_case_summary():
+    try:
+        # retrieve data (case_id, summary_of_facts, issues_questions, applicable_law, court_hearing_matter, specific_questions)
+        data = request.get_json()
+        case_id = data['case_id']
+        case_obj = cases.query.filter_by(case_id=case_id).first()
+        
+        # create case summary instance
+        data['case_summary_id'] = 0
+        data['client_summary_feedback'] = None
+        case_summary_obj = case_summary(**data)
+        
+        db.session.add(case_summary_obj)
+        db.session.commit()
+        
+        # update case summary date
+        case_obj.update_columns({
+            "case_summary_date": date.today()
+        })
+        
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully created case summary."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while creating case summary."
+            }
+        ), 404
+
+# 5 ) SA retrieve case summary
+@app.route('/get_case_summary', methods=['POST'])
+def get_case_summary():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        
+        cases_info = cases.query.filter_by(case_id=case_id)
+        
+        output = []
+        
+        for case in cases_info:
+            output.append(case.get_dict())
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving case summary."
+            }
+        ), 404
+
+# 6 ) Retrieve a specific case
+@app.route('/get_specific_case', methods=['POST'])
+def get_specific_case():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        
+        case_info = cases.query.filter_by(case_id=case_id).first()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "data": case_info.get_dict()
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving specific case."
+            }
+        ), 404
+
+# 7 ) Retrieve cases by SA by case_status
+@app.route('/get_cases_by_sa', methods=['POST'])
+def get_cases_by_sa():
+    try:
+        # retrieve data (sa_id)
+        data = request.get_json()
+        
+        sa_id = data['sa_id']
+        cases_info = cases.query.filter_by(sa_id=sa_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by SA."
+            }
+        ), 404
+
+# 8 ) Retrieve cases by lawyer by case_status
+@app.route('/get_cases_by_lawyer', methods=['POST'])
+def get_cases_by_lawyer():
+    try:
+        # retrieve data (lawyer_id)
+        data = request.get_json()
+        
+        lawyer_id = data['lawyer_id']
+        cases_info = cases.query.filter_by(lawyer_id=lawyer_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by lawyer."
+            }
+        ), 404
+
+# 9 ) Retrieve case by client by case_status
+@app.route('/get_cases_by_client', methods=['POST'])
+def get_cases_by_client():
+    try:
+        # retrieve data (client_id)
+        data = request.get_json()
+        
+        client_id = data['client_id']
+        cases_info = cases.query.filter_by(client_id=client_id)
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving cases by client."
+            }
+        ), 404
+
+# 10 ) Retrieve all cases by case_status
+@app.route('/get_all_cases_admin', methods=['GET'])
+def get_all_cases_admin():
+    try:
+        cases_info = cases.query.all()
+        
+        output = {}
+        
+        for case in cases_info:
+            case_data = case.get_dict()
+            current_case_status = case_data['current_case_status']
+            
+            if current_case_status not in output:
+                output[current_case_status] = []
+                
+            output[current_case_status].append(case_data)
+            
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+            
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while retrieving all cases by case status."
             }
         ), 404
 
