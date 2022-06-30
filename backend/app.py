@@ -1189,6 +1189,7 @@ def template():
             "client_summary_feedback": client_summary_feedback
         })
         
+        db.session.commit()
         
         # update case
         case_info = cases.query.filter_by(case_id=case_id).first()
@@ -1198,12 +1199,21 @@ def template():
             "client_summary_approval": client_summary_approval
         })
         
+        db.session.commit()
+        
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully updated client feedback."
+            }
+        ), 200
+        
     except Exception as e:
         print(e)
         return jsonify(
             {
                 "code": 404,
-                "message": ""
+                "message": "Error occurred while updating client feedback."
             }
         ), 404
 
