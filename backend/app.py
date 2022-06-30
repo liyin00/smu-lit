@@ -1147,14 +1147,20 @@ def get_all_cases_admin():
             case_data['sa_name'] = None
             
             if sa_id:
-                case_data['sa_name'] = users.query.filter_by(user_id=sa_id).first().get_dict()['name']
+                sa_info = users.query.filter_by(user_id=sa_id).first().get_dict()
+                case_data['sa_name'] = sa_info['name']
 
             lawyer_id = case_data['lawyer_id']
             case_data['lawyer_name'] = None
             
             if lawyer_id:
-                case_data['lawyer_name'] = users.query.filter_by(user_id=lawyer_id).first().get_dict()['name']
-            
+                lawyer_info = users.query.filter_by(user_id=lawyer_id).first().get_dict()
+                case_data['lawyer_name'] = lawyer_info['name']
+                
+            client_id = case_data['client_id']
+            client_info = users.query.filter_by(user_id=client_id).first().get_dict()
+            case_data['client_bdae'] = client_info['bdae']
+                
             if current_case_status not in output:
                 output[current_case_status] = []
                 
