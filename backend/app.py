@@ -1284,6 +1284,33 @@ def create_chat_message():
             }
         ), 404
 
+# User profile
+# 1 ) Retrieve user information by user_id
+@app.route('/get_user_profile', methods=['POST'])
+def get_user_profile():
+    try:
+        # retrieve data (user_id)
+        data = request.get_json()
+        user_id = data['user_id']
+        
+        user_info = users.query.filter_by(user_id=user_id).first()
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": user_info.get_dict()
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving user profile."
+            }
+        ), 404
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
 
