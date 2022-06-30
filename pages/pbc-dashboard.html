@@ -152,7 +152,7 @@
                             <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>
                             <p class="col">`+checkAssign(newCase['case_id'], newCase['sa_id']) +`</p>
                             <p class="col">`+checkAssign(newCase['case_id'], newCase['lawyer_id'])+`</p>
-                            <div class="col"><button type="submit" class="btn btn-primary">Submit</button></div>
+                            
                         </div>
                     </div>
                     `
@@ -197,7 +197,7 @@
 
 
         function retrieveAllAssignedCases(retrievedAssignedCases){
-            if(retrievedAssignedCases.length==0){
+            if(retrievedAssignedCases){
             document.getElementById("assignedCases").style.display ="none";
             }
             else{

@@ -119,6 +119,7 @@
                     if(response.existing_case == true){
                         document.getElementById("clinicSelect").setAttribute("href", "#")
                         document.getElementById("clinicSelect").addEventListener("click", caseExists);
+                        sessionStorage.setItem("category", "sa-client");
 
                     }
                     else{
