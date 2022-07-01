@@ -73,8 +73,8 @@
                     <p class="col text-light" >Applicant Name</p>
                     <p class="col text-light" >Case Type</p>
                     <p class="col text-light" >Case ID</p>
-                    <p class="col text-light" >Assign Student Assistant</p>
-                    <p class="col text-light" >Assign Volunteer Lawyer</p>
+                    <p class="col text-light" >Assign Student Assistant by ID</p>
+                    <p class="col text-light" >Assign Volunteer Lawyer by ID</p>
                 </div>
                 <div id="newCases" class="container-fluid my-4"></div>
                 <div class="container-fluid d-flex justify-content-center"><button type="submit" class="btn btn-primary mb-3">Submit</button></div>
@@ -129,7 +129,9 @@
             retrieveAllNewCases(retrievedNewCases);
 
             var retrievedAssignedCases = response.data["Assigned cases"];
+            var retrievedActiveCases = response.data["Active"];
             retrieveAllAssignedCases(retrievedAssignedCases);
+            retrieveAllAssignedCases(retrievedActiveCases);
         }
         });
 
@@ -137,7 +139,7 @@
 
         function retrieveAllNewCases(retrievedNewCases){
 
-            if(retrievedNewCases.length==0){
+            if(retrievedNewCases==null){
             document.getElementById("newCases").style.display ="none";
             }
             else{
@@ -149,7 +151,7 @@
                             <p class="col">`+newCase['court_hearing_date']+ `</p>
                             <p class="col">`+newCase['client_name']+ `</p>
                             <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>
                             <p class="col">`+checkAssignSA(newCase['case_id'], newCase['sa_id']) +`</p>
                             <p class="col">`+checkAssignLawyer(newCase['case_id'], newCase['lawyer_id'])+`</p>
                             
@@ -161,8 +163,10 @@
 
         }
 
-        function caseSession(caseID){
+        function caseSession(caseID, saID, lawyerID){
             sessionStorage.setItem("caseID", caseID);
+            sessionStorage.setItem("saID", saID);
+            sessionStorage.setItem("lawyerID", lawyerID);
         }
 
         function studentSession(saID){
@@ -198,7 +202,6 @@
 
         function retrieveAllAssignedCases(retrievedAssignedCases){
             if(retrievedAssignedCases == null){
-            document.getElementById("assignedCases").style.display ="none";
             }
             else{
                 for(i=0;i<retrievedAssignedCases.length; i++){
@@ -209,9 +212,9 @@
                             <p class="col">`+assignedCase['court_hearing_date']+ `</p>
                             <p class="col">`+assignedCase['client_name']+ `</p>
                             <p class="col">`+assignedCase['case_category']+`</p>
-                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+assignedCase['case_id']+`)">`+assignedCase['case_id']+`</a></p>
-                            <p class="col"> <a href="view-SA.html" onclick="caseSession(`+assignedCase['sa_id']+`)">`+ assignedCase['sa_id']+`</a></p>
-                            <p class="col"> <a href="view-lawyer.html" onclick="caseSession(`+assignedCase['lawyer_id']+`)">`+ assignedCase['lawyer_id'] +`</a></p>
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+assignedCase['case_id']+`,`+assignedCase['sa_id']+`,`+assignedCase['lawyer_id']+`)">`+assignedCase['case_id']+`</a></p>
+                            <p class="col"> <a href="view-SA.html" onclick="caseSession(`+assignedCase['case_id']+`,`+assignedCase['sa_id']+`,`+assignedCase['lawyer_id']+`)">`+ assignedCase['sa_name']+`</a></p>
+                            <p class="col"> <a href="view-lawyer.html" onclick="caseSession(`+assignedCase['case_id']+`,`+assignedCase['sa_id']+`,`+assignedCase['lawyer_id']+`)">`+ assignedCase['lawyer_name'] +`</a></p>
                         </div>
                     </div>
                     `
@@ -225,14 +228,12 @@
             }
         }
 
+
         function checkAssignLawyer(caseID, valueGiven){
             if(valueGiven == null){
                 return `<input type="text" id="`+ caseID +`" class="form-control"></input>`;
             }
         }
-        function assignSA(){
-
-        };
 
         document.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -258,6 +259,50 @@
             }
 
             console.log(dataFieldsObj)
+
+            var caseID = Object.keys(dataFieldsObj)[0];
+            var saID = Object.values(dataFieldsObj[caseID].saID)[0];
+            var lawyerID = Object.values(dataFieldsObj[caseID].lawyerID)[0];
+            console.log(caseID, saID, lawyerID);
+
+            
+            var settings = {
+                "url": "http://127.0.0.1:8100/assigning_case_to_SA",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "case_id": caseID,
+                    "sa_id":  saID
+                }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                console.log(response);
+
+                });
+
+                var settings = {
+                    "url": "http://127.0.0.1:8100/assign_case_lawyer",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "case_id": caseID,
+                        "lawyer_id": lawyerID
+                    }),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    alert("Case assigned.");
+                    location.reload
+                    });
+            
         })
     </script>
 

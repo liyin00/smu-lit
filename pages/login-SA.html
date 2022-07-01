@@ -140,6 +140,11 @@ function loginSA(){
     var email = document.getElementById("emailSAL").value;
     var password = document.getElementById("passwordSAL").value;
 
+    window.sessionStorage;
+
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("password", password)
+
     var settings = {
         "url": "http://127.0.0.1:8100/login",
         "method": "POST",

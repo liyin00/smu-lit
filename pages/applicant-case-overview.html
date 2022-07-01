@@ -67,7 +67,7 @@
 
       <a href="chat.html" class="block-link link-dark">
         <div class="d-flex justify-content-center m-5">  
-          <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Student Assistant</u></b></span></div>
+          <div id="chatHere"><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Student Assistant</u></b></span></div>
         </div>
       </a>
 
@@ -124,9 +124,9 @@
               </span>
 
               <h5 class="fw-bold">Awaiting Student Assistant Assignment</h5>
-              <p class="text-muted mb-2 fw-bold">To be updated</p>
+              <p class="text-muted mb-2 fw-bold" id="assignedDate">To be updated</p>
               <p class="text-muted">
-                A student assistant will shortly be assigned to you. We will notify you via email once a student assistant is assigned.
+                A student assistant will shortly be assigned to you.
               </p>
             </li>
 
@@ -138,7 +138,7 @@
               <h5 class="fw-bold">Case Details Review</h5>
               <p class="text-muted mb-2 fw-bold">To be updated</p>
               <p class="text-muted">
-                Please confirm that the facts of the case will are accurate by chatting to the student assistant.                  
+                Please confirm that the facts of the case are accurate with the student assistant.                  
               </p>
             </li>
 
@@ -147,10 +147,10 @@
               <span id="awaitingAppointment" class="timeline-icon">
                 <i class="fas fa-users text-primary fa-sm fa-fw"></i>
               </span>
-              <h5 class="fw-bold">Case Summary Completed</h5>
+              <h5 class="fw-bold">Awaiting Confirmed Appointment</h5>
               <p class="text-muted mb-2 fw-bold">To be updated</p>
               <p class="text-muted">
-                Please agree to the case summary provided by the student assistant by viewing it on the portal.
+                 Awaiting appointment to be accepted by assigned lawyer.
               </p>
             </li>
 
@@ -170,6 +170,10 @@
         <!-- Section: Timeline -->
 
       </div>
+
+      <h4>Action Items</h4>
+
+      <div class="d-grid gap-2 mb-4" id="actionItems"></div>
       
       <div class="d-grid gap-2">
         <button class="btn btn-primary" type="button" onclick="dashboardReturn()">Back to Dashboard</button>
@@ -207,11 +211,16 @@
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
               document.getElementById("awaitingAssignment").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Awaiting Assignment";
+              document.getElementById("chatHere").style.display = "none";
             }
             else if(response.data.finalised_case_summary_date == null){
+              document.getElementById("assignedDate").innerHTML = "Completed: " + response.data.student_assigned_date;
               document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
+              if(response.data.current_case_status == "Active"){
+                document.getElementById("actionItems").innerHTML = `<button type="button" id="confirmSummary" class="rounded-corners btn btn-secondary btn-block">View case summary and confirm case summary</button>`;
+              }
             }
             else if(response.data.confirmed_appointment_date == null){
               document.getElementById("awaitingAppointment").classList.remove("timeline-icon");

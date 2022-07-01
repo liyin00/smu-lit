@@ -115,14 +115,14 @@
 							
 		<div class="white-panel">
 			<div class="login-show">
-				<h2>LOGIN AS CLIENT</h2>
+				<h2>LOGIN AS APPLICANT</h2>
 				<input id="emailClientL" type="text" placeholder="Email">
 				<input id="passwordClientL" type="password" placeholder="Password">
 				<input type="button" value="Login" onclick="loginClient()">
 				<a href="" class="link-dark">Forgot password?</a>
 			</div>
 			<div class="register-show mb-3">
-				<h2>REGISTER AS CLIENT</h2>
+				<h2>REGISTER AS APPLICANT</h2>
 				<input type="text" placeholder="Email" id="emailClient">
                 <input type="text" placeholder="Name" id="nameClient">
                 <input type="text" placeholder="Birthday (YYYY-MM-DD)" id="bdayClient">
@@ -146,6 +146,10 @@ function loginClient(){
 
     console.log(email);
     console.log(password);
+
+    window.sessionStorage;
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("password", password);
 
     var settings = {
         "url": "http://127.0.0.1:8100/login",
