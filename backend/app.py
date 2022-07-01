@@ -8,7 +8,11 @@ from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
-import pathlib
+# import pke
+import warnings
+
+from tensorboard import summary
+warnings.filterwarnings('ignore')
 
 app = Flask(__name__)
 
@@ -924,83 +928,102 @@ def assigning_case_to_SA():
             }
         ), 404
 
-# 4 ) SA does case summary
-@app.route('/create_case_summary', methods=['POST'])
-def create_case_summary():
-    try:
-        # retrieve data (case_id, summary_of_facts, issues_questions, applicable_law, court_hearing_matter, specific_questions)
-        data = request.get_json()
-        case_id = data['case_id']
-        case_obj = cases.query.filter_by(case_id=case_id).first()
+# # 4 ) SA does case summary
+# @app.route('/create_case_summary', methods=['POST'])
+# def create_case_summary():
+#     try:
+#         # retrieve data (case_id, summary_of_facts, issues_questions, applicable_law, court_hearing_matter, specific_questions)
+#         data = request.get_json()
+#         case_id = data['case_id']
+#         case_obj = cases.query.filter_by(case_id=case_id).first()
         
-        # create case summary instance
-        data['case_summary_id'] = 0
-        data['client_summary_feedback'] = None
-        case_summary_obj = case_summary(**data)
+#         # extract key words
+#         extractor = pke.unsupervised.TopicRank()
+#         extractor.load_document(input=data['summary_of_facts'], language='en')
         
-        db.session.add(case_summary_obj)
-        db.session.commit()
+#         extractor.candidate_selection()
+#         extractor.candidate_weighting()
         
-        # update case summary date
-        case_obj.update_columns({
-            "case_summary_date": date.today()
-        })
+#         keyphrases = extractor.get_n_best(n=10)
         
-        db.session.commit()
+#         key_list = []
         
-        # retrieve client email
-        # 1) retrieve client id
-        client_id = cases.query.filter_by(case_id=case_id).first().get_dict()['client_id']
+#         for element in keyphrases:
+#             key_list.append(element[0])
+            
+#         summary_key_words = ','.join(key_list)
         
-        # 2) retrieve client email
-        email = users.query.filter_by(user_id=client_id).first().get_dict()['email']
+#         # create case summary instance
+#         data['case_summary_id'] = 0
+#         data['client_summary_feedback'] = None
+#         case_summary_obj = case_summary(**data)
+        
+#         db.session.add(case_summary_obj)
+#         db.session.commit()
+        
+#         # update case summary date
+#         case_obj.update_columns({
+#             "case_summary_date": date.today(),
+#             "summary_key_words": summary_key_words
+#         })
+        
+#         db.session.commit()
+        
+#         # retrieve client email
+#         # 1) retrieve client id
+#         client_id = cases.query.filter_by(case_id=case_id).first().get_dict()['client_id']
+        
+#         # 2) retrieve client email
+#         email = users.query.filter_by(user_id=client_id).first().get_dict()['email']
 
-        # 1) login
-        MY_ADDRESS = 'the_penteract@outlook.com' # input your address
-        MY_PW = 'PenteractPassword' # input your password
+#         # 1) login
+#         MY_ADDRESS = 'the_penteract@outlook.com' # input your address
+#         MY_PW = 'PenteractPassword' # input your password
         
-        s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
-        s.starttls()
-        s.login(MY_ADDRESS, MY_PW)
+#         s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
+#         s.starttls()
+#         s.login(MY_ADDRESS, MY_PW)
 
-        # create message
-        message = """
-        Dear Sir/Mdm,
+#         # create message
+#         message = """
+#         Dear Sir/Mdm,
 
-        Your case summary has been submitted. Kindly login to Locate Advocate to verify the case summary.
-        Thank you.
+#         Your case summary has been submitted.
+#         Kindly login to Locate Advocate to verify the case summary.
+        
+#         Thank you.
 
-        Kind regards,
-        Penteract"""
+#         Kind regards,
+#         Penteract"""
         
-        # send message
-        msg = MIMEMultipart()
+#         # send message
+#         msg = MIMEMultipart()
         
-        msg['From'] = MY_ADDRESS
-        msg['To'] = email
-        msg['Subject'] = 'Case Summary'
+#         msg['From'] = MY_ADDRESS
+#         msg['To'] = email
+#         msg['Subject'] = 'Case Summary'
 
-        msg.attach(MIMEText(message, 'plain'))
+#         msg.attach(MIMEText(message, 'plain'))
         
-        s.send_message(msg)
-        del msg
-        s.quit
+#         s.send_message(msg)
+#         del msg
+#         s.quit
         
-        return jsonify(
-            {
-                "code": 200,
-                "message": "Successfully created case summary."
-            }
-        ), 200
+#         return jsonify(
+#             {
+#                 "code": 200,
+#                 "message": "Successfully created case summary."
+#             }
+#         ), 200
         
-    except Exception as e:
-        print(e)
-        return jsonify(
-            {
-                "code": 404,
-                "message": "Error occured while creating case summary."
-            }
-        ), 404
+#     except Exception as e:
+#         print(e)
+#         return jsonify(
+#             {
+#                 "code": 404,
+#                 "message": "Error occured while creating case summary."
+#             }
+#         ), 404
 
 # 5 ) SA retrieve case summary
 @app.route('/get_case_summary', methods=['POST'])
@@ -1655,7 +1678,135 @@ def retrieve_past_cases_lawyer():
                 "message": "Error occurred while retrieving all SAs past cases."
             }
         ), 404
+        
+# Retrieve SA key_words
+@app.route('/all_sa_keywords', methods=['GET'])
+def all_sa_keywords():
+    try:
+        # get all SAs
+        sa_dict = {}
+        
+        SAs_info = users.query.filter_by(role='SA')
+        
+        for element in SAs_info:
+            element_json = element.get_dict()
+            
+            sa_id = element_json['user_id']
+            sa_name = element_json['name']
+            
+            sa_dict[sa_id] = sa_name
+        
+        output = {}
+        
+        case_info = cases.query.filter_by(current_case_status="Closed")
+        
+        for case in case_info:
+            case_json = case.get_dict()
+            summary_key_words = case_json['summary_key_words'].split(',')
 
+            sa_id = case_json['sa_id']
+            
+            # get sa_name
+            sa_name = sa_dict[sa_id]
+            
+            if sa_id not in output:
+                output[sa_id] = {
+                    "sa_name": sa_name,
+                    "summary_key_words": set()
+                }
+                
+            output[sa_id]['summary_key_words'].update(summary_key_words)
+
+        for element in sa_dict:
+            if element not in output:
+                output[element] = {
+                    "sa_name": sa_dict[element],
+                    "summary_key_words": set()   
+                }
+                
+        for element in output:
+            output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving all SAs keywords"
+            }
+        ), 404
+        
+# Retrieve lawyer key_words
+@app.route('/all_lawyer_keywords', methods=['GET'])
+def all_lawyer_keywords():
+    try:
+        # get all lawyers
+        lawyer_dict = {}
+        
+        lawyers_info = users.query.filter_by(role='lawyer')
+        
+        for element in lawyers_info:
+            element_json = element.get_dict()
+            
+            lawyer_id = element_json['user_id']
+            lawyer_name = element_json['name']
+            
+            lawyer_dict[lawyer_id] = lawyer_name
+        
+        output = {}
+        
+        case_info = cases.query.filter_by(current_case_status="Closed")
+        
+        for case in case_info:
+            case_json = case.get_dict()
+            summary_key_words = case_json['summary_key_words'].split(',')
+
+            lawyer_id = case_json['lawyer_id']
+            
+            # get lawyer_name
+            lawyer_name = lawyer_dict[lawyer_id]
+            
+            if lawyer_id not in output:
+                output[lawyer_id] = {
+                    "lawyer_name": lawyer_name,
+                    "summary_key_words": set()
+                }
+                
+            output[lawyer_id]['summary_key_words'].update(summary_key_words)
+
+        for element in lawyer_dict:
+            if element not in output:
+                output[element] = {
+                    "lawyer_name": lawyer_dict[element],
+                    "summary_key_words": set()   
+                }
+                
+        for element in output:
+            output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
+
+        return jsonify(
+            {
+                "code": 200,
+                "data": output
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occurred while retrieving all SAs keywords"
+            }
+        ), 404
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100, debug=True)
 
