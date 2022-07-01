@@ -54,7 +54,7 @@
         <div class="container bg-beige rounded-corners pt-3 pb-5 px-5">
 
             <div class="my-3 py-3 d-flex justify-content-center">
-                <div id="name"><h2>Name</h2></div>
+                <div><h2 id="name">Name</h2></div>
             </div>
 
             <div class="my-3 py-3 d-flex justify-content-center">
@@ -70,16 +70,7 @@
                 <div class="col-6"><div class="pt-2 d-flex justify-content-center container-fluid"><p><span id="background">SMU, Y3 Student</span></div></div>
                 <div class="col-6">
                     <div class="pt-2 d-flex justify-content-center container-fluid">
-                        <ul>
-                            <li>
-                                <p>Case 1</p>
-                            </li>
-                            <li>
-                                <p>Case 2</p>
-                            </li>
-                            <li>
-                                <p>Case 3</p>
-                            </li>
+                        <ul id="casesHere">
                         </ul>
                     </div>
                 </div>
@@ -91,6 +82,30 @@
     
         </div>
     </div>
+
+    <script>
+        window.onload = function(){
+            var settings = {
+                "url": "http://127.0.0.1:8100/get_user_profile",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "user_id": sessionStorage.getItem("lawyerID")
+                }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                console.log(response);
+                    document.getElementById("background").innerHTML = response.data.company + ", " + response.data.position;
+                    document.getElementById("name").innerHTML = response.data.name;
+                    document.getElementById("email").innerHTML = response.data.email;
+                });
+
+        }
+    </script>
   
 
   </body>

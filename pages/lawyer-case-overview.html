@@ -1,22 +1,21 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../stylesheet/stylesheet.css">
-        <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
-        <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-        />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <title>Locate Advocate - Lawyer Login</title>
-      </head>
-
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../stylesheet/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheet/stylesheetSCSS.css">
+    <link rel="stylesheet" href="../stylesheet/moreAnimations.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Locate Advocate - Applicant Dashboard</title>
+  </head>
   <body style="background-image:url(../pictures/website-bg.jpg);
   height: 100%;
   width: 100%;
@@ -52,26 +51,33 @@
 
     <div class="container bg-dblue pt-3 pb-2 mt-5 d-flex align-items-center justify-content-center">
       <div class="d-flex flex-column">
-          <div class="d-flex justify-content-center text-light"><h4>Name of Case</h4></div>
+          <div class="d-flex justify-content-center text-light"><h4>Case Name: <span id="caseName"></span></h4></div>
       </div>
     </div>
 
     <div class="container bg-gold pt-3 pb-2 d-flex align-items-center justify-content-center">
       <div class="d-flex flex-column">
-          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span>To be updated.</span></h4></div>
+          <div class="d-flex justify-content-center text-light"><h4>Case Status: <span id="caseStatus"></span></h4></div>
       </div>
     </div>
 
     <div class="container bg-beige p-4 px-5 mb-4">
 
-      <div class="row">
+      <div class="row" id="chatHere">
 
-        <div class="col-12">
+        <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Student Assistant</u></b></span></div>
+                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Client</u></b></span></div>
                 </div>
             </a>
+        </div>
+        <div class="col-6">
+            <a href="chat.html" class="block-link link-dark">
+                <div class="d-flex justify-content-center m-5">  
+                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Lawyer</u></b></span></div>
+                </div>
+              </a>
         </div>
 
       </div>
@@ -82,7 +88,7 @@
 
             <div class="col-6 col-md-6">
 
-                <div class="mb-3"><h4>Summary of Case Updates</h4></div>
+                <div class="mb-3"><h4 class="mb-4">Summary of Case Updates</h4></div>
 
                 <section>
                     <style>
@@ -131,7 +137,7 @@
           
                     <ul class="timeline-with-icons">
                       <li class="timeline-item mb-5">
-                        <span class="timeline-icon">
+                        <span id="awaitingAssignment" class="timeline-icon">
                           <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
                         </span>
           
@@ -144,32 +150,32 @@
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
+                        <span id="awaitingSummaryApproval" class="timeline-icon">
                           <i class="fas fa-hand-holding-usd text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Case Details Review</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
                         <p class="text-muted">
-                          The facts of the case are being reviewed.                 
+                          The facts of the case are being reviewed with the student assistant.                 
                         </p>
                       </li>
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
+                        <span id="awaitingAppointment" class="timeline-icon">
                           <i class="fas fa-users text-primary fa-sm fa-fw"></i>
                         </span>
-                        <h5 class="fw-bold">Case Summary Review</h5>
+                        <h5 class="fw-bold">Awaiting Confirmed Appointment</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
                         <p class="text-muted">
-                          The case summary is being confirmed.
+                          Awaiting Lawyer to confirm appointment.
                         </p>
                       </li>
           
                       <li class="timeline-item mb-5">
           
                         <span class="timeline-icon">
-                          <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
+                          <i id="confirmedAppointment" class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Appointment Confirmed</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
@@ -183,13 +189,22 @@
             </div>
     
             <div class="col-6 col-md-6">
-                <h4>Application Details</h4>
+                <h4 class="mb-4">Application Details</h4>
 
-                <h5><b>Client name: <span id="clientName"></span></b></h5>
+                <h5 class="text-gold mb-4"><b>Case Category:</b> <span id="caseCategory"></span></h5>
 
-                <h5><b>Client birthday: <span id="clientBday"></span></b></h5>
 
-                <p class="text-gold">Case Category: <span id="caseCategory"></span></p>
+                <div class="container-fluid mb-4">
+                  <h5><b>Client name:</b> <span id="clientName"></span></h5>
+                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
+                </div>
+
+                <div class="container-fluid mb-4">
+                  <h5><b>Lawyer Name:</b> <span id="lawyerName"></span></h5>
+                  <h5><b>Student Assistant Name:</b> <span id="saName"></span></h5>
+                </div>
+
+                
 
                 <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
@@ -201,60 +216,102 @@
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
-                <p class="text-gold" id="caseDescription">I am currently a freelance photographer and I work with a few agencies to get clients, paying them a small comission fees. My recent client engagement under PhotoMAGIC (the agency) with Mr and Mrs Smith (Client) for a wedding photoshoot has been disappointing as they are unwilling to pay for the agreed upon costs stating their unsatisfaction with the pictures. </p>
+                <p class="text-gold" id="caseDescription"></p>
 
 
             </div>
 
         </div>
 
-        <div class="row">
-
-            <h4 class="mb-2">Action Items</h4>
-
-            <button type="button" id="checkCOI" class="rounded-corners btn btn-primary btn-lg btn-block" onclick="noCOI()">I confirm that there is no conflict of interest and that I can make it to the appointment.</button>
-            <button type="button" id="closeCase" style="display: none;" class="rounded-corners btn btn-primary btn-lg btn-block" onclick="closeCase()">Close case</button>
-
-
-        </div>
-
       </div>
+
+      <h4>Action Items</h4>
+
+      <div class="d-grid gap-2 mb-4" id="actionItems"><button id="confirmNoCOI" class="rounded-corners btn btn-secondary btn-block"> I confirm that I have no conflict of interest with the client and I can make it for the appointment</button></div>
 
     </div>
 
     <script>
-        window.onload.changeStatus()
-        function changeStatus(){
-            //API call
-            var status = null;
-            if (status =="0"){
-                var coloredDots = document.getElementByClass("timeline-icon");
-                coloredDots[0].classList.add("timeline-current");
-            }
-            if (status == "1"){
-                var coloredDots = document.getElementByClass("timeline-icon");
+      window.onload = console.log(sessionStorage);
 
-                coloredDots[0].classList.remove("timeline-current");
-                coloredDots[0].classList.add("timeline-icon");
-                
-                coloredDots[1].classList.remove("timeline-icon");
-                coloredDots[1].classList.add("timeline-current");
+      window.onload = function retrieveCaseStatus(){
+        
+        //caseData
+        var settings = {
+          "url": "http://127.0.0.1:8100/get_specific_case",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+              "Content-Type": "application/json"
+          },
+          "data": JSON.stringify({
+              "case_id": sessionStorage.getItem("caseID")
+          }),
+          };
+
+          $.ajax(settings).done(function (response) {
+          console.log(response);
+          if (response.code==200){
+            document.getElementById("clientName").innerHTML = response.data.client_name;
+            document.getElementById("caseCategory").innerHTML = response.data.case_category;
+            document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
+            document.getElementById("caseName").innerHTML = response.data.case_title;
+            document.getElementById("clientName").innerHTML = response.data.client_name;
+            document.getElementById("lawyerName").innerHTML = response.data.lawyer_id;
+            document.getElementById("saName").innerHTML = response.data.sa_id;
+            window.sessionStorage
+            sessionStorage.setItem("userID", response.data.client_id);
+          }
+        });
+
+        //caseStatus
+        var settings = {
+          "url": "http://127.0.0.1:8100/get_cases_by_client",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "data": JSON.stringify({
+            "client_id": sessionStorage.getItem("userID")
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+          if (response.code == 200){
+            document.getElementById("caseName").innerHTML = response.data.case_title;
+            if (response.data.student_assigned_date == null){
+              document.getElementById("chatHere").style.display = "none";
+              document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAssignment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Assignment";
             }
-        }
-        function noCOI(){
-            document.getElementById("checkCOI").style.display = "none";
-            document.getElementById("closeCase").style.display = "block"
-            //API to change status to appointment confirmed
-        }
-        function closeCase(){
-            //redirect to case dashboard for lawyer
-        }
+            else if(response.data.finalised_case_summary_date == null){
+              document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
+              document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Case Detail Review";
+            }
+            else if(response.data.confirmed_appointment_date == null){
+              document.getElementById("awaitingAppointment").classList.remove("timeline-icon");
+              document.getElementById("awaitingAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Awaiting Appointment Confirmation";
+            }
+            else{
+              document.getElementById("confirmedAppointment").classList.remove("timeline-icon");
+              document.getElementById("confirmedAppointment").classList.add("timeline-current");
+              document.getElementById("caseStatus").innerHTML = "Appointment Confirmed";
+            }
+
+          }
+        });
+
+      }
+
+    
     </script>
 
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+  
 
   </body>
   </html>

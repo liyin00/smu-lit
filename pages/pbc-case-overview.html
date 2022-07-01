@@ -63,7 +63,7 @@
 
     <div class="container bg-beige p-4 px-5 mb-4">
 
-      <div class="row">
+      <div class="row" id="chatHere">
 
         <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
@@ -137,7 +137,7 @@
           
                     <ul class="timeline-with-icons">
                       <li class="timeline-item mb-5">
-                        <span id="awaitingAssignment" class="timeline-current">
+                        <span id="awaitingAssignment" class="timeline-icon">
                           <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
                         </span>
           
@@ -156,7 +156,7 @@
                         <h5 class="fw-bold">Case Details Review</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
                         <p class="text-muted">
-                          The facts of the case are being reviewed.                 
+                          The facts of the case are being reviewed with the student assistant.                 
                         </p>
                       </li>
           
@@ -165,10 +165,10 @@
                         <span id="awaitingAppointment" class="timeline-icon">
                           <i class="fas fa-users text-primary fa-sm fa-fw"></i>
                         </span>
-                        <h5 class="fw-bold">Case Summary Review</h5>
+                        <h5 class="fw-bold">Awaiting Confirmed Appointment</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
                         <p class="text-muted">
-                          The case summary is being confirmed.
+                          Awaiting Lawyer to confirm appointment.
                         </p>
                       </li>
           
@@ -253,6 +253,8 @@
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
+            document.getElementById("lawyerName").innerHTML = response.data.lawyer_id;
+            document.getElementById("saName").innerHTML = response.data.sa_id;
             window.sessionStorage
             sessionStorage.setItem("userID", response.data.client_id);
           }
@@ -276,6 +278,7 @@
           if (response.code == 200){
             document.getElementById("caseName").innerHTML = response.data.case_title;
             if (response.data.student_assigned_date == null){
+              document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
               document.getElementById("awaitingAssignment").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Awaiting Assignment";

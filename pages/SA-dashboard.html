@@ -52,9 +52,6 @@
         <h1><b>Active Cases</b></h1>
         <div class="mx-4">
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Select Category
-                </a>
               
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="#">Action</a></li>
@@ -83,9 +80,6 @@
         <h1><b>Complete Cases</b></h1>
         <div class="mx-4">
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Select Category
-                </a>
               
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="#">Action</a></li>
@@ -111,64 +105,79 @@
 
     <script>
 
-        const dummyCase = {
-            courtHearingDate:"28/06/2022",
-            applicantName:"John Tan",
-            caseType:"Divorce",
-            caseID: 12782,
-            studentAssistant: null,
-            volunteerLawyer: null
-        };
-        const dummyCase2 = {
-            courtHearingDate:"28/06/2022",
-            applicantName:"John Tan",
-            caseType:"Divorce",
-            caseID: 12784,
-            studentAssistant: null,
-            volunteerLawyer: null
-        };
-        const retrievedNewCases =[dummyCase, dummyCase2];
-        const retrievedAssignedCases=[dummyCase];
+        console.log(sessionStorage);
 
-        var count = 0;
+        var settings = {
+        "url": "http://127.0.0.1:8100/get_cases_by_sa",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+            "sa_id": sessionStorage.getItem("saID")
+        }),
+        };
 
-        if(retrievedNewCases.length==0){
-            document.getElementById("newCases").style.display ="none";
-        }
-        else{
-            for(i=0;i<retrievedNewCases.length; i++){
-                var newCase = retrievedNewCases[i];
-                document.getElementById("newCases").innerHTML += `
-                <div class="bg-beige" id="newCases">
-                    <div class ="row px-3">
-                        <p class="col">`+newCase['courtHearingDate']+ `</p>
-                        <p class="col">`+newCase['applicantName']+ `</p>
-                        <p class="col">`+newCase['caseType']+`</p>
-                        <p class="col">`+newCase['caseID']+`</p>
+        $.ajax(settings).done(function (response) {
+        console.log(response);
+            var retrievedAssignedCases = response.data["Assigned cases"];
+            var retrievedActiveCases = response.data["Active"];
+            console.log(retrievedActiveCases);
+            var completeCases = response.data["Complete"];
+            console.log(retrievedAssignedCases);
+            retrieveAllAssignedCases(retrievedAssignedCases);
+            retrieveAllAssignedCases(retrievedActiveCases);
+            retrieveAllClosedCases(completeCases);
+        });
+
+        function retrieveAllAssignedCases(retrievedNewCases){
+            if(retrievedNewCases==null){
+            }
+            else{
+                for(i=0;i<retrievedNewCases.length; i++){
+                    var newCase = retrievedNewCases[i];
+                    document.getElementById("newCases").innerHTML += `
+                    <div class="bg-beige" id="newCases">
+                        <div class ="row px-3">
+                            <p class="col">`+newCase['court_hearing_date']+ `</p>
+                            <p class="col">`+newCase['client_name']+ `</p>
+                            <p class="col">`+newCase['case_category']+`</p>
+                            <p class="col"> <a href="sa-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
+                        </div>
                     </div>
-                </div>
-                `
+                    `
+                }
             }
         }
-
-        if(retrievedAssignedCases.length==0){
+        
+            function retrieveAllClosedCases(retrievedNewCases){
+            if(retrievedNewCases==null){
             document.getElementById("assignedCases").style.display ="none";
-        }
-        else{
-            for(i=0;i<retrievedAssignedCases.length; i++){
-                var assignedCase = retrievedAssignedCases[i];
-                document.getElementById("assignedCases").innerHTML += `
-                <div class="bg-beige" id="assignedCases">
-                    <div class ="row px-3">
-                        <p class="col">`+assignedCase['courtHearingDate']+ `</p>
-                        <p class="col">`+assignedCase['applicantName']+ `</p>
-                        <p class="col">`+assignedCase['caseType']+`</p>
-                        <p class="col">`+assignedCase['caseID']+`</p>
+            }
+            else{
+                for(i=0;i<retrievedNewCases.length; i++){
+                    var newCase = retrievedNewCases[i];
+                    document.getElementById("assignedCases").innerHTML += `
+                    <div class="bg-beige" id="assignedCases">
+                        <div class ="row px-3">
+                            <p class="col">`+newCase['court_hearing_date']+ `</p>
+                            <p class="col">`+newCase['client_name']+ `</p>
+                            <p class="col">`+newCase['case_category']+`</p>
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
+                        </div>
                     </div>
-                </div>
-                `
+                    `
+                }
             }
         }
+
+        function caseSession(caseID, saID, lawyerID){
+            sessionStorage.setItem("caseID", caseID);
+            sessionStorage.setItem("saID", saID);
+            sessionStorage.setItem("lawyerID", lawyerID);
+        }
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

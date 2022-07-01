@@ -114,18 +114,18 @@
 		<div class="white-panel">
 			<div class="login-show">
 				<h2>LOGIN AS LAWYER</h2>
-				<input type="text" placeholder="Email">
-				<input type="password" placeholder="Password">
-				<input type="button" value="Login" onclick="loginLawyer">
+				<input type="text" id="emailLawyerL" placeholder="Email">
+				<input type="password" id="passwordLawyerL" placeholder="Password">
+				<input type="button" value="Login" onclick="loginLawyer()">
 				<a href="" class="link-dark">Forgot password?</a>
 			</div>
 			<div class="register-show mb-3">
 				<h2>REGISTER AS LAWYER</h2>
-				<input type="text" placeholder="Email">
-                <input type="text" placeholder="Name">
-                <input type="text" placeholder="Company">
-                <input type="text" placeholder="Position">
-				<input type="password" placeholder="Password">
+				<input type="text" id="emailLawyer" placeholder="Email">
+                <input type="text" id="nameLawyer" placeholder="Name">
+                <input type="text" id="company" placeholder="Company">
+                <input type="text" id="position" placeholder="Position">
+				<input type="password" id="passwordLawyer" placeholder="Password">
 				<input type="password" placeholder="Confirm Password">
 				<input type="button" value="Register" onclick="registerLawyer()">
 			</div>
@@ -138,17 +138,45 @@
 
 <script>
 
+
 function loginLawyer(){
-    var email = document.getElementById("emailLawyerL");
-    var password = document.getElementById("passwordLawyerL");
-    if(true){
-        //API
-        window.sessionStorage;
-        sessionStorage.setItem("name", "John Tan");
-        sessionStorage.setItem("userID", 22222);
-        sessionStorage.setItem("caseID", 21298);
-        sessionStorage.setItem("userType", "studentAssistant");
-    }
+    var email = document.getElementById("emailLawyerL").value;
+    var password = document.getElementById("passwordLawyerL").value;
+
+    window.sessionStorage;
+
+    sessionStorage.setItem("email", email);
+    sessionStorage.setItem("password", password)
+
+    var settings = {
+        "url": "http://127.0.0.1:8100/login",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+            "email": email,
+            "password": password
+        }),
+        };
+
+        $.ajax(settings).done(function (response) {
+        console.log(response);
+        if(response.code==200){
+            name = response.data.name;
+            userID = response.data.user_id;
+            otp = response.data.otp;
+            window.sessionStorage;
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("userID", userID);
+            sessionStorage.setItem("lawyerID", userID);
+            sessionStorage.setItem("otp", otp);
+            sessionStorage.setItem("userType", "lawyer");
+            sessionStorage.setItem("loginRegister", "login");
+            window.location.replace("otp.html");
+        }
+        });
 }
 
 function registerLawyer(){
@@ -163,8 +191,36 @@ function registerLawyer(){
     sessionStorage.setItem("company", company);
     sessionStorage.setItem("position", position);
     sessionStorage.setItem("password", password);
-    //API
+    sessionStorage.setItem("userType", "lawyer")
+    sessionStorage.setItem("loginRegister", "register")
+
+    console.log(sessionStorage);
+
+    var settings = {
+    "url": "http://127.0.0.1:8100/registration_scan",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+        "email": email
+    }),
+    };
+
+    $.ajax(settings).done(function (response) {
+    console.log(response);
+    if(response.code==200){
+        otp = response.data.otp;
+        sessionStorage.setItem("otp", otp)
+        window.location.replace("otp.html");
+    }
+    else{
+        alert("Registration failed. Do you have an existing account?")
+    }
+    });
 }
+
 
 $(document).ready(function(){
     $('.login-info-box').fadeOut();
@@ -198,7 +254,7 @@ $('.login-reg-panel input[type="radio"]').on('change', function() {
 </script>
 
 <script src="https://unpkg.com/scrollreveal"></script>
-<script src="animations.js"></script>
+<script src="../animations.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
 </body>
 
