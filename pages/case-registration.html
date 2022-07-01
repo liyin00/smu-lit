@@ -234,27 +234,7 @@
       $(function() {
           $('#datepicker').datepicker();
       });
-      
-      async function uploadFile(){
-        const inpFile = document.getElementById('fileUploaded').files[0];
-        const filebinary = await inpFile.arrayBuffer();
-        axios({
-          method: 'PUT',
-          url: 'https://wonhzkff7f.execute-api.ap-southeast-1.amazonaws.com/prd/hello/hello.pdf',
-          headers: {
-            'Content-Type': 'application/pdf',
-            'Access-Control-Allow-Origin': '*',
-          },
-          data: filebinary,
-          timeout: 10000,
-        });
-      }
 
-
-
-      caseForm.addEventListener("submit", e=> {
-        e.preventDefault();
-      }) 
     </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
@@ -265,10 +245,30 @@
 
 <script>
       
-console.log(sessionStorage);
+  console.log(sessionStorage);
+
+  async function uploadFile(){
+    var userID = sessionStorage.getItem("userID");
+    const inpFile = document.getElementById('fileUploaded').files[0];
+    const filebinary = await inpFile.arrayBuffer();
+    console.log(userID)
+    let doc_url = "https://wonhzkff7f.execute-api.ap-southeast-1.amazonaws.com/prd/"+userID+"/"+userID+".pdf";
+    // console.log(doc_url);
+    axios({
+      method: 'PUT',
+      url: doc_url,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*',
+      },
+      data: filebinary,
+      timeout: 10000,
+    });
+    return doc_url
+  }
 
  (function() {
-    function constructDataObj(){
+  function constructDataObj(){
         var dataFieldsObj = {
 
         };
@@ -281,7 +281,7 @@ console.log(sessionStorage);
         return dataFieldsObj
     };
     'use strict';
-    window.addEventListener('load', function() {
+    window.addEventListener('load', async function() {
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       var forms = document.getElementsByClassName('needs-validation');
       // Loop over them and prevent submission
@@ -303,8 +303,9 @@ console.log(sessionStorage);
             var hearingDate = moment(formDataObj.calendarDate, "MM/DD/YYYY").format("YYYY-MM-DD");
             var name = sessionStorage.getItem("name");
             var userID = sessionStorage.getItem("userID");
-            console.log(name, userID, salary, caseTitle,caseCategory, hearingDate, clientCaseSummary);
-
+            var doc_url = "https://wonhzkff7f.execute-api.ap-southeast-1.amazonaws.com/prd/"+userID+"/"+userID+".pdf";
+            // console.log(name, userID, salary, caseTitle,caseCategory, hearingDate, clientCaseSummary);
+            
             var settings = {
               "url": "http://127.0.0.1:8100/create_case",
               "method": "POST",
@@ -320,7 +321,7 @@ console.log(sessionStorage);
                 "case_category": caseCategory,
                 "court_hearing_date": hearingDate,
                 "client_case_description": clientCaseSummary,
-                "s3_url": "www.google.com"
+                "s3_url": doc_url
               }),
             };
 
