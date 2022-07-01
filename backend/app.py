@@ -1073,13 +1073,24 @@ def get_specific_case():
         data = request.get_json()
         case_id = data['case_id']
         case_info = cases.query.filter_by(case_id=case_id).first().get_dict()
+        
         sa_id = case_info['sa_id']
         lawyer_id = case_info['lawyer_id']
-        sa_info = users.query.filter_by(user_id=sa_id).first().get_dict()
-        lawyer_info = users.query.filter_by(user_id=lawyer_id).first().get_dict()
-        case_info['sa_name'] = sa_info['name']
-        case_info['lawyer_name'] = lawyer_info['name']
-
+        
+        if sa_id:
+            sa_info = users.query.filter_by(user_id=sa_id).first().get_dict()
+            case_info['sa_name'] = sa_info['name']
+            
+        else:
+            case_info['sa_name'] = None
+            
+        if lawyer_id:
+            lawyer_info = users.query.filter_by(user_id=lawyer_id).first().get_dict()
+            case_info['lawyer_name'] = lawyer_info['name']
+            
+        else:
+            case_info['lawyer_name'] = None
+            
         return jsonify(
             {
                 "code": 200,
