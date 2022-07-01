@@ -136,6 +136,8 @@
 
 
 <script>
+
+
 function loginSA(){
     var email = document.getElementById("emailSAL").value;
     var password = document.getElementById("passwordSAL").value;
@@ -167,14 +169,13 @@ function loginSA(){
             window.sessionStorage;
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("userID", userID);
+            sessionStorage.setItem("saID", saID);
             sessionStorage.setItem("otp", otp);
             sessionStorage.setItem("userType", "studentAssistant");
             sessionStorage.setItem("loginRegister", "login");
             window.location.replace("otp.html");
         }
-        else{
-            alert("Login failed.")
-        }
+
         });
 }
 
