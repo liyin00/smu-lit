@@ -113,7 +113,7 @@ class cases(db.Model):
     consultation_advices = db.Column(db.String(5000))
     client_summary_approval = db.Column(db.String(30))
     pre_consult_req = db.Column(db.Integer)
-    pre_consult_google_docs_link = db.Column(db.String(300))
+    summary_key_words = db.Column(db.String(1000))
 
     def __init__(
         self,
@@ -138,7 +138,7 @@ class cases(db.Model):
         consultation_advices,
         client_summary_approval,
         pre_consult_req,
-        pre_consult_google_docs_link
+        summary_key_words
     ):
         self.case_id = case_id
         self.client_name = client_name
@@ -161,7 +161,7 @@ class cases(db.Model):
         self.consultation_advices = consultation_advices
         self.client_summary_approval = client_summary_approval
         self.pre_consult_req = pre_consult_req
-        self.pre_consult_google_docs_link = pre_consult_google_docs_link
+        self.summary_key_words = summary_key_words
 
     def get_dict(self):
         """
@@ -262,8 +262,8 @@ class cases(db.Model):
         if 'pre_consult_req' in update_dict:
             self.pre_consult_req = update_dict['pre_consult_req']
 
-        if 'pre_consult_google_docs_link' in update_dict:
-            self.pre_consult_google_docs_link = update_dict['pre_consult_google_docs_link']
+        if 'summary_key_words' in update_dict:
+            self.summary_key_words = update_dict['summary_key_words']
 
             
 class case_summary(db.Model):
@@ -865,7 +865,7 @@ def create_case():
         data['consultation_advices'] = None 
         data['client_summary_approval'] = None 
         data['pre_consult_req'] = None 
-        data['pre_consult_google_docs_link'] = None
+        data['summary_key_words'] = None
         
         case_obj = cases(**data)
         
