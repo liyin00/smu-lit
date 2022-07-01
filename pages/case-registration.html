@@ -151,7 +151,7 @@
               
               <div class="form-group">
                 <label for="formFileMultiple" class="form-label">Please upload all relevant supporting documents (optional)</label>
-                <input class="form-control" type="file" id="formFileMultiple" multiple>
+                <input class="form-control" type="file" id="fileUploaded" accept="application/pdf">
                 <div class="valid-feedback">
                   Looks good!
                 </div>
@@ -172,7 +172,7 @@
                   </div>
               </div>
 
-              <div class="container-fluid my-4 d-flex flex-column rounded-corners bg-dblue p-3" style="width:80%; height:40vh;'">
+              <div class="container-fluid my-4 d-flex flex-column rounded-corners bg-dblue p-3" style="width:80%; height:40vh;">
                 <div class="row align-self-center"><p class="text-light"><u>Legal Disclaimers</u></p></div>
                 <div class="row align-self-center overflow-auto">
                     <p class="text-light"><u>Personal Data *</u></p>
@@ -212,7 +212,7 @@
                       </div>
                   </div>
               </div>
-              <button type="submit" class="btn btn-primary btn-lg grow">Submit</button>
+              <button type="submit" class="btn btn-primary btn-lg grow" onclick="uploadFile()">Submit</button>
             </form>
           </div>
         </div>
@@ -230,11 +230,33 @@
     
     <script type="text/javascript">
 
-        //datepicker
-        $(function() {
-            $('#datepicker').datepicker();
+      //datepicker
+      $(function() {
+          $('#datepicker').datepicker();
+      });
+      
+      async function uploadFile(){
+        const inpFile = document.getElementById('fileUploaded').files[0];
+        const filebinary = await inpFile.arrayBuffer();
+        axios({
+          method: 'PUT',
+          url: 'https://wonhzkff7f.execute-api.ap-southeast-1.amazonaws.com/prd/hello/hello.pdf',
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Access-Control-Allow-Origin': '*',
+          },
+          data: filebinary,
+          timeout: 10000,
         });
+      }
+
+
+
+      caseForm.addEventListener("submit", e=> {
+        e.preventDefault();
+      }) 
     </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="../animations.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script> 
@@ -282,8 +304,6 @@ console.log(sessionStorage);
             var name = sessionStorage.getItem("name");
             var userID = sessionStorage.getItem("userID");
             console.log(name, userID, salary, caseTitle,caseCategory, hearingDate, clientCaseSummary);
-
-
 
             var settings = {
               "url": "http://127.0.0.1:8100/create_case",

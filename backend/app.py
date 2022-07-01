@@ -1049,13 +1049,18 @@ def get_specific_case():
         # retrieve data (case_id)
         data = request.get_json()
         case_id = data['case_id']
-        
-        case_info = cases.query.filter_by(case_id=case_id).first()
-        
+        case_info = cases.query.filter_by(case_id=case_id).first().get_dict()
+        sa_id = case_info['sa_id']
+        client_id = case_info['client_id']
+        sa_info = users.query.filter_by(user_id=sa_id).first().get_dict()
+        client_info = users.query.filter_by(user_id=client_id).first().get_dict()
+        case_info['sa_name'] = sa_info['name']
+        case_info['client_name'] = client_info['name']
+
         return jsonify(
             {
                 "code": 200,
-                "data": case_info.get_dict()
+                "data": case_info
             }
         ), 200
         
