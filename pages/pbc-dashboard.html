@@ -261,10 +261,17 @@
             console.log(dataFieldsObj)
 
             var caseID = Object.keys(dataFieldsObj)[0];
-            var saID = Object.values(dataFieldsObj[caseID].saID)[0];
-            var lawyerID = Object.values(dataFieldsObj[caseID].lawyerID)[0];
-            console.log(caseID, saID, lawyerID);
-
+            // console.log(caseID)
+            // saID = caseID[0];
+            // var saID = caseID.saID;
+            // console.log(saID)
+            var saID = Object.values(dataFieldsObj[caseID].saID);
+            saID = saID.join("")
+            var lawyerID = Object.values(dataFieldsObj[caseID].lawyerID);
+            lawyerID = lawyerID.join("")
+            console.log(lawyerID)
+            // var lawyerID = Object.values(dataFieldsObj[caseID].lawyerID);
+            // console.log(caseID, saID, lawyerID);
             
             var settings = {
                 "url": "http://127.0.0.1:8100/assigning_case_to_SA",

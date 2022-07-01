@@ -37,12 +37,10 @@
         </header>
     </div>
       
-    <div class="d-flex bg-gold justify-content-end px-4">
+    <div class="d-flex bg-gold justify-content-end px-4 pt-3">
         <div>
             <nav class ="navbar">
-            <a class = "link-dotted link-light" href="./pages/login.html">Register</a> 
-            <a class = "text-light text-decoration-none px-1">/</a>
-            <a class = "link-dotted link-light" href="./pages/login.html">Log-in</a>
+            <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
             </nav>
         </div>
     </div>
@@ -122,10 +120,9 @@
                     console.log(response);
                     var activeCases = response.data["Active"];
                     var assignedCases = response.data["Assigned cases"];
-                    var pastCases = activeCases.concat(assignedCases);
-                    console.log(pastCases);
-                    for(i=0;i<pastCases.length;i++){
-                        document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+pastCases[i].case_id+`)>`+pastCases[i].case_title+`</a></li>`;
+                    // var pastCases = activeCases.concat(assignedCases);
+                    for(i=0;i<assignedCases.length;i++){
+                        document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+assignedCases[i].case_id+`)>`+assignedCases[i].case_title+`</a></li>`;
                     }
                     });
         }

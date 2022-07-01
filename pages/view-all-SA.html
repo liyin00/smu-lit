@@ -38,18 +38,24 @@
         </header>
     </div>
       
-    <div class="d-flex bg-gold justify-content-end px-4 pt-3">
+    <div class="d-flex bg-gold justify-content-end px-4">
         <div>
             <nav class ="navbar">
-            <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
+            <p class="text-light">Welcome <a class = "link-dotted link-light" href="#">SMU PRO BONO CENTRE</a> </p>
             </nav>
         </div>
     </div>
 
     <!--Body-->
 
+    <div class = "container-fluid d-flex justify-content-center mt-5"><h2>Search for Lawyer</h2></div>
+
+    <div class = "container-fluid d-flex justify-content-center m-5">
+        <div class ="bg-beige w-50 p-3 mx-3"><input type="text" placeholder="Search for student assistant by keyword:" style="background: transparent; background: none;"></div>
+        <button type="button" class="btn btn-primary">Search</button>
+    </div>
+
     <div class="container-fluid d-flex justify-content-center mt-5">
-        <h1><b>Active Cases</b></h1>
         <div class="mx-4">
             <div class="dropdown">
               
@@ -64,70 +70,42 @@
 
     <form id="newCaseForm">
         <div class="container-fluid d-flex justify-content-center">
-            <div class=" w-75 bg-gold rounded-corners mt-5">
+            <div class=" w-75 bg-dblue rounded-corners mt-5">
                 <div class ="row mt-4 px-3">
-                    <p class="col text-light" >Court Hearing Date</p>
-                    <p class="col text-light" >Applicant Name</p>
-                    <p class="col text-light" >Case Type</p>
-                    <p class="col text-light" >Case ID</p>
+                    <p class="col text-light" >Lawyer name</p>
+                    <p class="col text-light" >Associated Keywords</p>
+                    <p class="col text-light" >Company</p>
+                    <p class="col text-light" >Position </p>
                 </div>
                 <div id="newCases" class="container-fluid my-4"></div>
             </div>
         </div>
     </form>
     
-    <div class="container-fluid d-flex justify-content-center mt-5">
-        <h1><b>Complete Cases</b></h1>
-        <div class="mx-4">
-            <div class="dropdown">
-              
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-              </div>
-        </div>
-    </div>
-    <div class="container-fluid d-flex justify-content-center">
-        <div class=" w-75 bg-dblue rounded-corners mt-5">
-            <div class ="row mt-4 px-3">
-                <p class="col text-light" >Court Hearing Date</p>
-                <p class="col text-light" >Applicant Name</p>
-                <p class="col text-light" >Case Type</p>
-                <p class="col text-light" >Case ID</p>
-            </div>
-            <div id="assignedCases" class="container-fluid my-4"></div>
-        </div>
-    </div>
-
+    
     <div class="container-fluid" style="height: 5rem;"></div>
-
-
 
     <script>
 
-    console.log(sessionStorage);
-        
-    var lawyerID = sessionStorage.getItem("lawyerID")
-    console.log(lawyerID);
+        console.log(sessionStorage);
 
         var settings = {
-        "url": "http://127.0.0.1:8100/get_cases_by_lawyer",
+        "url": "http://127.0.0.1:8100/get_cases_by_sa",
         "method": "POST",
         "timeout": 0,
         "headers": {
             "Content-Type": "application/json"
         },
         "data": JSON.stringify({
-            "lawyer_id": lawyerID
+            "sa_id": sessionStorage.getItem("saID")
         }),
         };
 
         $.ajax(settings).done(function (response) {
-            console.log(response);
+        console.log(response);
             var retrievedAssignedCases = response.data["Assigned cases"];
             var retrievedActiveCases = response.data["Active"];
+            console.log(retrievedActiveCases);
             var completeCases = response.data["Complete"];
             console.log(retrievedAssignedCases);
             retrieveAllAssignedCases(retrievedAssignedCases);
