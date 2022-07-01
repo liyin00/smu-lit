@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS cases (
   consultation_advices varchar(5000),
   client_summary_approval varchar(30),
   pre_consult_req int,
-  pre_consult_google_docs_link varchar(300),
+  summary_key_words varchar(1000),
   PRIMARY KEY (case_id)
 );
 
@@ -141,7 +141,7 @@ INSERT INTO cases (
 	consultation_advices,
 	client_summary_approval,
 	pre_consult_req,
-	pre_consult_google_docs_link
+	summary_key_words
 ) VALUES (
 	0,
 	"Tom",
