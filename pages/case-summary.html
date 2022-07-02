@@ -239,7 +239,7 @@
           
 
         }
-        xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
+        xhttp.open("POST", "http://52.220.49.254:8100/get_case_summary", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(post_json);
       }
@@ -254,7 +254,7 @@
         let client_summary_feedback = "";
         let client_summary_approval = "1";
         const feedback = JSON.stringify({"case_id": case_id, "client_summary_approval": client_summary_approval, "client_summary_feedback": client_summary_feedback})
-        xhttp.open("POST", "http://localhost:8100/client_feedback", true);
+        xhttp.open("POST", "http://52.220.49.254:8100/client_feedback", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(feedback);
       }
@@ -264,7 +264,7 @@
         let client_summary_feedback = client_request;
         let client_summary_approval = "0";
         const feedback = JSON.stringify({"case_id": case_id, "client_summary_approval": client_summary_approval, "client_summary_feedback": client_request})
-        xhttp.open("POST", "http://localhost:8100/client_feedback", true);
+        xhttp.open("POST", "http://52.220.49.254:8100/client_feedback", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(feedback);
       }

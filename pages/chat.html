@@ -161,7 +161,7 @@
 
           }
         }
-        xhttp.open("POST", "http://localhost:8100/retrieve_chat", true);
+        xhttp.open("POST", "http://52.220.49.254:8100/retrieve_chat", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({"case_id": case_id,"category": category}));
       }
@@ -195,7 +195,7 @@
 
         let send_req = JSON.stringify({"case_id": case_id, "category": category, "sender_id": user_id, "message": new_message});
         console.log(send_req);
-        request.open("POST", "http://localhost:8100/create_chat_message");
+        request.open("POST", "http://52.220.49.254:8100/create_chat_message");
         request.setRequestHeader("Content-Type", "application/json");
         request.send(send_req);
 
