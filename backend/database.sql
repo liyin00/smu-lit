@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS cases (
   client_id int NOT NULL,
   gross_salary int NOT NULL,
   case_title varchar(100) NOT NULL,
-  case_category varchar(30) NOT NULL,
+  case_category varchar(1000) NOT NULL,
   court_hearing_date DATE NOT NULL,
   client_case_description varchar(1500),
   s3_url varchar(200),
