@@ -219,7 +219,7 @@
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
               if(response.data.current_case_status == "Active"){
-                document.getElementById("actionItems").innerHTML = `<button type="button" id="confirmSummary" class="rounded-corners btn btn-secondary btn-block">View case summary and confirm case summary</button>`;
+                document.getElementById("actionItems").innerHTML = `<a id="confirmSummary" href="case-summary.html" class="button rounded-corners btn btn-secondary btn-block">Please submit case summary here</a>`;
               }
             }
             else if(response.data.confirmed_appointment_date == null){
