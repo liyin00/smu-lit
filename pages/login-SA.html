@@ -144,11 +144,13 @@ function loginSA(){
 
     window.sessionStorage;
 
+    console.log(sessionStorage);
+
     sessionStorage.setItem("email", email);
-    sessionStorage.setItem("password", password)
+    sessionStorage.setItem("password", password);
 
     var settings = {
-        "url": "http://127.0.0.1:8100/login",
+        "url": "http://52.220.49.254:8100/login",
         "method": "POST",
         "timeout": 0,
         "headers": {
@@ -169,7 +171,7 @@ function loginSA(){
             window.sessionStorage;
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("userID", userID);
-            sessionStorage.setItem("saID", saID);
+            sessionStorage.setItem("saID", userID);
             sessionStorage.setItem("otp", otp);
             sessionStorage.setItem("userType", "studentAssistant");
             sessionStorage.setItem("loginRegister", "login");
@@ -195,7 +197,7 @@ function registerSA(){
     sessionStorage.setItem("loginRegister", "register")
 
     var settings = {
-    "url": "http://127.0.0.1:8100/registration_scan",
+    "url": "http://52.220.49.254:8100/registration_scan",
     "method": "POST",
     "timeout": 0,
     "headers": {

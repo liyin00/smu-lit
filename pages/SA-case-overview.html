@@ -40,7 +40,7 @@
     <div class="d-flex bg-gold justify-content-end px-4 pt-3">
       <div>
           <nav class ="navbar">
-          <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
+          <p class="text-light"><u>Welcome!</u></span></p>
           </nav>
       </div>
   </div>
@@ -66,14 +66,14 @@
         <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Client</u></b></span></div>
+                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="saClient()"><b><u>Chat with Client</u></b></span></div>
                 </div>
             </a>
         </div>
         <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Lawyer</u></b></span></div>
+                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="saLawyer()"><b><u>Chat with Lawyer</u></b></span></div>
                 </div>
               </a>
         </div>
@@ -194,7 +194,7 @@
 
                 <div class="container-fluid mb-4">
                   <h5><b>Client name:</b> <span id="clientName"></span></h5>
-                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
+                  <h5><b>Gross Salary</b> <span id="salary"></span></h5>
                 </div>
 
                 <div class="container-fluid mb-4">
@@ -204,13 +204,13 @@
 
                 
 
-                <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
+                <!-- <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
                 <ul id="documentList">
                     <li><a href="#">Document 1</a></li>
                     <li><a href="#">Document 2</a></li>
                     <li><a href="#">Document 3</a></li>
-                </ul>
+                </ul> -->
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
@@ -225,7 +225,11 @@
 
       <h4>Action Items</h4>
 
-      <div class="d-grid gap-2 mb-4" id="actionItems"></div>
+      <div class="d-grid gap-2" id="actionItems"></div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary mt-2" type="button" onclick="backDash()">Back to Dashboard</button>
+      </div>
 
     </div>
 
@@ -236,7 +240,7 @@
         
         //caseData
         var settings = {
-          "url": "http://127.0.0.1:8100/get_specific_case",
+          "url": "http://52.220.49.254:8100/get_specific_case",
           "method": "POST",
           "timeout": 0,
           "headers": {
@@ -255,30 +259,10 @@
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
-            document.getElementById("lawyerName").innerHTML = response.data.lawyer_id;
-            document.getElementById("saName").innerHTML = response.data.sa_id;
+            document.getElementById("lawyerName").innerHTML = response.data.lawyer_name;
+            document.getElementById("saName").innerHTML = response.data.sa_name;
+            document.getElementById("salary").innerHTML = "$" + response.data.gross_salary;
             window.sessionStorage
-            sessionStorage.setItem("userID", response.data.client_id);
-          }
-        });
-
-        //caseStatus
-        var settings = {
-          "url": "http://127.0.0.1:8100/get_cases_by_client",
-          "method": "POST",
-          "timeout": 0,
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          "data": JSON.stringify({
-            "client_id": sessionStorage.getItem("userID")
-          }),
-        };
-
-        $.ajax(settings).done(function (response) {
-          console.log(response);
-          if (response.code == 200){
-            document.getElementById("caseName").innerHTML = response.data.case_title;
             if (response.data.student_assigned_date == null){
               document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
@@ -309,6 +293,18 @@
           }
         });
 
+      }
+
+      function backDash(){
+            location.replace("SA-dashboard.html");
+        }
+
+      function saClient(){
+        sessionStorage.setItem("category", "sa-client")
+      }
+
+      function saLawyer(){
+        sessionStorage.setItem("category", "sa-lawyer")
       }
 
     

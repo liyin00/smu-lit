@@ -70,14 +70,21 @@
 
     <form id="newCaseForm">
         <div class="container-fluid d-flex justify-content-center">
-            <div class=" w-75 bg-dblue rounded-corners mt-5">
+            <div class=" w-75 bg-dblue rounded-corners mt-5" id="profiles">
                 <div class ="row mt-4 px-3">
                     <p class="col text-light" >Lawyer name</p>
                     <p class="col text-light" >Associated Keywords</p>
                     <p class="col text-light" >Company</p>
                     <p class="col text-light" >Position </p>
                 </div>
-                <div id="newCases" class="container-fluid my-4"></div>
+                <!-- <div class ="row mt-4 px-3 bg-beige">
+                    <p class="col" id="lawyer-name" ></p>
+                    <p class="col" id="keywords"></p>
+                    <p class="col" id="lawyer-company"></p>
+                    <p class="col" id="lawyer-position"></p>
+                </div> -->
+
+                <div id="lawyer_profiles" class="container-fluid my-4"></div>
             </div>
         </div>
     </form>
@@ -87,79 +94,31 @@
 
     <script>
 
-        console.log(sessionStorage);
+      window.onload = getLawyerKeywords();
+      function getLawyerKeywords() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          let lawyer_arr = JSON.parse(this.responseText).data;
+          for (var key in lawyer_arr){
+            var value = lawyer_arr[key];
+            console.log(value['lawyer_position'])
+            document.getElementById('profiles').innerHTML += `
+            <div class ="row mt-4 px-3 bg-beige">
+                <div class="col-3 lawyer-name" >`+value['lawyer_name']+`</div>
+                <div class="col-3 overflow-auto keywords">`+value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                <div class="col-3 lawyer-company">`+value['lawyer_company']+`</div>
+                <div class="col-3 lawyer-position">`+value['lawyer_position']+`</div>
+            </div>
+            `
+          }
 
-        var settings = {
-        "url": "http://127.0.0.1:8100/get_cases_by_sa",
-        "method": "POST",
-        "timeout": 0,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "data": JSON.stringify({
-            "sa_id": sessionStorage.getItem("saID")
-        }),
-        };
-
-        $.ajax(settings).done(function (response) {
-        console.log(response);
-            var retrievedAssignedCases = response.data["Assigned cases"];
-            var retrievedActiveCases = response.data["Active"];
-            console.log(retrievedActiveCases);
-            var completeCases = response.data["Complete"];
-            console.log(retrievedAssignedCases);
-            retrieveAllAssignedCases(retrievedAssignedCases);
-            retrieveAllAssignedCases(retrievedActiveCases);
-            retrieveAllClosedCases(completeCases);
-        });
-
-        function retrieveAllAssignedCases(retrievedNewCases){
-            if(retrievedNewCases==null){
-            }
-            else{
-                for(i=0;i<retrievedNewCases.length; i++){
-                    var newCase = retrievedNewCases[i];
-                    document.getElementById("newCases").innerHTML += `
-                    <div class="bg-beige" id="newCases">
-                        <div class ="row px-3">
-                            <p class="col">`+newCase['court_hearing_date']+ `</p>
-                            <p class="col">`+newCase['client_name']+ `</p>
-                            <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="sa-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
-                        </div>
-                    </div>
-                    `
-                }
-            }
         }
-        
-            function retrieveAllClosedCases(retrievedNewCases){
-            if(retrievedNewCases==null){
-            document.getElementById("assignedCases").style.display ="none";
-            }
-            else{
-                for(i=0;i<retrievedNewCases.length; i++){
-                    var newCase = retrievedNewCases[i];
-                    document.getElementById("assignedCases").innerHTML += `
-                    <div class="bg-beige" id="assignedCases">
-                        <div class ="row px-3">
-                            <p class="col">`+newCase['court_hearing_date']+ `</p>
-                            <p class="col">`+newCase['client_name']+ `</p>
-                            <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
-                        </div>
-                    </div>
-                    `
-                }
-            }
-        }
+        xhttp.open("GET", "http://52.220.49.254:8100/all_lawyer_keywords", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+      }
 
-        function caseSession(caseID, saID, lawyerID){
-            sessionStorage.setItem("caseID", caseID);
-            sessionStorage.setItem("saID", saID);
-            sessionStorage.setItem("lawyerID", lawyerID);
-        }
-
+      
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

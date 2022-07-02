@@ -52,9 +52,6 @@
         <h1><b>New Cases</b></h1>
         <div class="mx-4">
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Select Category
-                </a>
               
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="#">Action</a></li>
@@ -86,9 +83,6 @@
         <h1><b>Assigned Cases</b></h1>
         <div class="mx-4">
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Select Category
-                </a>
               
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li><a class="dropdown-item" href="#">Action</a></li>
@@ -117,7 +111,7 @@
     <script>
 
         var settings = {
-        "url": "http://127.0.0.1:8100/get_all_cases_admin",
+        "url": "http://52.220.49.254:8100/get_all_cases_admin",
         "method": "GET",
         "timeout": 0,
         };
@@ -165,8 +159,13 @@
 
         function caseSession(caseID, saID, lawyerID){
             sessionStorage.setItem("caseID", caseID);
+            if(saID == null){
+                sessionStorage.setItem("saID", null);
+                sessionStorage.setItem("lawyerId",null);
+            }
             sessionStorage.setItem("saID", saID);
             sessionStorage.setItem("lawyerID", lawyerID);
+            console.log(sessionStorage);
         }
 
         function studentSession(saID){
@@ -180,7 +179,7 @@
         function getUserDetails(userID){
 
             var settings = {
-                "url": "http://127.0.0.1:8100/user_profile",
+                "url": "http://52.220.49.254:8100/user_profile",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -274,7 +273,7 @@
             // console.log(caseID, saID, lawyerID);
             
             var settings = {
-                "url": "http://127.0.0.1:8100/assigning_case_to_SA",
+                "url": "http://52.220.49.254:8100/assigning_case_to_SA",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -292,7 +291,7 @@
                 });
 
                 var settings = {
-                    "url": "http://127.0.0.1:8100/assign_case_lawyer",
+                    "url": "http://52.220.49.254:8100/assign_case_lawyer",
                     "method": "POST",
                     "timeout": 0,
                     "headers": {

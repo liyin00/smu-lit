@@ -40,10 +40,10 @@
     <div class="d-flex bg-gold justify-content-end px-4 pt-3">
       <div>
           <nav class ="navbar">
-          <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
+          <p class="text-light"><u>Welcome!</u></span></p>
           </nav>
       </div>
-    </div>
+  </div>
 
     <!--Body-->
 
@@ -63,19 +63,12 @@
 
       <div class="row" id="chatHere">
 
-        <div class="col-6">
+        <div class="col-12">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Client</u></b></span></div>
+                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="lawyerSA()"><b><u>Chat with Student Assistant</u></b></span></div>
                 </div>
             </a>
-        </div>
-        <div class="col-6">
-            <a href="chat.html" class="block-link link-dark">
-                <div class="d-flex justify-content-center m-5">  
-                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Lawyer</u></b></span></div>
-                </div>
-              </a>
         </div>
 
       </div>
@@ -172,8 +165,8 @@
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
-                          <i id="confirmedAppointment" class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
+                        <span id="confirmedAppointment" class="timeline-icon">
+                          <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Appointment Confirmed</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
@@ -194,7 +187,7 @@
 
                 <div class="container-fluid mb-4">
                   <h5><b>Client name:</b> <span id="clientName"></span></h5>
-                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
+                  <h5><b>Gross Salary</b> <span id="salary"></span></h5>
                 </div>
 
                 <div class="container-fluid mb-4">
@@ -204,13 +197,13 @@
 
                 
 
-                <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
+                <!-- <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
                 <ul id="documentList">
                     <li><a href="#">Document 1</a></li>
                     <li><a href="#">Document 2</a></li>
                     <li><a href="#">Document 3</a></li>
-                </ul>
+                </ul> -->
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
@@ -225,7 +218,13 @@
 
       <h4>Action Items</h4>
 
-      <div class="d-grid gap-2 mb-4" id="actionItems"><button id="confirmNoCOI" class="rounded-corners btn btn-secondary btn-block"> I confirm that I have no conflict of interest with the client and I can make it for the appointment</button></div>
+      <div class="d-grid gap-2" id="actionItems">
+        <a id="confirmCOI" onclick="confirmCOI()" class="button rounded-corners btn btn-secondary btn-block">I confirm that there is no conflict of Interest & I can make it for the appointment</a>
+      </div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary mt-2" type="button" onclick="backDash()">Back to Dashboard</button>
+      </div>
 
     </div>
 
@@ -255,30 +254,10 @@
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
-            document.getElementById("lawyerName").innerHTML = response.data.lawyer_id;
-            document.getElementById("saName").innerHTML = response.data.sa_id;
+            document.getElementById("lawyerName").innerHTML = response.data.lawyer_name;
+            document.getElementById("saName").innerHTML = response.data.sa_name;
+            document.getElementById("salary").innerHTML = "$" + response.data.gross_salary;
             window.sessionStorage
-            sessionStorage.setItem("userID", response.data.client_id);
-          }
-        });
-
-        //caseStatus
-        var settings = {
-          "url": "http://127.0.0.1:8100/get_cases_by_client",
-          "method": "POST",
-          "timeout": 0,
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          "data": JSON.stringify({
-            "client_id": sessionStorage.getItem("userID")
-          }),
-        };
-
-        $.ajax(settings).done(function (response) {
-          console.log(response);
-          if (response.code == 200){
-            document.getElementById("caseName").innerHTML = response.data.case_title;
             if (response.data.student_assigned_date == null){
               document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
@@ -299,12 +278,39 @@
               document.getElementById("confirmedAppointment").classList.remove("timeline-icon");
               document.getElementById("confirmedAppointment").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Appointment Confirmed";
+              document.getElementById("confirmCOI").style.display = "none";
             }
-
           }
         });
 
       }
+
+      function backDash(){
+            location.replace("lawyer-dashboard.html");
+        }
+
+      function lawyerSA(){
+        sessionStorage.setItem("category", "lawyer-sa")
+      }
+
+      function confirmCOI(){
+        var settings = {
+          "url": "http://127.0.0.1:8100/update_appointment_date",
+          "method": "POST",
+          "timeout": 0,
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "data": JSON.stringify({
+            "case_id": sessionStorage.getItem("caseID")
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log(response);
+        });
+      }
+
 
     
     </script>

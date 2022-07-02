@@ -110,10 +110,10 @@
     console.log(sessionStorage);
         
     var lawyerID = sessionStorage.getItem("lawyerID")
-    console.log(lawyerID);
+    document.getElementById("nameHere").innerHTML = name;
 
         var settings = {
-        "url": "http://127.0.0.1:8100/get_cases_by_lawyer",
+        "url": "http://52.220.49.254:8100/get_cases_by_lawyer",
         "method": "POST",
         "timeout": 0,
         "headers": {
@@ -147,7 +147,7 @@
                             <p class="col">`+newCase['court_hearing_date']+ `</p>
                             <p class="col">`+newCase['client_name']+ `</p>
                             <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="sa-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
+                            <p class="col"> <a href="lawyer-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>                            
                         </div>
                     </div>
                     `
@@ -168,7 +168,7 @@
                             <p class="col">`+newCase['court_hearing_date']+ `</p>
                             <p class="col">`+newCase['client_name']+ `</p>
                             <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
+                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`)">`+newCase['case_id']+`</a></p>                            
                         </div>
                     </div>
                     `
@@ -176,10 +176,8 @@
             }
         }
 
-        function caseSession(caseID, saID, lawyerID){
+        function caseSession(caseID){
             sessionStorage.setItem("caseID", caseID);
-            sessionStorage.setItem("saID", saID);
-            sessionStorage.setItem("lawyerID", lawyerID);
         }
 
     </script>

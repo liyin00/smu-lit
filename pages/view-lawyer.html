@@ -56,6 +56,10 @@
             </div>
 
             <div class="my-3 py-3 d-flex justify-content-center">
+                <div><h5>Lawyer ID: <span id="id"></span></h5></div>
+            </div>
+
+            <div class="my-3 py-3 d-flex justify-content-center">
                 <div><h5>Email: <span id="email"></span></h5></div>
             </div>
 
@@ -75,7 +79,7 @@
             </div>
 
             <div class="d-grid">
-                <button class="btn btn-primary" type="button"><h5>Back to Dashboard</h5></button>
+                <button class="btn btn-primary" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
               </div>
     
         </div>
@@ -83,21 +87,23 @@
 
     <script>
         window.onload = function(){
+            lawyerID = sessionStorage.getItem("lawyerID")
+            document.getElementById("id").innerHTML = lawyerID;
             var settings = {
-                "url": "http://127.0.0.1:8100/get_user_profile",
+                "url": "http://52.220.49.254:8100/get_user_profile",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
                     "Content-Type": "application/json"
                 },
                 "data": JSON.stringify({
-                    "user_id": sessionStorage.getItem("lawyerID")
+                    "user_id": lawyerID
                 }),
                 };
 
                 $.ajax(settings).done(function (response) {
                 console.log(response);
-                    document.getElementById("background").innerHTML = response.data.company + ", " + response.data.position;
+                    document.getElementById("background").innerHTML = response.data.company + ", " + response.data.role;
                     document.getElementById("name").innerHTML = response.data.name;
                     document.getElementById("email").innerHTML = response.data.email;
                 });
@@ -110,7 +116,7 @@
                         "Content-Type": "application/json"
                     },
                     "data": JSON.stringify({
-                        "lawyer_id": 3
+                        "lawyer_id": lawyerID
                     }),
                     };
 
@@ -118,12 +124,23 @@
                     console.log(response);
                     var activeCases = response.data["Active"];
                     var assignedCases = response.data["Assigned cases"];
-                    // var pastCases = activeCases.concat(assignedCases);
-                    for(i=0;i<assignedCases.length;i++){
-                        document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+assignedCases[i].case_id+`)>`+assignedCases[i].case_title+`</a></li>`;
+                    var closedCases = response.data["Closed"];
+                    if(activeCases != null){
+                        displayPastCases(activeCases);
+                    }
+                    if(assignedCases!= null){
+                        displayPastCases(assignedCases);
                     }
                     });
 
+        }
+        function displayPastCases(assignedCases){
+            for(i=0;i<assignedCases.length;i++){
+                    document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+assignedCases[i].case_id+`)>`+assignedCases[i].case_title+`</a></li>`;
+                }
+        }
+        function backDash(){
+            location.replace("pbc-dashboard.html");
         }
     </script>
   

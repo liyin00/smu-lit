@@ -48,7 +48,7 @@
 
     <!--Body-->
 
-    <div class = "container-fluid d-flex justify-content-center mt-5"><h2>Search for Lawyer</h2></div>
+    <div class = "container-fluid d-flex justify-content-center mt-5"><h2>Search for Student Assistants</h2></div>
 
     <div class = "container-fluid d-flex justify-content-center m-5">
         <div class ="bg-beige w-50 p-3 mx-3"><input type="text" placeholder="Search for student assistant by keyword:" style="background: transparent; background: none;"></div>
@@ -70,14 +70,14 @@
 
     <form id="newCaseForm">
         <div class="container-fluid d-flex justify-content-center">
-            <div class=" w-75 bg-dblue rounded-corners mt-5">
+            <div class=" w-75 bg-dblue rounded-corners mt-5" id="profiles">
                 <div class ="row mt-4 px-3">
-                    <p class="col text-light" >Lawyer name</p>
+                    <p class="col text-light" >Student Assistant name</p>
                     <p class="col text-light" >Associated Keywords</p>
                     <p class="col text-light" >Company</p>
                     <p class="col text-light" >Position </p>
                 </div>
-                <div id="newCases" class="container-fluid my-4"></div>
+                <div id="sa-profiles" class="container-fluid my-4"></div>
             </div>
         </div>
     </form>
@@ -87,78 +87,30 @@
 
     <script>
 
-        console.log(sessionStorage);
+window.onload = getLawyerKeywords();
+      function getLawyerKeywords() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+          let sa_arr = JSON.parse(this.responseText).data;
+          for (var key in sa_arr){
+            var value = sa_arr[key];
+            // console.log(value['sa_educational_institution'])
+            document.getElementById('profiles').innerHTML += `
+            <div class ="row mt-4 px-3 bg-beige">
+                <div class="col-3 lawyer-name" >`+value['sa_name']+`</div>
+                <div class="col-3 overflow-auto keywords">`+ value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                <div class="col-3 lawyer-company">`+value['sa_educational_institution']+`</div>
+                <div class="col-3 lawyer-position">`+value['sa_study_year']+`</div>
+            </div>
+            `
+          }
 
-        var settings = {
-        "url": "http://127.0.0.1:8100/get_cases_by_sa",
-        "method": "POST",
-        "timeout": 0,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "data": JSON.stringify({
-            "sa_id": sessionStorage.getItem("saID")
-        }),
-        };
-
-        $.ajax(settings).done(function (response) {
-        console.log(response);
-            var retrievedAssignedCases = response.data["Assigned cases"];
-            var retrievedActiveCases = response.data["Active"];
-            console.log(retrievedActiveCases);
-            var completeCases = response.data["Complete"];
-            console.log(retrievedAssignedCases);
-            retrieveAllAssignedCases(retrievedAssignedCases);
-            retrieveAllAssignedCases(retrievedActiveCases);
-            retrieveAllClosedCases(completeCases);
-        });
-
-        function retrieveAllAssignedCases(retrievedNewCases){
-            if(retrievedNewCases==null){
-            }
-            else{
-                for(i=0;i<retrievedNewCases.length; i++){
-                    var newCase = retrievedNewCases[i];
-                    document.getElementById("newCases").innerHTML += `
-                    <div class="bg-beige" id="newCases">
-                        <div class ="row px-3">
-                            <p class="col">`+newCase['court_hearing_date']+ `</p>
-                            <p class="col">`+newCase['client_name']+ `</p>
-                            <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="sa-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
-                        </div>
-                    </div>
-                    `
-                }
-            }
         }
-        
-            function retrieveAllClosedCases(retrievedNewCases){
-            if(retrievedNewCases==null){
-            document.getElementById("assignedCases").style.display ="none";
-            }
-            else{
-                for(i=0;i<retrievedNewCases.length; i++){
-                    var newCase = retrievedNewCases[i];
-                    document.getElementById("assignedCases").innerHTML += `
-                    <div class="bg-beige" id="assignedCases">
-                        <div class ="row px-3">
-                            <p class="col">`+newCase['court_hearing_date']+ `</p>
-                            <p class="col">`+newCase['client_name']+ `</p>
-                            <p class="col">`+newCase['case_category']+`</p>
-                            <p class="col"> <a href="pbc-case-overview.html" onclick="caseSession(`+newCase['case_id']+`,`+newCase['sa_id']+`,`+newCase['lawyer_id']+`)">`+newCase['case_id']+`</a></p>                            
-                        </div>
-                    </div>
-                    `
-                }
-            }
-        }
+        xhttp.open("GET", "http://52.220.49.254:8100/all_sa_keywords", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+      }
 
-        function caseSession(caseID, saID, lawyerID){
-            sessionStorage.setItem("caseID", caseID);
-            sessionStorage.setItem("saID", saID);
-            sessionStorage.setItem("lawyerID", lawyerID);
-        }
 
     </script>
 

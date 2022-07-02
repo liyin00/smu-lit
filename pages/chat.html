@@ -45,7 +45,7 @@
     <div class="d-flex bg-gold justify-content-end px-4 pt-3">
       <div>
           <nav class ="navbar">
-          <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
+          <p class="text-light"><u>Welcome!</u></span></p>
           </nav>
       </div>
     </div>
@@ -57,7 +57,7 @@
         <div class=" center">
           <div>
             <div class="w-full">
-              <h3 style="text-align:center;"><b><i>You have been connected with a Student Assistant, either of you can initiate the conversation when needed!</i></b></h3>
+              <h3 style="text-align:center;"><b><i>This is a chat between a <span id="chatPartner"></span>, either of you can initiate the conversation when needed!</i></b></h3>
               <div class="relative w-full p-6 ">
   
                 <ul class="space-y-2" id="chat-messages">
@@ -110,12 +110,23 @@
 
     <script>
       
-      const user_id = localStorage.getItem("userID");
-      const category = localStorage.getItem("category");
-      const case_id = localStorage.getItem("caseID");
+      const user_id = sessionStorage.getItem("userID");
+      const category = sessionStorage.getItem("category");
+      const case_id = sessionStorage.getItem("caseID");
+
+      console.log(sessionStorage);
 
       window.onload = loadmsg();
       function loadmsg() {
+        
+
+        if(sessionStorage.getItem("category") =="sa-client"){
+          document.getElementById("chatPartner").innerHTML = "student assistant and a client"
+        }
+        else if(sessionStorage.getItem("category") =="sa-lawyer"){
+          document.getElementById("chatPartner").innerHTML = "student assistant and a lawyer"
+        }
+
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           let msg_arr = JSON.parse(this.responseText).data;
@@ -150,7 +161,7 @@
 
           }
         }
-        xhttp.open("POST", "http://localhost:8100/retrieve_chat", true);
+        xhttp.open("POST", "http://52.220.49.254:8100/retrieve_chat", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({"case_id": case_id,"category": category}));
       }
@@ -184,7 +195,7 @@
 
         let send_req = JSON.stringify({"case_id": case_id, "category": category, "sender_id": user_id, "message": new_message});
         console.log(send_req);
-        request.open("POST", "http://localhost:8100/create_chat_message");
+        request.open("POST", "http://52.220.49.254:8100/create_chat_message");
         request.setRequestHeader("Content-Type", "application/json");
         request.send(send_req);
 

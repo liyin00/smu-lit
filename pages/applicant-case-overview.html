@@ -67,7 +67,7 @@
 
       <a href="chat.html" class="block-link link-dark">
         <div class="d-flex justify-content-center m-5">  
-          <div id="chatHere"><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Student Assistant</u></b></span></div>
+          <div id="chatHere"><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="clientSA()"><b><u>Chat with Student Assistant</u></b></span></div>
         </div>
       </a>
 
@@ -156,7 +156,7 @@
 
             <li class="timeline-item mb-5">
 
-              <span class="timeline-icon">
+              <span id="confirmedAppointment" class="timeline-icon">
                 <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
               </span>
               <h5 class="fw-bold">Appointment Confirmed</h5>
@@ -192,7 +192,7 @@
 
       function retrieveCaseStatus(){
         var settings = {
-          "url": "http://127.0.0.1:8100/get_cases_by_client",
+          "url": "http://52.220.49.254:8100/get_cases_by_client",
           "method": "POST",
           "timeout": 0,
           "headers": {
@@ -219,7 +219,7 @@
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
               if(response.data.current_case_status == "Active"){
-                document.getElementById("actionItems").innerHTML = `<button type="button" id="confirmSummary" class="rounded-corners btn btn-secondary btn-block">View case summary and confirm case summary</button>`;
+                document.getElementById("actionItems").innerHTML = `<a id="confirmSummary" href="case-summary.html" class="button rounded-corners btn btn-secondary btn-block">Please submit case summary here</a>`;
               }
             }
             else if(response.data.confirmed_appointment_date == null){
@@ -236,6 +236,9 @@
         });
       }
 
+      function saClient(){
+        sessionStorage.setItem("category", "client-sa")
+      }
     </script>
 
   </body>

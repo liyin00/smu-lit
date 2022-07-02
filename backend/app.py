@@ -10,15 +10,14 @@ from email.mime.text import MIMEText
 import random
 import pke
 import warnings
-
 from tensorboard import summary
 warnings.filterwarnings('ignore')
 
+
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql'\
-    '+mysqlconnector://root@localhost:3306/penteract_db'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://admin:p3nT3rAcT@penteract-db.czzwiuesriik.ap-southeast-1.rds.amazonaws.com:3306/penteract_db'
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
@@ -1697,47 +1696,50 @@ def all_sa_keywords():
         # get all SAs
         sa_dict = {}
         
-        SAs_info = users.query.filter_by(role='SA')
+        sas_info = users.query.filter_by(role='sa')
         
-        for element in SAs_info:
+        for element in sas_info:
             element_json = element.get_dict()
             
             sa_id = element_json['user_id']
             sa_name = element_json['name']
+            sa_educational_instituition = element_json['educational_instituition']
+            sa_study_year = element_json['study_year']
             
             sa_dict[sa_id] = sa_name
         
         output = {}
         
         case_info = cases.query.filter_by(current_case_status="Closed")
-        
         for case in case_info:
             case_json = case.get_dict()
             summary_key_words = case_json['summary_key_words'].split(',')
-
             sa_id = case_json['sa_id']
             
             # get sa_name
-            sa_name = sa_dict[sa_id]
-            
+            sa_name = sa_dict.get(sa_id)
             if sa_id not in output:
                 output[sa_id] = {
                     "sa_name": sa_name,
+                    "sa_educational_institution": sa_educational_instituition, 
+                    "sa_study_year": sa_study_year,
                     "summary_key_words": set()
                 }
-                
+            
+            # print(output)
             output[sa_id]['summary_key_words'].update(summary_key_words)
 
         for element in sa_dict:
             if element not in output:
                 output[element] = {
                     "sa_name": sa_dict[element],
-                    "summary_key_words": set()   
+                    "summary_key_words": set()
                 }
                 
         for element in output:
             output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
 
+        print(output)
         return jsonify(
             {
                 "code": 200,
@@ -1768,35 +1770,37 @@ def all_lawyer_keywords():
             
             lawyer_id = element_json['user_id']
             lawyer_name = element_json['name']
+            lawyer_company = element_json['company']
+            lawyer_position = element_json['position']
             
             lawyer_dict[lawyer_id] = lawyer_name
         
         output = {}
         
         case_info = cases.query.filter_by(current_case_status="Closed")
-        
         for case in case_info:
             case_json = case.get_dict()
             summary_key_words = case_json['summary_key_words'].split(',')
-
             lawyer_id = case_json['lawyer_id']
             
             # get lawyer_name
-            lawyer_name = lawyer_dict[lawyer_id]
-            
+            lawyer_name = lawyer_dict.get(lawyer_id)
             if lawyer_id not in output:
                 output[lawyer_id] = {
                     "lawyer_name": lawyer_name,
+                    "lawyer_company": lawyer_company, 
+                    "lawyer_position": lawyer_position,
                     "summary_key_words": set()
                 }
-                
+            
+            # print(output)
             output[lawyer_id]['summary_key_words'].update(summary_key_words)
 
         for element in lawyer_dict:
             if element not in output:
                 output[element] = {
                     "lawyer_name": lawyer_dict[element],
-                    "summary_key_words": set()   
+                    "summary_key_words": set()
                 }
                 
         for element in output:
@@ -1817,6 +1821,37 @@ def all_lawyer_keywords():
                 "message": "Error occurred while retrieving all SAs keywords"
             }
         ), 404
+
+# update the appointment date 
+@app.route('/update_appointment_date', methods=['POST'])
+def update_appointment_date():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        case_info = cases.query.filter_by(case_id=case_id).first()
+
+        case_info.update_columns({
+            "confirmed_appointment_date": date.today()
+        })
         
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully updated appointment date."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating appointment date."
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100)
