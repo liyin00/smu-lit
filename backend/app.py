@@ -1696,47 +1696,50 @@ def all_sa_keywords():
         # get all SAs
         sa_dict = {}
         
-        SAs_info = users.query.filter_by(role='SA')
+        sas_info = users.query.filter_by(role='sa')
         
-        for element in SAs_info:
+        for element in sas_info:
             element_json = element.get_dict()
             
             sa_id = element_json['user_id']
             sa_name = element_json['name']
+            sa_educational_instituition = element_json['educational_instituition']
+            sa_study_year = element_json['study_year']
             
             sa_dict[sa_id] = sa_name
         
         output = {}
         
         case_info = cases.query.filter_by(current_case_status="Closed")
-        
         for case in case_info:
             case_json = case.get_dict()
             summary_key_words = case_json['summary_key_words'].split(',')
-
             sa_id = case_json['sa_id']
             
             # get sa_name
-            sa_name = sa_dict[sa_id]
-            
+            sa_name = sa_dict.get(sa_id)
             if sa_id not in output:
                 output[sa_id] = {
                     "sa_name": sa_name,
+                    "sa_educational_institution": sa_educational_instituition, 
+                    "sa_study_year": sa_study_year,
                     "summary_key_words": set()
                 }
-                
+            
+            # print(output)
             output[sa_id]['summary_key_words'].update(summary_key_words)
 
         for element in sa_dict:
             if element not in output:
                 output[element] = {
                     "sa_name": sa_dict[element],
-                    "summary_key_words": set()   
+                    "summary_key_words": set()
                 }
                 
         for element in output:
             output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
 
+        print(output)
         return jsonify(
             {
                 "code": 200,
