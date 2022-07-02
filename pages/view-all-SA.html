@@ -97,10 +97,10 @@ window.onload = getLawyerKeywords();
             // console.log(value['sa_educational_institution'])
             document.getElementById('profiles').innerHTML += `
             <div class ="row mt-4 px-3 bg-beige">
-                <p class="col lawyer-name" >`+value['sa_name']+`</p>
-                <p class="col keywords">`+value['summary_key_words']+`</p>
-                <p class="col lawyer-company">`+value['sa_educational_institution']+`</p>
-                <p class="col lawyer-position">`+value['sa_study_year']+`</p>
+                <div class="col-3 lawyer-name" >`+value['sa_name']+`</div>
+                <div class="col-3 overflow-auto keywords">`+ value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                <div class="col-3 lawyer-company">`+value['sa_educational_institution']+`</div>
+                <div class="col-3 lawyer-position">`+value['sa_study_year']+`</div>
             </div>
             `
           }
