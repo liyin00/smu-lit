@@ -144,8 +144,10 @@ function loginSA(){
 
     window.sessionStorage;
 
+    console.log(sessionStorage);
+
     sessionStorage.setItem("email", email);
-    sessionStorage.setItem("password", password)
+    sessionStorage.setItem("password", password);
 
     var settings = {
         "url": "http://127.0.0.1:8100/login",
@@ -169,7 +171,7 @@ function loginSA(){
             window.sessionStorage;
             sessionStorage.setItem("name", name);
             sessionStorage.setItem("userID", userID);
-            sessionStorage.setItem("saID", saID);
+            sessionStorage.setItem("saID", userID);
             sessionStorage.setItem("otp", otp);
             sessionStorage.setItem("userType", "studentAssistant");
             sessionStorage.setItem("loginRegister", "login");

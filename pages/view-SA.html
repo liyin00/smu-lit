@@ -75,7 +75,7 @@
             </div>
 
             <div class="d-grid">
-                <button class="btn btn-primary mt-5" type="button"><h5>Back to Dashboard</h5></button>
+                <button class="btn btn-primary mt-5" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
               </div>
     
         </div>
@@ -120,15 +120,26 @@
                     console.log(response);
                     var activeCases = response.data["Active"];
                     var assignedCases = response.data["Assigned cases"];
-                    // var pastCases = activeCases.concat(assignedCases);
-                    for(i=0;i<assignedCases.length;i++){
-                        document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+assignedCases[i].case_id+`)>`+assignedCases[i].case_title+`</a></li>`;
+                    if(activeCases!=null){
+                        displayPastCases(activeCases);
+                    }
+                    if(assignedCases!=null){
+                        displayPastCases(assignedCases);
                     }
                     });
         }
 
+        function displayPastCases(assignedCases){
+            for(i=0;i<assignedCases.length;i++){
+                        document.getElementById("casesHere").innerHTML += `<li><a href ="pbc-case-overview.html" onclick=viewCase(`+assignedCases[i].case_id+`)>`+assignedCases[i].case_title+`</a></li>`;
+                    }
+        }
+
         function viewCase(case_id){
             sessionStorage.setItem("caseID", case_id);
+        }
+        function backDash(){
+            location.replace("pbc-dashboard.html");
         }
     </script>
   

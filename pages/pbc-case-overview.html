@@ -194,7 +194,6 @@
 
                 <div class="container-fluid mb-4">
                   <h5><b>Client name:</b> <span id="clientName"></span></h5>
-                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
                 </div>
 
                 <div class="container-fluid mb-4">
@@ -204,13 +203,13 @@
 
                 
 
-                <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
+                <!-- <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
                 <ul id="documentList">
                     <li><a href="#">Document 1</a></li>
                     <li><a href="#">Document 2</a></li>
                     <li><a href="#">Document 3</a></li>
-                </ul>
+                </ul> -->
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
@@ -251,8 +250,10 @@
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
-            document.getElementById("lawyerName").innerHTML = response.data.lawyer_name;
-            document.getElementById("saName").innerHTML = response.data.sa_name;
+            if(response.data.lawyer_name != null){
+              document.getElementById("lawyerName").innerHTML = response.data.lawyer_name;
+              document.getElementById("saName").innerHTML = response.data.sa_name;
+            }
             window.sessionStorage
             sessionStorage.setItem("userID", response.data.client_id);
           }

@@ -110,9 +110,9 @@
 
     <script>
       
-      const user_id = localStorage.getItem("userID");
-      const category = localStorage.getItem("category");
-      const case_id = localStorage.getItem("caseID");
+      const user_id = sessionStorage.getItem("userID");
+      const category = sessionStorage.getItem("category");
+      const case_id = sessionStorage.getItem("caseID");
 
       window.onload = loadmsg();
       function loadmsg() {

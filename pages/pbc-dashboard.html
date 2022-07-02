@@ -165,8 +165,13 @@
 
         function caseSession(caseID, saID, lawyerID){
             sessionStorage.setItem("caseID", caseID);
+            if(saID == null){
+                sessionStorage.setItem("saID", null);
+                sessionStorage.setItem("lawyerId",null);
+            }
             sessionStorage.setItem("saID", saID);
             sessionStorage.setItem("lawyerID", lawyerID);
+            console.log(sessionStorage);
         }
 
         function studentSession(saID){
