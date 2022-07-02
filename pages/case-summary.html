@@ -187,8 +187,8 @@
     </div>
 
     <script>
-      const user_id = localStorage.getItem("userID");
-      const case_id = localStorage.getItem("caseID");
+      const user_id = sessionStorage.getItem("userID");
+      const case_id = sessionStorage.getItem("caseID");
       post_json = JSON.stringify({"case_id": case_id});
       // console.log(post_json);
       window.onload = loadDrafts();
