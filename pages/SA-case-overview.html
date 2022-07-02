@@ -40,7 +40,7 @@
     <div class="d-flex bg-gold justify-content-end px-4 pt-3">
       <div>
           <nav class ="navbar">
-          <p class="text-light"><u>Welcome, <span id="nameHere">!</u></span></p>
+          <p class="text-light"><u>Welcome!</u></span></p>
           </nav>
       </div>
   </div>
@@ -66,14 +66,14 @@
         <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Client</u></b></span></div>
+                    <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="saClient()"><b><u>Chat with Client</u></b></span></div>
                 </div>
             </a>
         </div>
         <div class="col-6">
             <a href="chat.html" class="block-link link-dark">
                 <div class="d-flex justify-content-center m-5">  
-                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span><b><u>Chat with Lawyer</u></b></span></div>
+                  <div><img src="../pictures/chat-gold.png" style="width: 2vw; height: auto;"> <span onclick="saLawyer()"><b><u>Chat with Lawyer</u></b></span></div>
                 </div>
               </a>
         </div>
@@ -225,10 +225,10 @@
 
       <h4>Action Items</h4>
 
-      <div class="d-grid gap-2 mb-4" id="actionItems"></div>
+      <div class="d-grid gap-2" id="actionItems"></div>
 
       <div class="d-grid">
-        <button class="btn btn-primary mt-5" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
+        <button class="btn btn-primary mt-2" type="button" onclick="backDash()">Back to Dashboard</button>
       </div>
 
     </div>
@@ -263,7 +263,6 @@
             document.getElementById("saName").innerHTML = response.data.sa_name;
             document.getElementById("salary").innerHTML = "$" + response.data.gross_salary;
             window.sessionStorage
-            sessionStorage.setItem("userID", response.data.client_id);
             if (response.data.student_assigned_date == null){
               document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
@@ -299,6 +298,14 @@
       function backDash(){
             location.replace("SA-dashboard.html");
         }
+
+      function saClient(){
+        sessionStorage.setItem("category", "sa-client")
+      }
+
+      function saLawyer(){
+        sessionStorage.setItem("category", "sa-lawyer")
+      }
 
     
     </script>

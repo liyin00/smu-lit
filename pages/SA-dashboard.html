@@ -107,6 +107,7 @@
 
         console.log(sessionStorage);
 
+
         var settings = {
         "url": "http://127.0.0.1:8100/get_cases_by_sa",
         "method": "POST",
@@ -177,6 +178,9 @@
             sessionStorage.setItem("saID", saID);
             sessionStorage.setItem("lawyerID", lawyerID);
         }
+
+        var name = sessionStorage.getItem("name");
+        document.getElementById("nameHere").innerHTML = name;
 
     </script>
 

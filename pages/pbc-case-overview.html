@@ -172,8 +172,8 @@
           
                       <li class="timeline-item mb-5">
           
-                        <span class="timeline-icon">
-                          <i id="confirmedAppointment" class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
+                        <span id="confirmedAppointment" class="timeline-icon">
+                          <i class="fas fa-money-bill-wave text-primary fa-sm fa-fw"></i>
                         </span>
                         <h5 class="fw-bold">Appointment Confirmed</h5>
                         <p class="text-muted mb-2 fw-bold">To be updated</p>
@@ -222,6 +222,9 @@
 
       </div>
 
+      <div class="d-grid">
+        <button class="btn btn-primary mt-5" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
+      </div>
     </div>
 
     <script>
@@ -302,6 +305,9 @@
 
       }
 
+      function backDash(){
+            location.replace("pbc-dashboard.html");
+        }
     
     </script>
 

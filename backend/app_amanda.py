@@ -1821,6 +1821,37 @@ def all_lawyer_keywords():
                 "message": "Error occurred while retrieving all SAs keywords"
             }
         ), 404
+
+# update the appointment date 
+@app.route('/update_appointment_date', methods=['POST'])
+def update_appointment_date():
+    try:
+        # retrieve data (case_id)
+        data = request.get_json()
+        case_id = data['case_id']
+        case_info = cases.query.filter_by(case_id=case_id).first()
+
+        case_info.update_columns({
+            "confirmed_appointment_date": date.today()
+        })
         
+        db.session.commit()
+
+        return jsonify(
+            {
+                "code": 200,
+                "message": "Successfully updated appointment date."
+            }
+        ), 200
+        
+    except Exception as e:
+        print(e)
+        return jsonify(
+            {
+                "code": 404,
+                "message": "Error occured while updating appointment date."
+            }
+        ), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8100)
