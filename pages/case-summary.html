@@ -193,6 +193,8 @@
       // console.log(post_json);
       window.onload = loadDrafts();
       function loadDrafts() { 
+        var name = sessionStorage.getItem("name");
+        document.getElementById("nameHere").innerHTML = name;
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
           let draft_info = JSON.parse(this.responseText).data;
