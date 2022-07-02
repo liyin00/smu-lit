@@ -194,7 +194,7 @@
 
                 <div class="container-fluid mb-4">
                   <h5><b>Client name:</b> <span id="clientName"></span></h5>
-                  <h5><b>Client birthday:</b> <span id="clientBday"></span></h5>
+                  <h5><b>Gross Salary</b> <span id="salary"></span></h5>
                 </div>
 
                 <div class="container-fluid mb-4">
@@ -204,13 +204,13 @@
 
                 
 
-                <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
+                <!-- <div class="bg-dblue"><p class="text-light">Documents Uploaded</p></div>
 
                 <ul id="documentList">
                     <li><a href="#">Document 1</a></li>
                     <li><a href="#">Document 2</a></li>
                     <li><a href="#">Document 3</a></li>
-                </ul>
+                </ul> -->
 
                 <div class="bg-dblue"><p class="text-light">Brief Description</p></div>
 
@@ -226,6 +226,10 @@
       <h4>Action Items</h4>
 
       <div class="d-grid gap-2 mb-4" id="actionItems"></div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary mt-5" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
+      </div>
 
     </div>
 
@@ -255,30 +259,11 @@
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
-            document.getElementById("lawyerName").innerHTML = response.data.lawyer_id;
-            document.getElementById("saName").innerHTML = response.data.sa_id;
+            document.getElementById("lawyerName").innerHTML = response.data.lawyer_name;
+            document.getElementById("saName").innerHTML = response.data.sa_name;
+            document.getElementById("salary").innerHTML = "$" + response.data.gross_salary;
             window.sessionStorage
             sessionStorage.setItem("userID", response.data.client_id);
-          }
-        });
-
-        //caseStatus
-        var settings = {
-          "url": "http://127.0.0.1:8100/get_cases_by_client",
-          "method": "POST",
-          "timeout": 0,
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          "data": JSON.stringify({
-            "client_id": sessionStorage.getItem("userID")
-          }),
-        };
-
-        $.ajax(settings).done(function (response) {
-          console.log(response);
-          if (response.code == 200){
-            document.getElementById("caseName").innerHTML = response.data.case_title;
             if (response.data.student_assigned_date == null){
               document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
@@ -310,6 +295,10 @@
         });
 
       }
+
+      function backDash(){
+            location.replace("SA-dashboard.html");
+        }
 
     
     </script>

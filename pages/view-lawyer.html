@@ -56,6 +56,10 @@
             </div>
 
             <div class="my-3 py-3 d-flex justify-content-center">
+                <div><h5>Lawyer ID: <span id="id"></span></h5></div>
+            </div>
+
+            <div class="my-3 py-3 d-flex justify-content-center">
                 <div><h5>Email: <span id="email"></span></h5></div>
             </div>
 
@@ -83,6 +87,8 @@
 
     <script>
         window.onload = function(){
+            lawyerID = sessionStorage.getItem("lawyerID")
+            document.getElementById("id").innerHTML = lawyerID;
             var settings = {
                 "url": "http://127.0.0.1:8100/get_user_profile",
                 "method": "POST",
@@ -91,13 +97,13 @@
                     "Content-Type": "application/json"
                 },
                 "data": JSON.stringify({
-                    "user_id": sessionStorage.getItem("lawyerID")
+                    "user_id": lawyerID
                 }),
                 };
 
                 $.ajax(settings).done(function (response) {
                 console.log(response);
-                    document.getElementById("background").innerHTML = response.data.company + ", " + response.data.position;
+                    document.getElementById("background").innerHTML = response.data.company + ", " + response.data.role;
                     document.getElementById("name").innerHTML = response.data.name;
                     document.getElementById("email").innerHTML = response.data.email;
                 });
@@ -110,7 +116,7 @@
                         "Content-Type": "application/json"
                     },
                     "data": JSON.stringify({
-                        "lawyer_id": 3
+                        "lawyer_id": lawyerID
                     }),
                     };
 
@@ -118,6 +124,7 @@
                     console.log(response);
                     var activeCases = response.data["Active"];
                     var assignedCases = response.data["Assigned cases"];
+                    var closedCases = response.data["Closed"];
                     if(activeCases != null){
                         displayPastCases(activeCases);
                     }

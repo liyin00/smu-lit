@@ -56,6 +56,10 @@
             </div>
 
             <div class="my-3 py-3 d-flex justify-content-center">
+                <div><h5>Student Assistant ID: <span id="id"></span></h5></div>
+            </div>
+
+            <div class="my-3 py-3 d-flex justify-content-center">
                 <div><h5>Email: <span id="email"></span></h5></div>
             </div>
 
@@ -76,13 +80,17 @@
 
             <div class="d-grid">
                 <button class="btn btn-primary mt-5" type="button" onclick="backDash()"><h5>Back to Dashboard</h5></button>
-              </div>
+            </div>
     
         </div>
     </div>
 
     <script>
         window.onload = console.log(sessionStorage);
+
+        var saID = sessionStorage.getItem("saID");
+
+        document.getElementById("id").innerHTML = saID;
 
         window.onload = function(){
             var settings = {
@@ -93,7 +101,7 @@
                     "Content-Type": "application/json"
                 },
                 "data": JSON.stringify({
-                    "user_id": sessionStorage.getItem("saID")
+                    "user_id": saID
                 }),
                 };
 
@@ -112,7 +120,7 @@
                         "Content-Type": "application/json"
                     },
                     "data": JSON.stringify({
-                        "sa_id": sessionStorage.getItem("saID")
+                        "sa_id": saID
                     }),
                     };
 
@@ -120,11 +128,15 @@
                     console.log(response);
                     var activeCases = response.data["Active"];
                     var assignedCases = response.data["Assigned cases"];
+                    var completedCases = response.data["Completed"];
                     if(activeCases!=null){
                         displayPastCases(activeCases);
                     }
                     if(assignedCases!=null){
                         displayPastCases(assignedCases);
+                    }
+                    if(completedCases!=null){
+                        displayPastCases(completedCases);
                     }
                     });
         }
