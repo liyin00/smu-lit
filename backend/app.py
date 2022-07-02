@@ -13,11 +13,11 @@ import warnings
 from tensorboard import summary
 warnings.filterwarnings('ignore')
 
+
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql'\
-    '+mysqlconnector://root@localhost:3306/penteract_db'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://admin:p3nT3rAcT@penteract-db.czzwiuesriik.ap-southeast-1.rds.amazonaws.com:3306/penteract_db'
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 299}
 
