@@ -104,10 +104,10 @@
             console.log(value['lawyer_position'])
             document.getElementById('profiles').innerHTML += `
             <div class ="row mt-4 px-3 bg-beige">
-                <p class="col lawyer-name" >`+value['lawyer_name']+`</p>
-                <p class="col keywords">`+value['summary_key_words']+`</p>
-                <p class="col lawyer-company">`+value['lawyer_company']+`</p>
-                <p class="col lawyer-position">`+value['lawyer_position']+`</p>
+                <div class="col-3 lawyer-name" >`+value['lawyer_name']+`</div>
+                <div class="col-3 overflow-auto keywords">`+value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                <div class="col-3 lawyer-company">`+value['lawyer_company']+`</div>
+                <div class="col-3 lawyer-position">`+value['lawyer_position']+`</div>
             </div>
             `
           }
