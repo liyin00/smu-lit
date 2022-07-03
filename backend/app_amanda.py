@@ -935,19 +935,22 @@ def create_case_summary():
         data = request.get_json()
         case_id = data['case_id']
         case_obj = cases.query.filter_by(case_id=case_id).first()
-        
-        # # extract key words
+        print('hi')
+        # extract key words
         # extractor = pke.unsupervised.TopicRank()
         # extractor.load_document(input=data['summary_of_facts'], language='en')
         
         # extractor.candidate_selection()
         # extractor.candidate_weighting()
         
+        # keyphrases = extractor.get_n_best(n=10)
+
         keyphrases = [
-            ('Supermarket', 0),
-            ('Murder', 0),
-            ('Knife', 0),
-            ("Harrassment", 0)
+            ('Litigation', 0),
+            ('Disputes', 0),
+            ('claims', 0),
+            ('divorce', 0),
+            ('settlement', 0)
         ]
         
         key_list = []
@@ -968,7 +971,8 @@ def create_case_summary():
         # update case summary date
         case_obj.update_columns({
             "case_summary_date": date.today(),
-            "summary_key_words": summary_key_words
+            "summary_key_words": summary_key_words,
+            "current_case_status": "Active"
         })
         
         db.session.commit()
@@ -1701,47 +1705,50 @@ def all_sa_keywords():
         # get all SAs
         sa_dict = {}
         
-        SAs_info = users.query.filter_by(role='SA')
+        sas_info = users.query.filter_by(role='sa')
         
-        for element in SAs_info:
+        for element in sas_info:
             element_json = element.get_dict()
             
             sa_id = element_json['user_id']
             sa_name = element_json['name']
+            sa_educational_instituition = element_json['educational_instituition']
+            sa_study_year = element_json['study_year']
             
             sa_dict[sa_id] = sa_name
         
         output = {}
         
         case_info = cases.query.filter_by(current_case_status="Closed")
-        
         for case in case_info:
             case_json = case.get_dict()
             summary_key_words = case_json['summary_key_words'].split(',')
-
             sa_id = case_json['sa_id']
             
             # get sa_name
-            sa_name = sa_dict[sa_id]
-            
+            sa_name = sa_dict.get(sa_id)
             if sa_id not in output:
                 output[sa_id] = {
                     "sa_name": sa_name,
+                    "sa_educational_institution": sa_educational_instituition, 
+                    "sa_study_year": sa_study_year,
                     "summary_key_words": set()
                 }
-                
+            
+            # print(output)
             output[sa_id]['summary_key_words'].update(summary_key_words)
 
         for element in sa_dict:
             if element not in output:
                 output[element] = {
                     "sa_name": sa_dict[element],
-                    "summary_key_words": set()   
+                    "summary_key_words": set()
                 }
                 
         for element in output:
             output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
 
+        print(output)
         return jsonify(
             {
                 "code": 200,
@@ -1772,35 +1779,37 @@ def all_lawyer_keywords():
             
             lawyer_id = element_json['user_id']
             lawyer_name = element_json['name']
+            lawyer_company = element_json['company']
+            lawyer_position = element_json['position']
             
             lawyer_dict[lawyer_id] = lawyer_name
         
         output = {}
         
         case_info = cases.query.filter_by(current_case_status="Closed")
-        
         for case in case_info:
             case_json = case.get_dict()
             summary_key_words = case_json['summary_key_words'].split(',')
-
             lawyer_id = case_json['lawyer_id']
             
             # get lawyer_name
-            lawyer_name = lawyer_dict[lawyer_id]
-            
+            lawyer_name = lawyer_dict.get(lawyer_id)
             if lawyer_id not in output:
                 output[lawyer_id] = {
                     "lawyer_name": lawyer_name,
+                    "lawyer_company": lawyer_company, 
+                    "lawyer_position": lawyer_position,
                     "summary_key_words": set()
                 }
-                
+            
+            # print(output)
             output[lawyer_id]['summary_key_words'].update(summary_key_words)
 
         for element in lawyer_dict:
             if element not in output:
                 output[element] = {
                     "lawyer_name": lawyer_dict[element],
-                    "summary_key_words": set()   
+                    "summary_key_words": set()
                 }
                 
         for element in output:
@@ -1854,4 +1863,4 @@ def update_appointment_date():
         ), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8100)
+    app.run(host='0.0.0.0', port=8100, debug=True)

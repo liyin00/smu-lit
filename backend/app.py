@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 import random
 import pke
 import warnings
-from tensorboard import summary
+
 warnings.filterwarnings('ignore')
 
 app = Flask(__name__)
@@ -963,7 +963,8 @@ def create_case_summary():
         # update case summary date
         case_obj.update_columns({
             "case_summary_date": date.today(),
-            "summary_key_words": summary_key_words
+            "summary_key_words": summary_key_words,
+            "current_case_status": "Active"
         })
         
         db.session.commit()
