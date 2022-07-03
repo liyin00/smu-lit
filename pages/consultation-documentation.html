@@ -118,7 +118,7 @@
             let consultation_advices = document.getElementById('consultation_advices_input').value;
             const consult_notes = JSON.stringify({"case_id": caseID, "consultation_questions": consultation_questions, "consultation_advices": consultation_advices});
 
-            xhttp.open("POST", "http://localhost:8100/update_consultation", true);
+            xhttp.open("POST", "http://52.220.49.254:8100/update_consultation", true);
             xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send(consult_notes);
 
