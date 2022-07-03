@@ -114,8 +114,6 @@
       const category = sessionStorage.getItem("category");
       const case_id = sessionStorage.getItem("caseID");
 
-      console.log(sessionStorage);
-
       window.onload = loadmsg();
       function loadmsg() {
         
@@ -142,14 +140,14 @@
 
             if (user_id == messages.sender_id){
               // console.log("It's a match!!")
-              li.setAttribute("class","flex justify-start");
+              li.setAttribute("class","flex justify-end");
               div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 rounded shadow");
               div.setAttribute("style", "background-color: #202837");
               span.setAttribute("class", "block");
               span.setAttribute("style", "color: white");
             }
             else {
-              li.setAttribute("class","flex justify-end");
+              li.setAttribute("class","flex justify-start");
               div.setAttribute("class", "relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow");
               span.setAttribute("class", "block");
             }
