@@ -165,8 +165,8 @@
             </section>
             <div class="container-fluid d-flex justify-content-center" style="margin-bottom: 30px;">
               <div id="approval" style="display: none;">
-                <button class="border border-dark bg-dblue text-light mx-3" onclick="approveDraft()">Approve Latest Draft</button>
-                <button class="text-light bg-gold mx-3" style="border: none;" onclick="addEdits()">Request Edits</button>
+                <button id="approve" class="border border-dark bg-dblue text-light mx-3" onclick="approveDraft()">Approve Latest Draft</button>
+                <button id ="reqEdits" class="text-light bg-gold mx-3" style="border: none;" onclick="addEdits()">Request Edits</button>
               </div>
             </div>
 
@@ -193,6 +193,10 @@
       // console.log(post_json);
       window.onload = loadDrafts();
       function loadDrafts() { 
+        if(sessionStorage.getItem("userType")!="client"){
+          document.getElementById("approve").style.display = "none";
+          document.getElementById("reqEdits").style.display = "none";
+        }
         var name = sessionStorage.getItem("name");
         document.getElementById("nameHere").innerHTML = name;
         const xhttp = new XMLHttpRequest();
@@ -257,6 +261,7 @@
         xhttp.open("POST", "http://localhost:8100/client_feedback", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(feedback);
+        window.location.replace("")
       }
       function requestEdits(){ 
         const client_request = document.getElementById('client-req').value;

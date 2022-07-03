@@ -196,8 +196,10 @@
 
     <script>
 
-        const user_id = localStorage.getItem("userID");
-        const case_id = localStorage.getItem("caseID");
+      console.log(sessionStorage);
+
+        const user_id = sessionStorage.getItem("userID");
+        const case_id = sessionStorage.getItem("caseID");
         function getDate(){
             var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -217,77 +219,84 @@
             let applicable_law_input = document.getElementById('applicable_law_input').value;
             let court_hearing_matter_input = document.getElementById('court_hearing_matter_input').value;
             let specific_questions_input = document.getElementById('specific_questions_input').value;
-            const draft_submitted = JSON.stringify({"case_id": case_id, "summary_of_facts":summary_of_facts_input, "issues_questions": issues_questions_input, "applicable_law": applicable_law_input, "court_hearing_matter": court_hearing_matter_input, "specific_questions": specific_questions_input});
-            
-            const xhttp = new XMLHttpRequest();
-            xhttp.onload = function() {
-                let draft_submitted = JSON.stringify({"case_id": case_id, "summary_of_facts":summary_of_facts_input, "issues_questions": issues_questions_input, "applicable_law": applicable_law_input, "court_hearing_matter": court_hearing_matter_input, "specific_questions": specific_questions_input});
+            var settings = {
+            "url": "http://127.0.0.1:8100/create_case_summary",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "data": JSON.stringify({
+              "case_id": case_id,
+              "summary_of_facts": summary_of_facts_input,
+              "issues_questions": issues_questions_input,
+              "applicable_law": applicable_law_input,
+              "court_hearing_matter": court_hearing_matter_input,
+              "specific_questions": specific_questions_input
+            }),
+          };
+
+          $.ajax(settings).done(function (response) {
+            console.log(response);
+            if(response.code == 200){
+              alert("Case summary submission success.")
+              window.location.replace("sa-case-overview.html")
             }
-            xhttp.open("POST", "http://localhost:8100/create_case_summary", true);
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(draft_submitted);
-            // console.log("success");
+          });
+        };
 
-            document.getElementById('summary_of_facts_input').value = "";
-            document.getElementById('issues_questions_input').value = "";
-            document.getElementById('applicable_law_input').value = "";
-            document.getElementById('court_hearing_matter_input').value = "";
-            document.getElementById('specific_questions_input').value = "";
-            
-        }
+        // post_json = JSON.stringify({"case_id": case_id});
+        // // console.log(post_json);
+        // window.onload = loadDrafts();
+        // function loadDrafts() { 
+        //   const xhttp = new XMLHttpRequest();
+        //   xhttp.onload = function() {
+        //     let draft_info = JSON.parse(this.responseText).data;
+        //     // console.log(draft_info.case_summary.issues_questions);
 
-        post_json = JSON.stringify({"case_id": case_id});
-        // console.log(post_json);
-        window.onload = loadDrafts();
-        function loadDrafts() { 
-          const xhttp = new XMLHttpRequest();
-          xhttp.onload = function() {
-            let draft_info = JSON.parse(this.responseText).data;
-            // console.log(draft_info.case_summary.issues_questions);
+        //     let applicable_law = draft_info.case_summary.applicable_law;
+        //     let case_summary_id = draft_info.case_summary.case_summary_id;
+        //     let client_summary_feedback = draft_info.case_summary.client_summary_feedback;
+        //     let court_hearing_matter = draft_info.case_summary.court_hearing_matter;
+        //     let issues_questions = draft_info.case_summary.issues_questions;
+        //     let specific_questions = draft_info.case_summary.specific_questions;
+        //     let summary_of_facts = draft_info.case_summary.summary_of_facts;
+        //     let case_summary_date = draft_info.case_summary_date;
+        //     let finalised_case_summary_date = draft_info.finalised_case_summary_date;
 
-            let applicable_law = draft_info.case_summary.applicable_law;
-            let case_summary_id = draft_info.case_summary.case_summary_id;
-            let client_summary_feedback = draft_info.case_summary.client_summary_feedback;
-            let court_hearing_matter = draft_info.case_summary.court_hearing_matter;
-            let issues_questions = draft_info.case_summary.issues_questions;
-            let specific_questions = draft_info.case_summary.specific_questions;
-            let summary_of_facts = draft_info.case_summary.summary_of_facts;
-            let case_summary_date = draft_info.case_summary_date;
-            let finalised_case_summary_date = draft_info.finalised_case_summary_date;
+        //     //logic flow for requesting edits 
+        //     if (finalised_case_summary_date != null || case_summary_date != null) {
+        //       // case whereby the entire case has previously been approved 
+        //       if (case_summary_date != null && finalised_case_summary_date != null){
+        //         document.getElementById('timeline').style.display="";
+        //         document.getElementById('latest_draft').style.display="";
+        //         document.getElementById('final_draft').style.display="";
+        //         document.getElementById('case_summary_date').innerHTML = case_summary_date;
+        //         document.getElementById('finalized_case_summary_date').innerHTML = finalised_case_summary_date;
+        //       }
+        //       // case whereby approval is pending 
+        //       else if (finalised_case_summary_date == null){
+        //         document.getElementById('timeline').style.display="";
+        //         document.getElementById('latest_draft').style.display="";
+        //         document.getElementById('case_summary_date').innerHTML = case_summary_date;
+        //         document.getElementById('approval').style.display = "";
+        //       }
+        //     }
 
-            //logic flow for requesting edits 
-            if (finalised_case_summary_date != null || case_summary_date != null) {
-              // case whereby the entire case has previously been approved 
-              if (case_summary_date != null && finalised_case_summary_date != null){
-                document.getElementById('timeline').style.display="";
-                document.getElementById('latest_draft').style.display="";
-                document.getElementById('final_draft').style.display="";
-                document.getElementById('case_summary_date').innerHTML = case_summary_date;
-                document.getElementById('finalized_case_summary_date').innerHTML = finalised_case_summary_date;
-              }
-              // case whereby approval is pending 
-              else if (finalised_case_summary_date == null){
-                document.getElementById('timeline').style.display="";
-                document.getElementById('latest_draft').style.display="";
-                document.getElementById('case_summary_date').innerHTML = case_summary_date;
-                document.getElementById('approval').style.display = "";
-              }
-            }
-
-            //populating fields on the left 
-            document.getElementById('case_date').innerHTML = case_summary_date;
-            document.getElementById('summary_of_facts').innerHTML = summary_of_facts;
-            document.getElementById('issues_questions').innerHTML = issues_questions;
-            document.getElementById('applicable_law').innerHTML = applicable_law;
-            document.getElementById('court_hearing_matter').innerHTML = court_hearing_matter;
-            document.getElementById('specific_questions').innerHTML = specific_questions;
+        //     //populating fields on the left 
+        //     document.getElementById('case_date').innerHTML = case_summary_date;
+        //     document.getElementById('summary_of_facts').innerHTML = summary_of_facts;
+        //     document.getElementById('issues_questions').innerHTML = issues_questions;
+        //     document.getElementById('applicable_law').innerHTML = applicable_law;
+        //     document.getElementById('court_hearing_matter').innerHTML = court_hearing_matter;
+        //     document.getElementById('specific_questions').innerHTML = specific_questions;
             
 
-          }
-          xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
-          xhttp.setRequestHeader("Content-Type", "application/json");
-          xhttp.send(post_json);
-        }
+        //   }
+        //   xhttp.open("POST", "http://localhost:8100/get_case_summary", true);
+        //   xhttp.setRequestHeader("Content-Type", "application/json");
+        //   xhttp.send(post_json);
+        // }
 
 
     </script>

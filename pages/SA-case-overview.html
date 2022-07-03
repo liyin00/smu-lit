@@ -256,6 +256,7 @@
           if (response.code==200){
             document.getElementById("clientName").innerHTML = response.data.client_name;
             document.getElementById("caseCategory").innerHTML = response.data.case_category;
+            sessionStorage.getItem("caseID", response.data.case_id);
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
             document.getElementById("caseName").innerHTML = response.data.case_title;
             document.getElementById("clientName").innerHTML = response.data.client_name;
@@ -273,11 +274,11 @@
               document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
-              if(response.data.current_case_status != "Active"){
+              if(response.data.case_summary_date == null){
                 document.getElementById("actionItems").innerHTML = `<a id="confirmSummary" href="submit_summary.html" class="button rounded-corners btn btn-secondary btn-block">Please submit case summary here</a>`;
               }
-              else if(response.data.current_case_status == "Active"){
-                document.getElementById("actionItems").innerHTML = `<p>Please get the client to approve the case summary or add comments by chatting to the client.</p>`
+              else if(response.data.case_summary_date != null){
+                document.getElementById("actionItems").innerHTML += `<a id="confirmSummary" href="case-summary.html" class="button rounded-corners btn btn-secondary btn-block">Please get client to approve summary</a>`
               }
             }
             else if(response.data.confirmed_appointment_date == null){

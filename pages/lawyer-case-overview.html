@@ -219,7 +219,7 @@
       <h4>Action Items</h4>
 
       <div class="d-grid gap-2" id="actionItems">
-        <a id="confirmCOI" onclick="confirmCOI()" class="button rounded-corners btn btn-secondary btn-block">I confirm that there is no conflict of Interest & I can make it for the appointment</a>
+        <a id="confirmCOI" onclick="confirmCOI()" class="button rounded-corners btn btn-secondary btn-block">I confirm that there is no conflict of interest and I can make it to the agreed appointment</a>
       </div>
 
       <div class="d-grid">
@@ -249,6 +249,7 @@
           $.ajax(settings).done(function (response) {
           console.log(response);
           if (response.code==200){
+            sessionStorage.getItem("caseID", response.data.case_id);
             document.getElementById("clientName").innerHTML = response.data.client_name;
             document.getElementById("caseCategory").innerHTML = response.data.case_category;
             document.getElementById("caseDescription").innerHTML = response.data.client_case_description;
@@ -258,6 +259,10 @@
             document.getElementById("saName").innerHTML = response.data.sa_name;
             document.getElementById("salary").innerHTML = "$" + response.data.gross_salary;
             window.sessionStorage
+            if(response.data.confirmed_appointment_date != null){
+              document.getElementById("confirmCOI").innerHTML = "Case Summary";
+              document.getElementById("confirmCOI").setAttribute("href", "case-summary.html");
+            }
             if (response.data.student_assigned_date == null){
               document.getElementById("chatHere").style.display = "none";
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
@@ -268,6 +273,9 @@
               document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
+              if(response.case_summary_date != null){
+                document.getElementById("actionItems").innerHTML = `<a id="viewSummary" href="case_summary.html" class="button rounded-corners btn btn-secondary btn-block">Please submit case summary here</a>`;
+              }
             }
             else if(response.data.confirmed_appointment_date == null){
               document.getElementById("awaitingAppointment").classList.remove("timeline-icon");
@@ -278,7 +286,7 @@
               document.getElementById("confirmedAppointment").classList.remove("timeline-icon");
               document.getElementById("confirmedAppointment").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Appointment Confirmed";
-              document.getElementById("confirmCOI").style.display = "none";
+              document.getElementById("actionItems").innerHTML += `<a id="closeCase" class="button rounded-corners btn btn-secondary btn-block" href='case-closed.html'>Close the case</a>`;
             }
           }
         });

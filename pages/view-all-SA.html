@@ -51,8 +51,8 @@
     <div class = "container-fluid d-flex justify-content-center mt-5"><h2>Search for Student Assistants</h2></div>
 
     <div class = "container-fluid d-flex justify-content-center m-5">
-        <div class ="bg-beige w-50 p-3 mx-3"><input type="text" placeholder="Search for student assistant by keyword:" style="background: transparent; background: none;"></div>
-        <button type="button" class="btn btn-primary">Search</button>
+        <div class ="bg-beige w-50 p-3 mx-3"><input id="searchBar" type="text" placeholder="Search for student assistant by keyword:" style="background: transparent; border: none;"></div>
+        <button type="button" onclick="searchByKeyword()" class="btn btn-primary">Search</button>
     </div>
 
     <div class="container-fluid d-flex justify-content-center mt-5">
@@ -74,8 +74,8 @@
                 <div class ="row mt-4 px-3">
                     <p class="col text-light" >Student Assistant name</p>
                     <p class="col text-light" >Associated Keywords</p>
-                    <p class="col text-light" >Company</p>
-                    <p class="col text-light" >Position </p>
+                    <p class="col text-light" >Educational Institution</p>
+                    <p class="col text-light" >Year of Study </p>
                 </div>
                 <div id="sa-profiles" class="container-fluid my-4"></div>
             </div>
@@ -88,6 +88,7 @@
     <script>
 
 window.onload = getLawyerKeywords();
+console.log(sessionStorage);
       function getLawyerKeywords() {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
@@ -95,14 +96,38 @@ window.onload = getLawyerKeywords();
           for (var key in sa_arr){
             var value = sa_arr[key];
             // console.log(value['sa_educational_institution'])
-            document.getElementById('profiles').innerHTML += `
-            <div class ="row mt-4 px-3 bg-beige">
-                <div class="col-3 lawyer-name" >`+value['sa_name']+`</div>
-                <div class="col-3 overflow-auto keywords">`+ value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
-                <div class="col-3 lawyer-company">`+value['sa_educational_institution']+`</div>
-                <div class="col-3 lawyer-position">`+value['sa_study_year']+`</div>
-            </div>
-            `
+
+            if (value['summary_key_words'].length !=0){
+
+              if(sessionStorage.getItem("keyword")==null || sessionStorage.getItem("keyword")==""){
+                console.log("no search");
+                document.getElementById('profiles').innerHTML += `
+                <div class ="row mt-4 px-3 bg-beige">
+                    <div class="col-3 lawyer-name" >`+value['sa_name']+`</div>
+                    <div class="col-3 overflow-auto keywords">`+ value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                    <div class="col-3 lawyer-company">`+value['sa_educational_institution']+`</div>
+                    <div class="col-3 lawyer-position">`+value['sa_study_year']+`</div>
+                </div>
+                `
+              }
+              else{
+                for(i=0;i<value['summary_key_words'].length; i++){
+                  if (sessionStorage.getItem("keyword") == value['summary_key_words'][i]){
+                    document.getElementById('profiles').innerHTML += `
+                    <div class ="row mt-4 px-3 bg-beige">
+                        <div class="col-3 lawyer-name" >`+value['sa_name']+`</div>
+                        <div class="col-3 overflow-auto keywords">`+ value['summary_key_words'].toString().replaceAll(",", " ")+`</div>
+                        <div class="col-3 lawyer-company">`+value['sa_educational_institution']+`</div>
+                        <div class="col-3 lawyer-position">`+value['sa_study_year']+`</div>
+                    </div>
+                    `
+                  }
+                }
+              }
+
+            }
+
+            
           }
 
         }
@@ -111,6 +136,11 @@ window.onload = getLawyerKeywords();
         xhttp.send();
       }
 
+      function searchByKeyword(){
+        var keyword = document.getElementById("searchBar").value;
+        sessionStorage.setItem("keyword", keyword);
+        location.reload();
+      }
 
     </script>
 
