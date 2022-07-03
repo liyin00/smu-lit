@@ -1715,9 +1715,14 @@ def all_sa_keywords():
             sa_educational_instituition = element_json['educational_instituition']
             sa_study_year = element_json['study_year']
             
-            sa_dict[sa_id] = sa_name
+            sa_dict[sa_id] = {
+                'sa_name': sa_name,
+                'sa_educational_instituition': sa_educational_instituition,
+                'sa_study_year': sa_study_year
+            }
         
         output = {}
+        print(sa_dict)
         
         case_info = cases.query.filter_by(current_case_status="Closed")
         for case in case_info:
@@ -1725,30 +1730,28 @@ def all_sa_keywords():
             summary_key_words = case_json['summary_key_words'].split(',')
             sa_id = case_json['sa_id']
             
-            # get sa_name
-            sa_name = sa_dict.get(sa_id)
             if sa_id not in output:
                 output[sa_id] = {
-                    "sa_name": sa_name,
-                    "sa_educational_institution": sa_educational_instituition, 
-                    "sa_study_year": sa_study_year,
+                    "sa_name": sa_dict[sa_id]['sa_name'],
+                    "sa_educational_institution": sa_dict[sa_id]['sa_educational_instituition'], 
+                    "sa_study_year": sa_dict[sa_id]['sa_study_year'],
                     "summary_key_words": set()
                 }
             
-            # print(output)
             output[sa_id]['summary_key_words'].update(summary_key_words)
 
         for element in sa_dict:
             if element not in output:
                 output[element] = {
-                    "sa_name": sa_dict[element],
-                    "summary_key_words": set()
+                    "sa_name": sa_dict[sa_id]['sa_name'],
+                    "summary_key_words": set(),
+                    "sa_educational_instituition": sa_dict[sa_id]['sa_educational_instituition'],
+                    "sa_study_year": sa_dict[sa_id]['sa_study_year']
                 }
                 
         for element in output:
             output[element]['summary_key_words'] = list(output[element]['summary_key_words'])
 
-        print(output)
         return jsonify(
             {
                 "code": 200,
@@ -1782,7 +1785,11 @@ def all_lawyer_keywords():
             lawyer_company = element_json['company']
             lawyer_position = element_json['position']
             
-            lawyer_dict[lawyer_id] = lawyer_name
+            lawyer_dict[lawyer_id] = {
+                'lawyer_name': lawyer_name,
+                'lawyer_company': lawyer_company,
+                'lawyer_position': lawyer_position
+            }
         
         output = {}
         
@@ -1792,13 +1799,11 @@ def all_lawyer_keywords():
             summary_key_words = case_json['summary_key_words'].split(',')
             lawyer_id = case_json['lawyer_id']
             
-            # get lawyer_name
-            lawyer_name = lawyer_dict.get(lawyer_id)
             if lawyer_id not in output:
                 output[lawyer_id] = {
-                    "lawyer_name": lawyer_name,
-                    "lawyer_company": lawyer_company, 
-                    "lawyer_position": lawyer_position,
+                    "lawyer_name": lawyer_dict[lawyer_id]['lawyer_name'],
+                    "lawyer_company": lawyer_dict[lawyer_id]['lawyer_company'], 
+                    "lawyer_position": lawyer_dict[lawyer_id]['lawyer_position'],
                     "summary_key_words": set()
                 }
             
@@ -1808,8 +1813,10 @@ def all_lawyer_keywords():
         for element in lawyer_dict:
             if element not in output:
                 output[element] = {
-                    "lawyer_name": lawyer_dict[element],
-                    "summary_key_words": set()
+                    "summary_key_words": set(),
+                    "lawyer_name": lawyer_dict[element]['lawyer_name'],
+                    "lawyer_company": lawyer_dict[element]['lawyer_company'], 
+                    "lawyer_position": lawyer_dict[element]['lawyer_position'],
                 }
                 
         for element in output:
