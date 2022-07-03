@@ -37,15 +37,13 @@
         </header>
     </div>
       
-    <div class="d-flex bg-gold justify-content-end px-4">
-        <div>
-            <nav class ="navbar">
-            <a class = "link-dotted link-light" href="./pages/login.html">Register</a> 
-            <a class = "text-light text-decoration-none px-1">/</a>
-            <a class = "link-dotted link-light" href="./pages/login.html">Log-in</a>
-            </nav>
-        </div>
-    </div>
+    <div class="d-flex bg-gold justify-content-end px-4 pt-3">
+      <div>
+          <nav class ="navbar">
+          <p class="text-light"><u>Welcome!</u></span></p>
+          </nav>
+      </div>
+  </div>
 
     <!--Body-->
 
@@ -173,7 +171,7 @@
 
       <h4>Action Items</h4>
 
-      <div class="d-grid gap-2 mb-4" id="actionItems"></div>
+      <div class="d-grid gap-2" id="actionItems"></div>
       
       <div class="d-grid gap-2">
         <button class="btn btn-primary" type="button" onclick="dashboardReturn()">Back to Dashboard</button>
@@ -207,6 +205,7 @@
           console.log(response);
           if (response.code == 200){
             document.getElementById("caseName").innerHTML = response.data.case_title;
+            sessionStorage.setItem("caseID", response.data.case_id);
             if (response.data.student_assigned_date == null){
               document.getElementById("awaitingAssignment").classList.remove("timeline-icon");
               document.getElementById("awaitingAssignment").classList.add("timeline-current");
@@ -218,8 +217,8 @@
               document.getElementById("awaitingSummaryApproval").classList.remove("timeline-icon");
               document.getElementById("awaitingSummaryApproval").classList.add("timeline-current");
               document.getElementById("caseStatus").innerHTML = "Case Detail Review";
-              if(response.data.current_case_status == "Active"){
-                document.getElementById("actionItems").innerHTML = `<a id="confirmSummary" href="case-summary.html" class="button rounded-corners btn btn-secondary btn-block">Please submit case summary here</a>`;
+              if(response.data.case_summary_date != null){
+                document.getElementById("actionItems").innerHTML = `<a id="confirmSummary" href="case-summary.html" class="button rounded-corners btn btn-secondary btn-block">Please confirm case summary here</a>`;
               }
             }
             else if(response.data.confirmed_appointment_date == null){
@@ -236,8 +235,8 @@
         });
       }
 
-      function saClient(){
-        sessionStorage.setItem("category", "client-sa")
+      function clientSA(){
+        sessionStorage.setItem("category", "sa-client")
       }
     </script>
 
